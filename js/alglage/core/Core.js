@@ -88,9 +88,9 @@ Point.distance = function(pt1, pt2) {
 
 //Vektor Prototyp
 
-function Vector(x,y){
-//    return new Point(x,y);
-    this.point = new Point(x, y);
+function Vector(x,y) {
+    this.x = x;
+    this.y = y;
 };
 
 Vector.prototype.abs = function( ) {
