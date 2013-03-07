@@ -3,10 +3,6 @@
  * Hier wird alles initialisiert
  */
 
-var $cont = $('#jxgbox');
-var width = $cont.width();
-var height = $cont.height();
-
 var gui = new GUI({
     containerId : 'jxgbox',       // Id des Containers
     maxX : 15,              // maximale X-Koordinate für Punkte
