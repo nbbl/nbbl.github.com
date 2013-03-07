@@ -4,14 +4,14 @@ self.onmessage = function(event){
     var points = event.data.points;
     var name = event.data.name;
     
-    this.calculate(points, name);
+    calculate(points, name);
 };
 
 function calculate(points, name) {
     
     // Berechne irgendwas
     for(var i = 0; i < 10000; i++) {
-        for(var j = 0; j < 100000; j++) {
+        for(var j = 0; j < 100; j++) {
         
         }
     }

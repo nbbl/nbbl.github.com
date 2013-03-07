@@ -3,16 +3,20 @@
  * Hier wird alles initialisiert
  */
 
-var $cont = $('#container');
+var $cont = $('#jxgbox');
 var width = $cont.width();
 var height = $cont.height();
 
-var gui = new GUI('container', width, height);
+var gui = new GUI({
+    containerId : 'jxgbox',       // Id des Containers
+    maxX : 15,              // maximale X-Koordinate für Punkte
+    maxY : 10               // maximale Y-Koordinate für Punkte
+});
 
 var alc = new AlgLageController(gui);
 
-var p1 = new Point(100, 150);
-var p2 = new Point(200, 250);
+var p1 = new Point(12, 4);
+var p2 = new Point(3, 7);
 
 alc.addPoint(p1);
 alc.addPoint(p2);
