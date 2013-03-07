@@ -89,7 +89,12 @@ Point.distance = function(pt1, pt2) {
 //Vektor Prototyp
 
 function Vector(x,y){
-    return new Point(x,y);
+//    return new Point(x,y);
+    this.point = new Point(x, y);
+};
+
+Vector.prototype.abs = function( ) {
+    return Point.distance(this.point, {x:0, y:0});
 };
 
 Vector.skalarMult = function(s,v){
