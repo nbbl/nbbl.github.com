@@ -90,15 +90,15 @@ Point.distance = function(pt1, pt2) {
 
 function Vector(x,y){
     return new Point(x,y);
-}
+};
 
 Vector.skalarMult = function(s,v){
     return new Vector(v.x*s,v.y*s);
-}
+};
 
 Vector.skalarProd = function(v1,v2){
     return v1.x*v2.x + v1.y*v2.y;
-}
+};
 
 // Kanten Prototyp
 
@@ -116,11 +116,11 @@ function Edge(pt1,pt2){
 				    (function(v) { return new Vector(v.y,-v.x) }) (pt1.substract(pt2)));
     this.dist = Vector.skalarProd(this.normal,pt1);
   
-}
+};
 
 Edge.norm = function(pt1, pt2) {
     return 
-}
+};
 
 /* diese beiden Funktionen sind nötig da Punkte nicht zwingend in der
  * Sortierung zur Initialisierung bleiben. 
@@ -129,17 +129,17 @@ Edge.prototype.getLeft = function(){
     if (pt1.x == pt2.x) return null;
     else if (pt1.x < pt2.x) return pt1;
     else return pt2;
-}
+};
 
 Edge.prototype.getRight = function(){
     if (pt1.x == pt2.x) return null;
     else if (pt1.x < pt2.x) return pt2;
     else return pt1;
-}
+};
 
 Edge.prototype.distanceToLine = function(pt){
     return Vector.skalarProd(pt,this.normal) - this.dist;
-}
+};
 
 // Edge.prototype.intersectLine = function(pt,epsilon){
     
