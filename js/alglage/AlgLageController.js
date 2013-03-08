@@ -50,6 +50,14 @@ var AlgLageController = function(gui) {
     function refresh() {
         gui.drawPoints(points);
     }
+
+    // Füllt das Feld zufällig mit <amount> vielen Punkten
+    function fillRandomly(amount) {
+        for(i = 0; i < amount; i++) {
+            var x = Math.random() * this.gui.width;
+            var y = Math.random() * this.gui.height;
+        }
+    }
     
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {

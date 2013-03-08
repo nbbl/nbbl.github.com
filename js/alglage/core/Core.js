@@ -2,25 +2,29 @@
  * Hier kommt alles rein, was überall Verfügbar sein muss (auch in den 'Web Workers')
  */
 
-// Point Klasse
+// Vector Klasse
 
-function Point(x, y) {
+function Vector(x, y) {
     this.x = x || 0;
     this.y = y || 0;
 };
 
-Point.prototype.x = null;
-Point.prototype.y = null;
+Vector.prototype.x = null;
+Vector.prototype.y = null;
 
-Point.prototype.add = function(v) {
-    return new Point(this.x + v.x, this.y + v.y);
+Vector.prototype.clone = function() {
+    return new Vector(this.x, this.y);
 };
 
-Point.prototype.clone = function() {
-    return new Point(this.x, this.y);
+Vector.prototype.abs = function() {
+    return this.distance(Origin);
 };
 
-Point.prototype.degreesTo = function(v) {
+Vector.prototype.add = function(v) {
+    return new Vector(this.x + v.x, this.y + v.y);
+};
+
+Vector.prototype.degreesTo = function(v) {
     var dx = this.x - v.x;
     var dy = this.y - v.y;
     var angle = Math.atan2(dy, dx);
@@ -29,72 +33,61 @@ Point.prototype.degreesTo = function(v) {
     // degrees
 };
 
-Point.prototype.distance = function(v) {
+Vector.prototype.distance = function(v) {
     var x = this.x - v.x;
     var y = this.y - v.y;
     return Math.sqrt(x * x + y * y);
 };
 
-Point.prototype.equals = function(toCompare) {
+Vector.prototype.equals = function(toCompare) {
     return this.x == toCompare.x && this.y == toCompare.y;
 };
 
-Point.prototype.interpolate = function(v, f) {
-    return new Point((this.x + v.x) * f, (this.y + v.y) * f);
+Vector.prototype.interpolate = function(v, f) {
+    return new Vector((this.x + v.x) * f, (this.y + v.y) * f);
 };
 
-Point.prototype.length = function() {
+Vector.prototype.length = function() {
     return Math.sqrt(this.x * this.x + this.y * this.y);
 };
 
-Point.prototype.normalize = function(thickness) {
+Vector.prototype.normalize = function(thickness) {
     var l = this.length();
     this.x = this.x / l * thickness;
     this.y = this.y / l * thickness;
 };
 
-Point.prototype.orbit = function(origin, arcWidth, arcHeight, degrees) {
+Vector.prototype.orbit = function(origin, arcWidth, arcHeight, degrees) {
     var radians = degrees * (Math.PI / 180);
     this.x = origin.x + arcWidth * Math.cos(radians);
     this.y = origin.y + arcHeight * Math.sin(radians);
 };
 
-Point.prototype.offset = function(dx, dy) {
+Vector.prototype.offset = function(dx, dy) {
     this.x += dx;
     this.y += dy;
 };
 
-Point.prototype.substract = function(v) {
-    return new Point(this.x - v.x, this.y - v.y);
+Vector.prototype.substract = function(v) {
+    return new Vector(this.x - v.x, this.y - v.y);
 };
 
-Point.prototype.toString = function() {
+Vector.prototype.toString = function() {
     return "(x=" + this.x + ", y=" + this.y + ")";
 };
 
-Point.interpolate = function(pt1, pt2, f) {
-    return new Point((pt1.x + pt2.x) * f, (pt1.y + pt2.y) * f);
+Vector.interpolate = function(pt1, pt2, f) {
+    return new Vector((pt1.x + pt2.x) * f, (pt1.y + pt2.y) * f);
 };
 
-Point.polar = function(len, angle) {
-    return new Point(len * Math.sin(angle), len * Math.cos(angle));
+Vector.polar = function(len, angle) {
+    return new Vector(len * Math.sin(angle), len * Math.cos(angle));
 };
 
-Point.distance = function(pt1, pt2) {
+Vector.distance = function(pt1, pt2) {
     var x = pt1.x - pt2.x;
     var y = pt1.y - pt2.y;
     return Math.sqrt(x * x + y * y);
-};
-
-//Vektor Prototyp
-
-function Vector(x,y) {
-    this.x = x;
-    this.y = y;
-};
-
-Vector.prototype.abs = function( ) {
-    return Point.distance(this.point, {x:0, y:0});
 };
 
 Vector.skalarMult = function(s,v){
@@ -104,6 +97,9 @@ Vector.skalarMult = function(s,v){
 Vector.skalarProd = function(v1,v2){
     return v1.x*v2.x + v1.y*v2.y;
 };
+
+const var origin = new Vector(0,0);
+
 
 // Kanten Prototyp
 
