@@ -5,12 +5,12 @@
 var AlgLageController = function(gui) {
         
     // Private Variablen
-    var points = [];
+    var Points = [];
     var algos = {};
     var gui = gui;
     
     function addPoint(p) {
-        points.push(p);
+        Points.push(p);
     }
     
     function addAlgo(algoName, algoPath) {
@@ -34,7 +34,7 @@ var AlgLageController = function(gui) {
         for(var a in algos) {
             algos[a].worker.postMessage({
                 name : algos[a].name,
-                points : points
+                Points : Points
             });
         }
     }
@@ -42,26 +42,27 @@ var AlgLageController = function(gui) {
     function stopAlgos() {
         for(var i = 0; i < algos.length; i++) {
             algos[i].worker.postMessage({
-                points : points
+                Points : Points
             });
         }
     }
     
     function refresh() {
-        gui.drawPoints(points);
+        gui.drawPoints(Points);
     }
 
-    // Füllt das Feld zufällig mit <amount> vielen Punkten
-    function fillRandomly(amount) {
+    // Füllt das Feld zw. Ursprung und maxX/maxY zufällig mit <amount> vielen Punkten
+    function fillRandomly(amount, maxX, maxY) {
         for(i = 0; i < amount; i++) {
-            var x = Math.random() * this.gui.width;
-            var y = Math.random() * this.gui.height;
+            var x = Math.random() * maxX;
+            var y = Math.random() * maxY;
+            this.addPoint(new Vector(x, y));
         }
     }
     
     // Wird ausgeführt wenn sich Punkte ändern
-    $.subscribe('points-change', function() {
-        points = gui.getPoints();
+    $.subscribe('Points-change', function() {
+        Points = gui.getPoints();
         calculateAlgos()
     });
     
