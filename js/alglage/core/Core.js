@@ -17,7 +17,7 @@ Vector.prototype.clone = function() {
 };
 
 Vector.prototype.abs = function() {
-    return this.distance(Origin);
+    return this.distance(ORIGIN);
 };
 
 Vector.prototype.add = function(v) {
@@ -57,10 +57,10 @@ Vector.prototype.normalize = function(thickness) {
     this.y = this.y / l * thickness;
 };
 
-Vector.prototype.orbit = function(origin, arcWidth, arcHeight, degrees) {
+Vector.prototype.orbit = function(ORIGIN, arcWidth, arcHeight, degrees) {
     var radians = degrees * (Math.PI / 180);
-    this.x = origin.x + arcWidth * Math.cos(radians);
-    this.y = origin.y + arcHeight * Math.sin(radians);
+    this.x = ORIGIN.x + arcWidth * Math.cos(radians);
+    this.y = ORIGIN.y + arcHeight * Math.sin(radians);
 };
 
 Vector.prototype.offset = function(dx, dy) {
@@ -98,7 +98,7 @@ Vector.skalarProd = function(v1,v2){
     return v1.x*v2.x + v1.y*v2.y;
 };
 
-const var origin = new Vector(0,0);
+var ORIGIN = new Vector(0,0);
 
 
 // Kanten Prototyp

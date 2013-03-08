@@ -71,6 +71,7 @@ var AlgLageController = function(gui) {
         addPoint : addPoint,
         addAlgo : addAlgo,
         calculateAlgos : calculateAlgos,
-        refresh : refresh
+        refresh : refresh,
+        fillRandomly : fillRandomly
     }
 };
