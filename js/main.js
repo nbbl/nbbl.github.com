@@ -11,8 +11,9 @@ var gui = new GUI({
 
 var alc = new AlgLageController(gui);
 
-var p1 = new Point(12, 4);
-var p2 = new Point(3, 7);
+var p1 = new Vector(12, 4);
+var p2 = new Vector(3, 7);
+AlgLageController.fillRandomly(25, 5, 5);
 
 alc.addPoint(p1);
 alc.addPoint(p2);
