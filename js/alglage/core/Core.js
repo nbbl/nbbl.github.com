@@ -100,6 +100,14 @@ Vector.skalarProd = function(v1,v2){
 
 const var origin = new Vector(0,0);
 
+//Punkt als Alias fuer einen Vektor
+
+function Point(x, y) {
+	this.base = Vector;
+	this.base(x, y);
+}
+
+Point.prototype = new Vector;
 
 // Kanten Prototyp
 
@@ -119,9 +127,6 @@ function Edge(pt1,pt2){
   
 };
 
-Edge.norm = function(pt1, pt2) {
-    return 
-};
 
 /* diese beiden Funktionen sind nötig da Punkte nicht zwingend in der
  * Sortierung zur Initialisierung bleiben. 
