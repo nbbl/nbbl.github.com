@@ -127,6 +127,9 @@ function Edge(pt1,pt2){
   
 };
 
+Edge.prototype.length = function() {
+    return this.pt1.distance(this.pt2);
+};
 
 /* diese beiden Funktionen sind nötig da Punkte nicht zwingend in der
  * Sortierung zur Initialisierung bleiben. 
