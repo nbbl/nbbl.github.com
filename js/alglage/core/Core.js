@@ -4,7 +4,7 @@
 
 var ORIGIN = new Vector(0,0);  // Ursprungspunkt
 var SPATIAL_TOLERANCE = 1e-10; // Die Toleranz bei Abständen zu Strecken & Geraden
-var ANGULAR_TOLERANCE = undef; // yet to be defined.
+var ANGULAR_TOLERANCE = undefined; // yet to be defined.
 
 // Vector Klasse
 
@@ -146,11 +146,18 @@ Edge.prototype.distanceToLine = function(pt){
     return Vector.skalarProd(pt,this.normal) - this.dist;
 };
 
-Edge.prototype.intersectLine = function(pt){
+Edge.prototype.lineContains = function(pt){ //enthält die Gerade zur Kante den Punkt?
     return this.distanceToLine(pt) < SPATIAL_TOLERANCE; 
 };
 
-Edge.prototype.intersectLineSegment = function(pt){
-    return this.intersectLine(pt) && 
+Edge.prototype.contains = function(pt){ //enthält die Kante den Punkt?
+    return this.lineContains(pt) && 
 	   (this.getLeft().distance(pt) + this.getRight().distance(pt) < this.length() + SPATIAL_TOLERANCE);
 };
+
+Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
+    var y = (this.normal.x * edge.dist     - edge.normal.x * this.dist) / 
+	    (this.normal.x * edge.normal.y - this.normal.y * edge.normal.x);
+    var x = (this.dist - this.normal.y * y) / this.normal.x;
+    return new Point(x,y);
+}; 
