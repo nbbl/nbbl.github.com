@@ -102,13 +102,16 @@ var ORIGIN = new Vector(0,0);
 
 //Punkt als Alias fuer einen Vektor
 
+var Point = Vector;
+
+/*
 function Point(x, y) {
 	this.base = Vector;
 	this.base(x, y);
 }
 
 Point.prototype = new Vector;
-
+*/
 // Kanten Prototyp
 
 function Edge(pt1,pt2){
