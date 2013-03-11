@@ -103,7 +103,6 @@ Vector.skalarProd = function(v1,v2){
 };
 
 //Punkt als Alias fuer einen Vektor
-
 var Point = Vector; 
 
 // Kanten Prototyp
