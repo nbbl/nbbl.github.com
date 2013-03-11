@@ -2,6 +2,10 @@
  * Hier kommt alles rein, was überall Verfügbar sein muss (auch in den 'Web Workers')
  */
 
+var ORIGIN = new Vector(0,0);  // Ursprungspunkt
+var SPATIAL_TOLERANCE = 1e-10; // Die Toleranz bei Abständen zu Strecken & Geraden
+var ANGULAR_TOLERANCE = undef; // yet to be defined.
+
 // Vector Klasse
 
 function Vector(x, y) {
@@ -98,16 +102,9 @@ Vector.skalarProd = function(v1,v2){
     return v1.x*v2.x + v1.y*v2.y;
 };
 
-var ORIGIN = new Vector(0,0);
-
 //Punkt als Alias fuer einen Vektor
 
-function Point(x, y) {
-	this.base = Vector;
-	this.base(x, y);
-}
-
-Point.prototype = new Vector;
+var Point = Vector; 
 
 // Kanten Prototyp
 
@@ -135,25 +132,26 @@ Edge.prototype.length = function() {
  * Sortierung zur Initialisierung bleiben. 
  */
 Edge.prototype.getLeft = function(){
-    if (pt1.x == pt2.x) return null;
-    else if (pt1.x < pt2.x) return pt1;
-    else return pt2;
+    if (this.pt1.x == this.pt2.x) return null;
+    else if (this.pt1.x < this.pt2.x) return this.pt1;
+    else return this.pt2;
 };
 
 Edge.prototype.getRight = function(){
-    if (pt1.x == pt2.x) return null;
-    else if (pt1.x < pt2.x) return pt2;
-    else return pt1;
+    if (this.pt1.x == this.pt2.x) return null;
+    else if (this.pt1.x < this.pt2.x) return this.pt2;
+    else return this.pt1;
 };
 
 Edge.prototype.distanceToLine = function(pt){
     return Vector.skalarProd(pt,this.normal) - this.dist;
 };
 
-// Edge.prototype.intersectLine = function(pt,epsilon){
-    
-// }
+Edge.prototype.intersectLine = function(pt){
+    return this.distanceToLine(pt) < SPATIAL_TOLERANCE; 
+};
 
-// Edge.prototype.intersectLineSegment = function(pt,epsilon){
-    
-// }
+Edge.prototype.intersectLineSegment = function(pt){
+    return this.intersectLine(pt) && 
+	   (this.getLeft().distance(pt) + this.getRight().distance(pt) < this.length() + SPATIAL_TOLERANCE);
+};
