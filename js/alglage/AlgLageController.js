@@ -16,10 +16,30 @@ var AlgLageController = function(gui) {
     function addAlgo(algoName, algoPath) {
         var w = new Worker(algoPath);
         
+        // Verwaltung der Ergebnisse der Algorithmen
+        // Provisorisch erstmal mit nem Switch umgesetzt
         w.onmessage = function(event) {
-            var $ele = $('#' + event.data.name);
-            $ele.find('h2').html(event.data.score);
-            $ele.find('p:first').html(event.data.more);
+
+            var name = event.data.name;
+            switch (name) {
+
+                case "Algo1":
+                    var $ele = $('#' + event.data.name);
+                    $ele.find('h2').html(event.data.score);
+                    $ele.find('p:first').html(event.data.more);
+                    break;
+
+                case "Algo2":
+                    var $ele = $('#' + event.data.name);
+                    $ele.find('h2').html(event.data.score);
+                    $ele.find('p:first').html(event.data.more);
+                    break;
+
+                case "ShortestDistance_BF":
+                    break;
+                default:
+                    break;
+            }
         };
         
         var a = {
