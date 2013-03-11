@@ -10,8 +10,8 @@ self.onmessage = function(event){
 function calculate(points, name) {
     
     // Berechne irgendwas
-    for(var i = 0; i < 10000; i++) {
-        for(var j = 0; j < 300; j++) {
+    for(var i = 0; i < 10; i++) {
+        for(var j = 0; j < 30; j++) {
         
         }
     }
