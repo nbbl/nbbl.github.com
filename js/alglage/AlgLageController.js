@@ -34,7 +34,7 @@ var AlgLageController = function(gui) {
         for(var a in algos) {
             algos[a].worker.postMessage({
                 name : algos[a].name,
-                Points : Points
+                points : Points
             });
         }
     }
@@ -42,7 +42,7 @@ var AlgLageController = function(gui) {
     function stopAlgos() {
         for(var i = 0; i < algos.length; i++) {
             algos[i].worker.postMessage({
-                Points : Points
+                points : Points
             });
         }
     }
@@ -56,7 +56,7 @@ var AlgLageController = function(gui) {
         for(i = 0; i < amount; i++) {
             var x = Math.random() * maxX;
             var y = Math.random() * maxY;
-            this.addPoint(new Vector(x, y));
+            this.addPoint(new Point(x, y));
         }
     }
     
