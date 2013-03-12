@@ -6,6 +6,10 @@ var ORIGIN = new Vector(0,0);  // Ursprungspunkt
 var SPATIAL_TOLERANCE = 1e-10; // Die Toleranz bei Abständen zu Strecken & Geraden
 var ANGULAR_TOLERANCE = undefined; // yet to be defined.
 
+function approx(skalar1,skalar2){
+    return Math.abs(skalar1 - skalar2) < SPATIAL_TOLERANCE;
+}
+
 // Vector Klasse
 
 function Vector(x, y) {
@@ -44,7 +48,7 @@ Vector.prototype.distance = function(v) {
 };
 
 Vector.prototype.equals = function(toCompare) {
-    return this.x == toCompare.x && this.y == toCompare.y;
+    return approx(this.x,toCompare.x) && approx(this.y,toCompare.y);
 };
 
 Vector.prototype.interpolate = function(v, f) {
@@ -145,13 +149,13 @@ Edge.prototype.length = function() {
  * Gleiche X-Koordinaten müssen im vorhinein ausgeschlossen werden!
  */
 Edge.prototype.getLeft = function(){
-    if (this.pt1.x == this.pt2.x) return null;
+    if (this.pt1.x === this.pt2.x) return null;
     else if (this.pt1.x < this.pt2.x) return this.pt1;
     else return this.pt2;
 };
 
 Edge.prototype.getRight = function(){
-    if (this.pt1.x == this.pt2.x) return null;
+    if (this.pt1.x === this.pt2.x) return null;
     else if (this.pt1.x < this.pt2.x) return this.pt2;
     else return this.pt1;
 };
@@ -166,13 +170,17 @@ Edge.prototype.lineContains = function(pt){ //enthält die Gerade zur Kante den 
 
 Edge.prototype.contains = function(pt){ //enthält die Kante den Punkt?
     return this.lineContains(pt) && 
-	   (this.getLeft().distance(pt) + this.getRight().distance(pt) < this.length() + SPATIAL_TOLERANCE);
+	approx(this.getLeft().distance(pt) + this.getRight().distance(pt), this.length());
 };
 
 /*
  *
  */
 Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
+    if (this.normal.equals(edge.normal) || this.normal.equals(-edge.normal)) {
+	if (approx(this.dist,edge.dist)) return "identical";
+	return "parallel"; 
+    }
     var y = (this.normal.x * edge.dist     - edge.normal.x * this.dist) / 
 	    (this.normal.x * edge.normal.y - this.normal.y * edge.normal.x);
     var x = (this.dist - this.normal.y * y) / this.normal.x;
