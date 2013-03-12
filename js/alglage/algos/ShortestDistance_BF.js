@@ -4,6 +4,10 @@ self.onmessage = function(event) {
     var points = event.data.points;
     var name = event.data.name;
 
+    // durch die Serialisierung in eine Nachricht haben die Punkte ihre
+    // Methoden verloren. Daher zurückcasten!
+    points = Vector.cast(points);
+
     calculate(points, name);
 };
 
@@ -34,6 +38,6 @@ function calculate(points, name) {
     self.postMessage({
         score : shortestDistance,
         more : edges,
-        name : name
+        name : 'ShortestDistance'
     });
 };

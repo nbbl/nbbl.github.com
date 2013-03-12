@@ -15,38 +15,19 @@ var AlgLageController = function(gui) {
     
     function addAlgo(algoName, algoPath) {
         var w = new Worker(algoPath);
+        if (!w) {
+            console.log('could not create worker with path' + algoPath);
+        };
         
-        // Verwaltung der Ergebnisse der Algorithmen
-        // Provisorisch erstmal mit nem Switch umgesetzt
         w.onmessage = function(event) {
-
-            var name = event.data.name;
-            switch (name) {
-
-                case "Algo1":
-                    var $ele = $('#' + event.data.name);
-                    $ele.find('h2').html(event.data.score);
-                    $ele.find('p:first').html(event.data.more);
-                    break;
-
-                case "Algo2":
-                    var $ele = $('#' + event.data.name);
-                    $ele.find('h2').html(event.data.score);
-                    $ele.find('p:first').html(event.data.more);
-                    break;
-
-                case "ShortestDistance_BF":
-                    break;
-                default:
-                    break;
-            }
+            handleResponse(event);
         };
         
         var a = {
             worker : w,
             name : algoName
         };
-        
+
         algos[algoName] = a;
     }
     
@@ -68,7 +49,7 @@ var AlgLageController = function(gui) {
     function refresh() {
         gui.drawPoints(points);
     }
-
+    
     // Füllt das Feld zw. Ursprung und maxX/maxY zufällig mit <amount> vielen Punkten
     function fillRandomly(amount, maxX, maxY) {
         for(i = 0; i < amount; i++) {
@@ -83,6 +64,29 @@ var AlgLageController = function(gui) {
         points = gui.getPoints();
         calculateAlgos()
     });
+
+    function handleResponse(event) {
+        var name = event.data.name;
+        switch (name) {
+            case 'algo1':
+                var $ele = $('#' + event.data.name);
+                $ele.find('h2').html(event.data.score);
+                $ele.find('p:first').html(event.data.more);
+                break;
+            case 'algo2':
+                var $ele = $('#' + event.data.name);
+                $ele.find('h2').html(event.data.score);
+                $ele.find('p:first').html(event.data.more);
+                break;
+            case 'ShortestDistance':
+                var $ele = $('#' + 'algo3');
+                $ele.find('h2').html(event.data.score);
+                break;
+            default:
+                console.log('No matching switchcase for ' + name + ' in handleResponse()-switch');
+                break;
+        }
+    }
     
     // Öffentliches Interface
     return {
