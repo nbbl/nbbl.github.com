@@ -1,3 +1,21 @@
+/*
+ * Dieser Generator kann z.B. wie folgt verwendet werden:
+ *
+ * js> var set = new Binomsubset([1,2,3,4,5,6,7,8,9,10],3);
+ * js> for(var i in set) print(i); 
+ * 1,2,3
+ * 1,2,4
+ * ...
+ * 1,2,10
+ * 1,3,10
+ * 1,4,10
+ * ...
+ * 1,9,10
+ * 2,9,10
+ * 3,9,10
+ * ...
+ * 8,9,10
+ */
 function Binomsubset(array,subsetsize){
     this.array = array;
     this.subsetsize = subsetsize;
