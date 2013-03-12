@@ -102,6 +102,18 @@ Vector.skalarProd = function(v1,v2){
     return v1.x*v2.x + v1.y*v2.y;
 };
 
+Vector.cast = function(p) {
+    if( Object.prototype.toString.call(p) === '[object Array]' ) {
+        for(var i = 0; i < p.length; i++) {
+            p[i].__proto__ = Point.prototype;
+        }   
+    }
+    else {
+        p.__proto__ = Point.prototype;
+    }
+    return p;
+};
+
 //Punkt als Alias fuer einen Vektor
 var Point = Vector; 
 
