@@ -161,7 +161,7 @@ Edge.prototype.getRight = function(){
 };
 
 Edge.prototype.distanceToLine = function(pt){
-    return Vector.skalarProd(pt,this.normal) - this.dist;
+    return Math.abs(Vector.skalarProd(pt,this.normal) - this.dist);
 };
 
 Edge.prototype.lineContains = function(pt){ //enthält die Gerade zur Kante den Punkt?
