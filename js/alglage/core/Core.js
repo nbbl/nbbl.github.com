@@ -178,8 +178,8 @@ Edge.prototype.contains = function(pt){ //enthält die Kante den Punkt?
  */
 Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
     if (this.normal.equals(edge.normal) || this.normal.equals(-edge.normal)) {
-	if (approx(this.dist,edge.dist)) return "identical";
-	return "parallel"; 
+	if (approx(this.dist,edge.dist)) return "identical_lines";
+	return "parallel_lines"; 
     }
     var y = (this.normal.x * edge.dist     - edge.normal.x * this.dist) / 
 	    (this.normal.x * edge.normal.y - this.normal.y * edge.normal.x);
@@ -190,6 +190,8 @@ Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden 
 
 Edge.prototype.edgeIntersection = function(edge){ //der Schnittpunkt der beiden Kanten.
     var potIntsec = this.lineIntersection(edge);
-    if (potIntsec !== null && edge.contains(potIntsec) || this.contains(potIntsec)) return potIntsec;
-    return null;
+    if (potIntsec === "parallel_lines") return null; //kein Schnittpunkt
+    if (potIntsec === "identical_lines") return "identical_lines"; //sollte nicht passieren
+    if (potIntsec !== null && edge.contains(potIntsec) && this.contains(potIntsec)) return potIntsec;
+    return null; //kein Schnittpunkt
 };
