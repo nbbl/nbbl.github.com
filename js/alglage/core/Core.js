@@ -129,6 +129,8 @@ Edge.prototype.length = function() {
 
 /* diese beiden Funktionen sind nötig da Punkte nicht zwingend in der
  * Sortierung zur Initialisierung bleiben. 
+ *
+ * Gleiche X-Koordinaten müssen im vorhinein ausgeschlossen werden!
  */
 Edge.prototype.getLeft = function(){
     if (this.pt1.x == this.pt2.x) return null;
@@ -155,9 +157,19 @@ Edge.prototype.contains = function(pt){ //enthält die Kante den Punkt?
 	   (this.getLeft().distance(pt) + this.getRight().distance(pt) < this.length() + SPATIAL_TOLERANCE);
 };
 
+/*
+ *
+ */
 Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
     var y = (this.normal.x * edge.dist     - edge.normal.x * this.dist) / 
 	    (this.normal.x * edge.normal.y - this.normal.y * edge.normal.x);
     var x = (this.dist - this.normal.y * y) / this.normal.x;
+    if (!isFinite(x) || !isFinite(y)) return null; 
     return new Point(x,y);
 }; 
+
+Edge.prototype.edgeIntersection = function(edge){ //der Schnittpunkt der beiden Kanten.
+    var potIntsec = this.lineIntersection(edge);
+    if (potIntsec !== null && edge.contains(potIntsec) || this.contains(potIntsec)) return potIntsec;
+    return null;
+};
