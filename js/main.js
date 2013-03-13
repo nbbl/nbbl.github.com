@@ -5,6 +5,7 @@
 
 var gui = new GUI({
     containerId : 'jxgbox',       // Id des Containers
+    dummyContainer : 'dummyBox', // Id von Dummy-Box
     maxX : 15,              // maximale X-Koordinate für Punkte
     maxY : 10               // maximale Y-Koordinate für Punkte
 });

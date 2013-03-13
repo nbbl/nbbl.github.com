@@ -7,6 +7,7 @@ Settings
 --------
 {
     containerId : '',       // Id des Containers
+    dummyContainer : '',    // Id von Dummy-Box
     maxX : 10,              // maximale X-Koordinate für Punkte
     maxY : 10               // maximale Y-Koordinate für Punkte
 }
@@ -16,6 +17,8 @@ var GUI = function(settings) {
         
     // Private Variablen
     var points = [];
+    var $dummyBox = $('#' + settings.dummyContainer);
+    var algoBoxes = {};
     
     // JSXGraph-Board initialisieren
     var board = JXG.JSXGraph.initBoard(settings.containerId, {
@@ -64,9 +67,25 @@ var GUI = function(settings) {
         
     }
     
+    function initAlgoBox(algoName) {
+        var $ele = $dummyBox.clone().attr('id', algoName);
+        $dummyBox.before($ele);
+        algoBoxes[algoName] = $ele;
+    }
+    
+    function refreshAlgoBox(algoName, score, info) {
+        if(algoBoxes[algoName] === undefined) return false;
+        
+        var $ele = algoBoxes[algoName];
+        $ele.find('h2').html(score);
+        $ele.find('p:first').html(info);
+    }
+    
     // Öffentliches Interface
     return {
         drawPoints : drawPoints,
-        getPoints : getPoints
+        getPoints : getPoints,
+        initAlgoBox : initAlgoBox,
+        refreshAlgoBox : refreshAlgoBox
     }
 }

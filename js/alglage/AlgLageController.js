@@ -29,6 +29,9 @@ var AlgLageController = function(gui) {
         };
 
         algos[algoName] = a;
+        
+        // Algo-Box initialisieren
+        gui.initAlgoBox(algoName);
     }
     
     function calculateAlgos() {
@@ -66,26 +69,14 @@ var AlgLageController = function(gui) {
     });
 
     function handleResponse(event) {
+        // Layer an GUI schicken
+        // gui.draw(...);
+        
+        // Algo-Boxen neuladen
         var name = event.data.name;
-        switch (name) {
-            case 'algo1':
-                var $ele = $('#' + event.data.name);
-                $ele.find('h2').html(event.data.score);
-                $ele.find('p:first').html(event.data.more);
-                break;
-            case 'algo2':
-                var $ele = $('#' + event.data.name);
-                $ele.find('h2').html(event.data.score);
-                $ele.find('p:first').html(event.data.more);
-                break;
-            case 'ShortestDistance':
-                var $ele = $('#' + 'algo3');
-                $ele.find('h2').html(event.data.score);
-                break;
-            default:
-                console.log('No matching switchcase for ' + name + ' in handleResponse()-switch');
-                break;
-        }
+        var score = event.data.score;
+        var info = event.data.info;
+        gui.refreshAlgoBox(name, score, info);
     }
     
     // Öffentliches Interface
