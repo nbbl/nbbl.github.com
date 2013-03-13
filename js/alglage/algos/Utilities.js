@@ -37,3 +37,74 @@ Subsets.prototype.__iterator__ = function(){
     }
     yield this.pointers.map(function(x){return array[x];});
 };
+
+/*------------------------------------------------------------------*/
+/*START Sorted Double Linked List-----------------------------------*/
+/*------------------------------------------------------------------*/
+function SortedDLL(compFunction) {
+    this.cmp = cmpFunction;
+    this.head = null;
+    this.tail = null;
+}
+
+SortedDLL.prototype.insert = function(elem) {
+    if (this.head === null) {
+        this.head = new ChainElement(elem);
+        this.tail = this.head;
+    } else {
+        var curr = this.head;
+        while ((this.cmp(elem, curr) > 0) && (curr.next !== null)) {
+            curr = curr.next;
+        }
+        if (this.cmp(elem, curr)<=0 && curr.prev===null) { //elem is smaller/equal to minimum 
+            curr.prev = new ChainElem(elem);
+            curr.prev.next = curr;
+            this.head = curr.prev;
+        } else if ((this.cmp(elem, curr)>0)) { //elem is new maximum
+            curr.next = new ChainElem(elem);
+            curr.next.prev = curr;
+            this.tail = curr.next;
+        } else { //insert inside existing chain
+            curr.prev.next = new ChainElem(elem);
+            curr.prev.next.prev = curr.prev;
+
+            curr.prev = curr.prev.next;
+            curr.prev.next = curr;
+        }
+    }
+}
+
+// delete a given ChainElement, returns the stored vaule
+function SortedDll.prototype.deleteChainElem(ce) {
+    if (this.head === ce) {     
+        if (ce.next !== null) { //there is at least one other ChainElement 
+            this.head = ce.next; 
+            ce.next.prev = null; 
+        } else {                //ce is the only ChainElement 
+            this.head = null;
+            this.tail = null;
+        }
+    } else if (this.tail === ce) { 
+        this.tail = ce.prev;
+        ce.prev.next = null;
+    } else {                    //ce has 'prev' and 'next' ChainElement
+        ce.prev.nex = ce.next;
+        ce.next.prev = ce.prev;
+    }
+    return ce.value;
+}
+
+//retrieves minimal stored value, and removes its corresponding ChainElement 
+SortedDLL.prototype.retrieveMin = function() {
+    if (this.head===null) return null; //no elements there
+    return deleteChainElem(this.head);
+}
+
+function ChainElem(elem) {
+    this.value = elem;
+    this.prev = null;
+    this.next = null;
+}
+/*------------------------------------------------------------------*/
+/*END Sorted Double Linked List-----------------------------------*/
+/*------------------------------------------------------------------*/
