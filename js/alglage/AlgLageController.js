@@ -62,13 +62,18 @@ var AlgLageController = function(gui) {
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {
         points = gui.getPoints();
-        calculateAlgos()
+        calculateAlgos();
     });
 
     function handleResponse(event) {
         // Layer an GUI schicken
         // gui.draw(...);
-        
+        if(event.data.name === 'ShortestDistance_BF') {
+            gui.draw({
+                straightLines : event.data.more
+            });
+        }
+
         // Algo-Boxen neuladen
         var name = event.data.name;
         var score = event.data.score;
