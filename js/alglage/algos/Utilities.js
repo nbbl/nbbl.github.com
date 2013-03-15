@@ -23,7 +23,7 @@ function Subsets(array,subsetsize){
     this.maxpointer = new Array(subsetsize);
     for(var i=0; i<subsetsize; i++){
 	this.pointers[i]=i;
-	this.maxpointer[i]=array.length-1-i;
+	this.maxpointer[i]=array.length-(subsetsize-i);
     }
 };
 
@@ -33,18 +33,18 @@ Subsets.prototype.__iterator__ = function(){
     var i = this.pointers.length-1;
     outerloop:
     while(true){
-	while(this.pointers[i]<=this.maxpointer[i]){
-	    yield this.pointers.map(function(x){return array[x];});
-	    this.pointers[i]++;
-	}
-	while(this.pointers[i]>this.maxpointer[i]){
-	    p[--i]++;
-	    if(i==0 && this.pointers[i]>this.maxpointer[i]) break outerloop;
-	}
-	while(i<this.pointers.length-1){
-	    ++i;
-	    this.pointers[i]=this.pointers[i-1]+1;
-	}	    
+        while(this.pointers[i]<=this.maxpointer[i]){
+            yield this.pointers.map(function(x){return array[x];});
+            this.pointers[i]++;
+        }
+        while(this.pointers[i]>this.maxpointer[i]){
+            this.pointers[--i]++;
+            if(i==0 && this.pointers[i]>this.maxpointer[i]) break outerloop;
+        }
+        while(i<this.pointers.length-1){
+            ++i;
+            this.pointers[i]=this.pointers[i-1]+1;
+        }	    
     }
 };
 
@@ -104,6 +104,7 @@ SortedDLL.prototype.retrieveMin = function() {
     return deleteChainElem(this.head);
 }
 
+//creates a container for elements used in  SortedDLL
 function ChainElem(elem) {
     this.value = elem;
     this.prev = null;
