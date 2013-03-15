@@ -20,22 +20,32 @@ function Subsets(array,subsetsize){
     this.array = array;
     this.subsetsize = subsetsize;
     this.pointers = new Array(subsetsize);
+    this.maxpointer = new Array(subsetsize);
     for(var i=0; i<subsetsize; i++){
 	this.pointers[i]=i;
+	this.maxpointer[i]=array.length-1-i;
     }
 };
 
+
 Subsets.prototype.__iterator__ = function(){
-    var array = this.array
-    var nextmax = array.length-1;
-    for(var i=this.subsetsize-1; i>=0; i--){
-	while(this.pointers[i]<nextmax){
+    var array = this.array;
+    var i = this.pointers.length-1;
+    outerloop:
+    while(true){
+	while(this.pointers[i]<=this.maxpointer[i]){
 	    yield this.pointers.map(function(x){return array[x];});
 	    this.pointers[i]++;
 	}
-	nextmax--;
+	while(this.pointers[i]>this.maxpointer[i]){
+	    p[--i]++;
+	    if(i==0 && this.pointers[i]>this.maxpointer[i]) break outerloop;
+	}
+	while(i<this.pointers.length-1){
+	    ++i;
+	    this.pointers[i]=this.pointers[i-1]+1;
+	}	    
     }
-    yield this.pointers.map(function(x){return array[x];});
 };
 
 /*------------------------------------------------------------------*/
@@ -75,7 +85,7 @@ SortedDLL.prototype.insert = function(elem) {
 }
 
 // delete a given ChainElement, returns the stored vaule
-function SortedDll.prototype.deleteChainElem(ce) {
+SortedDLL.prototype.deleteChainElem = function(ce) {
     if (this.head === ce) {     
         if (ce.next !== null) { //there is at least one other ChainElement 
             this.head = ce.next; 
