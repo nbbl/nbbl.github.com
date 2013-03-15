@@ -13,12 +13,11 @@ var alc = new AlgLageController(gui);
 
 var p1 = new Point(12, 4);
 var p2 = new Point(3, 7);
-alc.fillRandomly(25, 5, 5);
 
 alc.addPoint(p1);
 alc.addPoint(p2);
 
-alc.refresh();
+alc.fillRandomly(25, 5, 5);
 
 alc.addAlgo('algo1', 'js/alglage/algos/Algo1.js');
 alc.addAlgo('algo2', 'js/alglage/algos/Algo2.js');

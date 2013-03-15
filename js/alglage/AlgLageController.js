@@ -46,11 +46,7 @@ var AlgLageController = function(gui) {
             // algos[i].worker Macht noch nichts...
         }
     }
-    
-    function refresh() {
-        gui.drawPoints(points);
-    }
-    
+
     // Füllt das Feld zw. Ursprung und maxX/maxY zufällig mit <amount> vielen Punkten
     function fillRandomly(amount, maxX, maxY) {
         for(i = 0; i < amount; i++) {
@@ -94,7 +90,6 @@ var AlgLageController = function(gui) {
         addPoint : addPoint,
         addAlgo : addAlgo,
         calculateAlgos : calculateAlgos,
-        refresh : refresh,
         fillRandomly : fillRandomly
     }
 };
