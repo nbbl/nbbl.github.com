@@ -44,13 +44,11 @@ Subsets.prototype.__iterator__ = function(){
 function SortedDLL(compFunction) {
     this.cmp = cmpFunction;
     this.head = null;
-    this.tail = null;
 }
 
 SortedDLL.prototype.insert = function(elem) {
     if (this.head === null) {
         this.head = new ChainElement(elem);
-        this.tail = this.head;
     } else {
         var curr = this.head;
         while ((this.cmp(elem, curr) > 0) && (curr.next !== null)) {
@@ -60,14 +58,12 @@ SortedDLL.prototype.insert = function(elem) {
             curr.prev = new ChainElem(elem);
             curr.prev.next = curr;
             this.head = curr.prev;
-        } else if ((this.cmp(elem, curr)>0)) { //elem is new maximum
+        } else if (this.cmp(elem, curr) > 0) { //elem is new maximum
             curr.next = new ChainElem(elem);
             curr.next.prev = curr;
-            this.tail = curr.next;
         } else { //insert inside existing chain
             curr.prev.next = new ChainElem(elem);
             curr.prev.next.prev = curr.prev;
-
             curr.prev = curr.prev.next;
             curr.prev.next = curr;
         }
@@ -82,10 +78,8 @@ function SortedDll.prototype.deleteChainElem(ce) {
             ce.next.prev = null; 
         } else {                //ce is the only ChainElement 
             this.head = null;
-            this.tail = null;
         }
-    } else if (this.tail === ce) { 
-        this.tail = ce.prev;
+    } else if (ce.next === null) { 
         ce.prev.next = null;
     } else {                    //ce has 'prev' and 'next' ChainElement
         ce.prev.nex = ce.next;
