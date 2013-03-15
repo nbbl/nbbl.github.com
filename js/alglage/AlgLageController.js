@@ -11,6 +11,7 @@ var AlgLageController = function(gui) {
     
     function addPoint(p) {
         points.push(p);
+        gui.initGraph(points);
     }
     
     function addAlgo(algoName, algoPath) {
