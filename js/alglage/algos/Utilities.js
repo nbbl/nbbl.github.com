@@ -20,22 +20,32 @@ function Subsets(array,subsetsize){
     this.array = array;
     this.subsetsize = subsetsize;
     this.pointers = new Array(subsetsize);
+    this.maxpointer = new Array(subsetsize);
     for(var i=0; i<subsetsize; i++){
 	this.pointers[i]=i;
+	this.maxpointer[i]=array.length-(subsetsize-i);
     }
 };
 
+
 Subsets.prototype.__iterator__ = function(){
-    var array = this.array
-    var nextmax = array.length-1;
-    for(var i=this.subsetsize-1; i>=0; i--){
-	while(this.pointers[i]<nextmax){
-	    yield this.pointers.map(function(x){return array[x];});
-	    this.pointers[i]++;
-	}
-	nextmax--;
+    var array = this.array;
+    var i = this.pointers.length-1;
+    outerloop:
+    while(true){
+        while(this.pointers[i]<=this.maxpointer[i]){
+            yield this.pointers.map(function(x){return array[x];});
+            this.pointers[i]++;
+        }
+        while(this.pointers[i]>this.maxpointer[i]){
+            this.pointers[--i]++;
+            if(i==0 && this.pointers[i]>this.maxpointer[i]) break outerloop;
+        }
+        while(i<this.pointers.length-1){
+            ++i;
+            this.pointers[i]=this.pointers[i-1]+1;
+        }	    
     }
-    yield this.pointers.map(function(x){return array[x];});
 };
 
 /*------------------------------------------------------------------*/
@@ -44,13 +54,11 @@ Subsets.prototype.__iterator__ = function(){
 function SortedDLL(compFunction) {
     this.cmp = cmpFunction;
     this.head = null;
-    this.tail = null;
 }
 
 SortedDLL.prototype.insert = function(elem) {
     if (this.head === null) {
         this.head = new ChainElement(elem);
-        this.tail = this.head;
     } else {
         var curr = this.head;
         while ((this.cmp(elem, curr) > 0) && (curr.next !== null)) {
@@ -60,14 +68,12 @@ SortedDLL.prototype.insert = function(elem) {
             curr.prev = new ChainElem(elem);
             curr.prev.next = curr;
             this.head = curr.prev;
-        } else if ((this.cmp(elem, curr)>0)) { //elem is new maximum
+        } else if (this.cmp(elem, curr) > 0) { //elem is new maximum
             curr.next = new ChainElem(elem);
             curr.next.prev = curr;
-            this.tail = curr.next;
         } else { //insert inside existing chain
             curr.prev.next = new ChainElem(elem);
             curr.prev.next.prev = curr.prev;
-
             curr.prev = curr.prev.next;
             curr.prev.next = curr;
         }
@@ -75,17 +81,15 @@ SortedDLL.prototype.insert = function(elem) {
 }
 
 // delete a given ChainElement, returns the stored vaule
-function SortedDll.prototype.deleteChainElem(ce) {
+SortedDLL.prototype.deleteChainElem = function(ce) {
     if (this.head === ce) {     
         if (ce.next !== null) { //there is at least one other ChainElement 
             this.head = ce.next; 
             ce.next.prev = null; 
         } else {                //ce is the only ChainElement 
             this.head = null;
-            this.tail = null;
         }
-    } else if (this.tail === ce) { 
-        this.tail = ce.prev;
+    } else if (ce.next === null) { 
         ce.prev.next = null;
     } else {                    //ce has 'prev' and 'next' ChainElement
         ce.prev.nex = ce.next;
@@ -100,6 +104,7 @@ SortedDLL.prototype.retrieveMin = function() {
     return deleteChainElem(this.head);
 }
 
+//creates a container for elements used in  SortedDLL
 function ChainElem(elem) {
     this.value = elem;
     this.prev = null;
