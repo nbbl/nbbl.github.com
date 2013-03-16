@@ -12,18 +12,32 @@ var gui = new GUI({
 
 var alc = new AlgLageController(gui);
 
-var p1 = new Point(12, 4);
-var p2 = new Point(3, 7);
-var p3 = new Point(6, 5);
+var points = [
+    new Point(4, 6),
+    new Point(12, 4),
+    new Point(3, 7),
+    new Point(6, 5),
+    new Point(6, 7),
+    new Point(7, 2),
+    new Point(14, 5),
+    new Point(4, 1) ];
 
-alc.addPoint(p1);
-alc.addPoint(p2);
-alc.addPoint(p3);
-// alc.fillRandomly(10, 5, 5);
+var edges = [
+    new Edge(points[0], points[1]),
+    new Edge(points[1], points[2]),
+    new Edge(points[2], points[4]),
+    new Edge(points[7], points[1]),
+    new Edge(points[7], points[6]),
+    new Edge(points[2], points[6]),
+    new Edge(points[3], points[6]),
+    new Edge(points[4], points[6]),
+    new Edge(points[7], points[5]) ];
 
-// alc.addAlgo('algo1', 'js/alglage/algos/Algo1.js');
-// alc.addAlgo('algo2', 'js/alglage/algos/Algo2.js');
+var graph = new Graph(points, edges);
+alc.setGraph(graph);
 
+alc.addAlgo('algo1', 'js/alglage/algos/Algo1.js');
+alc.addAlgo('algo2', 'js/alglage/algos/Algo2.js');
 alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF.js');
 
 alc.calculateAlgos();

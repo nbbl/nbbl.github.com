@@ -6,12 +6,36 @@ var AlgLageController = function(gui) {
         
     // Private Variablen
     var points = [];
+    var edges = [];
+    var graph = new Graph(points, edges);
     var algos = {};
     var gui = gui;
     
     function addPoint(p) {
-        points.push(p);
-        gui.initGraph(points);
+        // points.push(p);
+        // gui.initGraph(points);
+        graph.addPoint(p);
+        gui.initGraph(graph);
+    }
+
+    function addEdge(edge) {
+        graph.addEdge(edge);
+        gui.initGraph(graph);
+    }
+
+    function removePoint(p) {
+        graph.removePoint(p);
+        gui.initGraph(graph);
+    }
+
+    function removeEdge(edge) {
+        graph.removeEdge(edge);
+        gui.initGraph(graph);
+    }
+
+    function setGraph(gr) {
+        graph = gr;
+        gui.initGraph(graph);
     }
     
     function addAlgo(algoName, algoPath) {
@@ -84,6 +108,10 @@ var AlgLageController = function(gui) {
     // Öffentliches Interface
     return {
         addPoint : addPoint,
+        addEdge : addEdge,
+        removePoint : removePoint,
+        removeEdge : removeEdge,
+        setGraph : setGraph,
         addAlgo : addAlgo,
         calculateAlgos : calculateAlgos,
         fillRandomly : fillRandomly

@@ -40,9 +40,9 @@ var GUI = function(settings) {
         }
     });
     
-    function initGraph(pnts, egs) {
-        points = pnts;
-        edges = egs;
+    function initGraph(graph) {
+        points = graph.getPoints();
+        edges = graph.getEdges();
         _drawGraph();
     }
 
@@ -74,11 +74,7 @@ var GUI = function(settings) {
                 p.srcPoint = points[i];
                 boardPoints.push(p);
 
-                // nach einem Verziehen eines Punktes dessen zugrundeliegenden Punkt
-                // in points updaten, und event publishen
                 p.on('mouseup', function(){
-                    // points[p.srcInd].x = this.X();
-                    // points[p.srcInd].y = this.Y();
                     $.publish('points-change');
                 });
 
@@ -92,7 +88,7 @@ var GUI = function(settings) {
             }
         }
 
-/*        if(edges !== undefined) {
+        if(edges !== undefined) {
             // alle Kanten neuzeichnen
             for(var i = 0; i < boardEdges.length; i++) {
                 p = board.removeObject(boardEdges[i]);
@@ -101,10 +97,13 @@ var GUI = function(settings) {
             for (var i = 0; i < edges.length; i++) {
                 var pt1 = boardPoints[points.indexOf(edges[i].pt1)];
                 var pt2 = boardPoints[points.indexOf(edges[i].pt2)];
-                var line = board.create('line', [ pt1, pt2 ], {straightFirst:false, straightLast:false});
+                var line = board.create('line', [ pt1, pt2 ], {strokeWidth:5, strokeColor:'#ff0000', straightFirst:false, straightLast:false});
                 boardEdges.push(line);
+                line.on('mouseup', function(){
+                    $.publish('points-change');
+                });
             }
-        } */
+        }
     }
 
     // mit draw() kann unabhängig vom Graphen gezeichnet werden
