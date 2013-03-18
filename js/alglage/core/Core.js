@@ -200,13 +200,18 @@ function Graph(points, edges) {
     this.points = points;
     this.edges = edges;
 };
-
 Graph.prototype.getPoints = function() {
     return this.points;
 };
 Graph.prototype.getEdges = function() {
     return this.edges;
 };
+Graph.prototype.setPoints = function(points) {
+    this.points = points;
+}
+Graph.prototype.setEdges = function(edges) {
+    this.edges = edges;
+}
 
 Graph.prototype.addPoint = function(point) {
     if(point === undefined) {
