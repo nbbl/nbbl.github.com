@@ -91,7 +91,12 @@ var AlgLageController = function(gui) {
 
     function handleResponse(event) {
         // Layer an GUI schicken
+        
         gui.overdraw(event.data.annotations);
+
+        if(event.data.name === 'CollinearityTest') {
+            gui.draw(event.data.annotations);
+        }
 
         // Algo-Boxen neuladen
         var name = event.data.name;
