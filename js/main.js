@@ -36,8 +36,6 @@ var edges = [
 var graph = new Graph(points, edges);
 alc.setGraph(graph);
 
-alc.addAlgo('algo1', 'js/alglage/algos/Algo1.js');
-alc.addAlgo('algo2', 'js/alglage/algos/Algo2.js');
 alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF.js');
 
 alc.calculateAlgos();
