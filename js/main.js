@@ -39,5 +39,6 @@ alc.setGraph(graph);
 alc.addAlgo('algo1', 'js/alglage/algos/Algo1.js');
 alc.addAlgo('algo2', 'js/alglage/algos/Algo2.js');
 alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF.js');
+alc.addAlgo('CollinearityTest.js', 'js/alglage/algos/CollinearityTest.js');
 
 alc.calculateAlgos();
