@@ -1,5 +1,5 @@
 importScripts('../core/Core.js');
-importScripts('../Utilities.js');
+importScripts('Utilities.js');
 
 CollinearityTest_SPATIAL_TOLERANCE = 0.1;
 
