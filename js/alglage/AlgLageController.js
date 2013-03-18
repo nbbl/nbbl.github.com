@@ -91,12 +91,8 @@ var AlgLageController = function(gui) {
 
     function handleResponse(event) {
         // Layer an GUI schicken
-        // gui.draw(...);
-        if(event.data.name === 'ShortestDistance_BF') {
-            gui.draw({
-                lineSegment : event.data.more
-            });
-        }
+        
+        gui.overdraw(event.data.annotations);
 
         if(event.data.name === 'CollinearityTest') {
             gui.draw(event.data.annotations);
