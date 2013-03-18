@@ -21,12 +21,15 @@ function Subsets(array,subsetsize){
     this.subsetsize = subsetsize;
     this.pointers = new Array(subsetsize);
     this.maxpointer = new Array(subsetsize);
-    for(var i=0; i<subsetsize; i++){
-	this.pointers[i]=i;
-	this.maxpointer[i]=array.length-(subsetsize-i);
-    }
+    this.init();
 };
 
+Subsets.prototype.init = function() {
+    for(var i=0; i<this.subsetsize; i++){
+	this.pointers[i]=i;
+	this.maxpointer[i]=this.array.length-(this.subsetsize-i);
+    }
+}
 
 Subsets.prototype.__iterator__ = function(){
     var array = this.array;
@@ -39,7 +42,10 @@ Subsets.prototype.__iterator__ = function(){
         }
         while(this.pointers[i]>this.maxpointer[i]){
             this.pointers[--i]++;
-            if(i==0 && this.pointers[i]>this.maxpointer[i]) break outerloop;
+            if(i==0 && this.pointers[i]>this.maxpointer[i]) {
+                this.init();
+                break outerloop;
+            }
         }
         while(i<this.pointers.length-1){
             ++i;
