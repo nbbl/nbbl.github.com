@@ -259,3 +259,12 @@ Graph.prototype.removeEdge = function(edge) {
         }
     }
 };
+
+/* 
+*  Kreis-Klasse
+*/
+
+function Circle(point, radius) {
+    this.point = point;
+    this.radius = radius;
+}

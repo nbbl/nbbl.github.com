@@ -133,7 +133,16 @@ var GUI = function(settings) {
             }
         }
         if(obj.circles !== undefined) {
-            console.log("drawing circles not yet implemented");
+            for(var i = 0; i < obj.circles.length; i++) {
+                var p = obj.circles[i].point;
+                var r = obj.circles[i].radius;
+                var circle = board.createElement('point',[p.x, p.y], {
+                    withLabel: false, 
+                    face: 'circle', 
+                    size: r,
+                });
+                annotations.push(circle);
+            }
         }
         if(obj.areas !== undefined) {
             console.log("drawing areas not yet implemented");
