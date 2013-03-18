@@ -28,8 +28,8 @@ function calculate(points) {
     }
 
     var r = 0.5;
-    var precision = 10;
     
+    var precision = 10;
     
     // Berechnete Wert
     
@@ -82,15 +82,15 @@ function calculate(points) {
     }
 
     // Werte zurückrechnen
-    bestRad = Math.round(bestRad / precision);
-    bestX = Math.round(bestX / precision);
-    bestY = Math.round(bestY / precision);
+    bestRad = bestRad / precision;
+    bestX = bestX / precision;
+    bestY = bestY / precision;
 
     self.postMessage({
         score : max,
         annotations : {
             'circles' : [
-                new Circle(new Point(bestX, bestY), bestRad * 10)
+                new Circle(new Point(bestX, bestY), bestRad)
             ]
         },
         name : 'circleCheck',

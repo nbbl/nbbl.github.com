@@ -135,11 +135,7 @@ var GUI = function(settings) {
             for(var i = 0; i < obj.circles.length; i++) {
                 var p = obj.circles[i].point;
                 var r = obj.circles[i].radius;
-                var circle = board.createElement('point',[p.x, p.y], {
-                    withLabel: false, 
-                    face: 'circle', 
-                    size: r,
-                });
+                var circle = board.create('circle', [[p.x, p.y],[p.x, p.y + r]], {strokeWidth:2, highlightStrokeColor : 'blue',});
                 annotations.push(circle);
             }
         }
