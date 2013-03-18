@@ -34,7 +34,7 @@ Subsets.prototype.init = function() {
 Subsets.prototype.__iterator__ = function(){
     var array = this.array;
     var i = this.pointers.length-1;
-    outerloop:
+//    outerloop:
     while(true){
         while(this.pointers[i]<=this.maxpointer[i]){
             yield this.pointers.map(function(x){return array[x];});
@@ -44,7 +44,8 @@ Subsets.prototype.__iterator__ = function(){
             this.pointers[--i]++;
             if(i==0 && this.pointers[i]>this.maxpointer[i]) {
                 this.init();
-                break outerloop;
+                throw StopIteration
+//                break outerloop;
             }
         }
         while(i<this.pointers.length-1){
