@@ -206,6 +206,10 @@ Graph.prototype.getPoints = function() {
 Graph.prototype.getEdges = function() {
     return this.edges;
 };
+Graph.prototype.setGraph = function(points, edges) {
+    this.points = points;
+    this.edges = edges;
+}
 Graph.prototype.setPoints = function(points) {
     this.points = points;
 }

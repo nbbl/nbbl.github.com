@@ -86,17 +86,13 @@ var AlgLageController = function(gui) {
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {
         points = gui.getPoints();
+        gui.overdraw({});
         calculateAlgos();
     });
 
     function handleResponse(event) {
         // Layer an GUI schicken
-        
-        gui.overdraw(event.data.annotations);
-
-        if(event.data.name === 'CollinearityTest') {
-            gui.draw(event.data.annotations);
-        }
+        gui.draw(event.data.annotations);
 
         // Algo-Boxen neuladen
         var name = event.data.name;
