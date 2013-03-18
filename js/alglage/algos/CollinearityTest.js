@@ -1,5 +1,5 @@
 importScripts('../core/Core.js');
-importScripts('Utilities.js');
+//importScripts('./Utilities.js');
 
 CollinearityTest_SPATIAL_TOLERANCE = 0.1;
 
@@ -9,6 +9,32 @@ self.onmessage = function(event) {
     calculate(points, name);
 };
 
+function calculate(points, name) {
+    var res = [];
+    var info = "";
+    for (var i = 0; i < points.length-2; ++i) {
+        for (var j = i+1; j < points.length-1; ++j) {
+            for (var k = j+1; k < points.length; ++k) {
+                var edge = new Edge(points[i], points[j]);
+                var dist = edge.distanceToLine(points[k]);
+                if (dist < CollinerarityTest_SPATIAL_TOLERANCE) {
+                    res.push(edge);
+                    info = info + dist + ", ";
+                }
+            }
+        }
+    }
+
+    self.postMessage({
+        score       : res.length,
+        annotations : { lines : res },
+        name        : name,
+	info  : info
+    });
+}
+
+/*
+ * mit Iteratoren
 function calculate(points,name){
     var sets = new Subsets(points,3);
     var collintriple = [];
@@ -26,3 +52,4 @@ function calculate(points,name){
 	info  : ''
     });
 }
+*/

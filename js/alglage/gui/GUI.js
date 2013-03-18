@@ -112,7 +112,7 @@ var GUI = function(settings) {
     function draw(obj) {
         // TODO Annotations undraggable machen
         if(obj.lines !== undefined) {
-            for(var i = 0; i < lines.length; i++) {
+            for(var i = 0; i < obj.lines.length; i++) {
                 var line = board.create('line', [
                                     [obj.lines[i].pt1.x, obj.lines[i].pt1.y],
                                     [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ] );
