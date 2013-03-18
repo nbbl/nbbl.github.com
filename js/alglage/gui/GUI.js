@@ -119,10 +119,10 @@ var GUI = function(settings) {
                 annotations.push(line);
             }
         }
-        if(obj.lineSegment !== undefined) {
-            for(var i = 0; i < obj.lineSegment.length; i++) {
-                var pt1 = obj.lineSegment[i].pt1;
-                var pt2 = obj.lineSegment[i].pt2;
+        if(obj.lineSegments !== undefined) {
+            for(var i = 0; i < obj.lineSegments.length; i++) {
+                var pt1 = obj.lineSegments[i].pt1;
+                var pt2 = obj.lineSegments[i].pt2;
                 var line = board.create('line', [
                                     [pt1.x, pt1.y],
                                     [pt2.x, pt2.y] ],

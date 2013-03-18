@@ -40,8 +40,8 @@ function calculate(points) {
 
     self.postMessage({
         score : shortestDistance,
-        more : result,
+        annotations : { lineSegments : result },
         name : 'ShortestDistance_BF',
-        info : ''
+        info : 'plz put some information here'
     });
 };

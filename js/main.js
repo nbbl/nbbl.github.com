@@ -38,5 +38,6 @@ alc.setGraph(graph);
 
 alc.addAlgo('circleCheck', 'js/alglage/algos/CircleCheck.js');
 alc.addAlgo('CollinearityTest', 'js/alglage/algos/CollinearityTest.js');
+alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF');
 
 alc.calculateAlgos();
