@@ -94,8 +94,12 @@ var AlgLageController = function(gui) {
         // gui.draw(...);
         if(event.data.name === 'ShortestDistance_BF') {
             gui.draw({
-                straightLines : event.data.more
+                lineSegment : event.data.more
             });
+        }
+
+        if(event.data.name === 'CollinearityTest') {
+            gui.draw(event.data.annotations);
         }
 
         // Algo-Boxen neuladen
