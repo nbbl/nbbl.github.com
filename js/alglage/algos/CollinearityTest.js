@@ -18,7 +18,9 @@ function calculate(points,name){
     }
     self.postMessage({
         score :  collintriple.length,
-        more  :  collintriple,
+        annotations  : { 
+            lines : collintriple.map(function(x){return x.splice(0,2)});
+        }
         name  :  name,
 	info  : ''
     });
