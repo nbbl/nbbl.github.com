@@ -113,17 +113,16 @@ var GUI = function(settings) {
         // TODO Annotations undraggable machen
         if(obj.lines !== undefined) {
             for(var i = 0; i < lines.length; i++) {
-                var p1 = lines[i].pt1;
                 var line = board.create('line', [
                                     [obj.lines[i].pt1.x, obj.lines[i].pt1.y],
                                     [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ] );
                 annotations.push(line);
             }
         }
-        if(obj.straightLines !== undefined) {
-            for(var i = 0; i < obj.straightLines.length; i++) {
-                var pt1 = obj.straightLines[i].pt1;
-                var pt2 = obj.straightLines[i].pt2;
+        if(obj.lineSegment !== undefined) {
+            for(var i = 0; i < obj.lineSegment.length; i++) {
+                var pt1 = obj.lineSegment[i].pt1;
+                var pt2 = obj.lineSegment[i].pt2;
                 var line = board.create('line', [
                                     [pt1.x, pt1.y],
                                     [pt2.x, pt2.y] ],
@@ -133,7 +132,16 @@ var GUI = function(settings) {
             }
         }
         if(obj.circles !== undefined) {
-            console.log("drawing circles not yet implemented");
+            for(var i = 0; i < obj.circles.length; i++) {
+                var p = obj.circles[i].point;
+                var r = obj.circles[i].radius;
+                var circle = board.createElement('point',[p.x, p.y], {
+                    withLabel: false, 
+                    face: 'circle', 
+                    size: r,
+                });
+                annotations.push(circle);
+            }
         }
         if(obj.areas !== undefined) {
             console.log("drawing areas not yet implemented");
