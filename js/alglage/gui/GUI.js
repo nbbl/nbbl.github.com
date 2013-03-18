@@ -30,14 +30,14 @@ var GUI = function(settings) {
         boundingbox: [0, settings.maxY, settings.maxX, 0],
         axis : true,
         showCopyright : false,
-        zoom : {
+        /* zoom : {
             wheel: true,
             needShift: false
         },
         pan : {
             needShift: false,
             enabled: true
-        }
+        } */
     });
     
     function initGraph(graph) {
@@ -46,19 +46,10 @@ var GUI = function(settings) {
         _drawGraph();
     }
 
-    // Diese Methode wird von AlgLageController genutzt, um nach einer
-    // Benachrichtigung durch ein 'points-change' die neue Lage der
-    // Punkte abfragen zu können
     function getPoints() {
-        for(var i = 0; i < boardPoints.length; i++) {
-            boardPoints[i].srcPoint.x = boardPoints[i].X();            
-            boardPoints[i].srcPoint.y = boardPoints[i].Y();
-        }
         return points;
     }
-    
-    // Der Inhalt der privaten points & edges Variablen wird gezeichnet
-    // Wird einmal zum initialisieren des Graphs aufgerufen
+
     function _drawGraph() {
         if(points !== undefined) {
             // alle Punkte neuzeichnen
@@ -75,6 +66,8 @@ var GUI = function(settings) {
                 boardPoints.push(p);
 
                 p.on('mouseup', function(){
+                    this.srcPoint.x = this.X();
+                    this.srcPoint.y = this.Y();
                     $.publish('points-change');
                 });
 
@@ -99,17 +92,25 @@ var GUI = function(settings) {
                 var pt2 = boardPoints[points.indexOf(edges[i].pt2)];
                 var line = board.create('line', [ pt1, pt2 ], {strokeWidth:5, strokeColor:'#ff0000', straightFirst:false, straightLast:false});
                 boardEdges.push(line);
+
                 line.on('mouseup', function(){
                     $.publish('points-change');
+                });
+                line.on('drag', function() {
+                    // TODO implementieren, dass auch Linien nicht aus dem Feld herausgeschoben werden können
                 });
             }
         }
     }
 
+    function overdraw(obj) {
+        _eraseAnnotations();
+        draw(obj);
+    }
+
     // mit draw() kann unabhängig vom Graphen gezeichnet werden
     function draw(obj) {
-        _eraseAnnotations();
-
+        // TODO Annotations undraggable machen
         if(obj.lines !== undefined) {
             for(var i = 0; i < lines.length; i++) {
                 var line = board.create('line', [
@@ -163,6 +164,7 @@ var GUI = function(settings) {
     // Öffentliches Interface
     return {
         initGraph : initGraph,
+        overdraw : overdraw,
         draw : draw,
         getPoints : getPoints,
         initAlgoBox : initAlgoBox,
