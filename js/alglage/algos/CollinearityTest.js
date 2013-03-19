@@ -17,7 +17,7 @@ function calculate(points, name) {
             for (var k = j+1; k < points.length; ++k) {
                 var edge = new Edge(points[i], points[j]);
                 var dist = edge.distanceToLine(points[k]);
-                if (dist < CollinerarityTest_SPATIAL_TOLERANCE) {
+                if (dist < CollinearityTest_SPATIAL_TOLERANCE) {
                     res.push(edge);
                     info = info + dist + ", ";
                 }
