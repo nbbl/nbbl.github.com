@@ -4,7 +4,30 @@
    Author's custom styles
    ========================================================================== */
 
+div.algoBox {
+	position: relative;
+}
 
+div.algoBox.loading > .loader {
+	display: block;
+}
+
+div.algoBox > .loader {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #fff;
+    opacity: 0.8;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+div.algoBox > .loader > img {
+	position: relative;
+	top: 45%;
+}
 
 
 

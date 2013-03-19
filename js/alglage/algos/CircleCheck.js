@@ -85,16 +85,30 @@ function calculate(points) {
     bestRad = bestRad / precision;
     bestX = bestX / precision;
     bestY = bestY / precision;
-
+    
+    var infoText;
+    if(max <= 3) {
+        infoText = 'Es befinden sich nur 3 Punkte auf einem Kreis und somit ist nach diesem '
+            + 'Kriterium die allgemeine Lage gegeben.<br>'
+            + 'Der Score berechnet sich aus den Abständen aller Punkte, die annähernd auf einem '
+            + 'Kreis liegen.'
+    }
+    else {
+        infoText = 'Es befinden sich ' + max + ' Punkte auf einem Kreis und somit ist nach diesem '
+            + 'Kriterium die allgemeine Lage <strong>nicht</strong> gegeben.<br>'
+            + 'Der Score berechnet sich aus den Abständen aller Punkte, die annähernd auf einem '
+            + 'Kreis liegen.'
+    }
+    
     self.postMessage({
-        score : max,
+        score : 0.1234,
         annotations : {
             'circles' : [
                 new Circle(new Point(bestX, bestY), bestRad)
             ]
         },
         name : 'circleCheck',
-        info : 'blabla'
+        info : infoText
     });
 };
 

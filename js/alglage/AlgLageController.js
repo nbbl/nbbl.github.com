@@ -61,6 +61,10 @@ var AlgLageController = function(gui) {
     
     function calculateAlgos() {
         for(var a in algos) {
+            
+            // Ladeanimation setzten
+            gui.setAlgoBoxLoading(a);
+            
             algos[a].worker.postMessage({
                 name : algos[a].name,
                 points : points
@@ -91,14 +95,12 @@ var AlgLageController = function(gui) {
     });
 
     function handleResponse(event) {
-        // Layer an GUI schicken
-        gui.draw(event.data.annotations);
-
         // Algo-Boxen neuladen
         var name = event.data.name;
         var score = event.data.score;
         var info = event.data.info;
-        gui.refreshAlgoBox(name, score, info);
+        var annots = event.data.annotations;
+        gui.refreshAlgoBox(name, score, info, annots);
     }
     
     // Öffentliches Interface

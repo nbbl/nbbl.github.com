@@ -24,7 +24,9 @@ var GUI = function(settings) {
 
     var $dummyBox = $('#' + settings.dummyContainer);
     var algoBoxes = {};
-    
+
+    var activeAlgoBox = ''; // Name der activen algoBox
+        
     // JSXGraph-Board initialisieren
     var board = JXG.JSXGraph.initBoard(settings.containerId, {
         boundingbox: [0, settings.maxY, settings.maxX, 0],
@@ -154,14 +156,45 @@ var GUI = function(settings) {
 
     function initAlgoBox(algoName) {
         var $ele = $dummyBox.clone().attr('id', algoName);
-        $dummyBox.before($ele);
+        
+        var $btn = $ele.find('a.btn');
+        $btn.click(function() {
+            var annots = $ele.data('annots');
+            if(annots !== undefined) {
+                activeAlgoBox = algoName;
+                $btn.parents('.row').find('.btn').removeClass('btn-success');
+                $btn.addClass('btn-success');
+                overdraw(annots);
+            }
+            return false;
+        });
+        
+        if(activeAlgoBox === '') {
+            $btn.addClass('btn-success');
+            activeAlgoBox = algoName;
+        }
+        
         algoBoxes[algoName] = $ele;
+        $dummyBox.before($ele);
     }
     
-    function refreshAlgoBox(algoName, score, info) {
+    function setAlgoBoxLoading(algoName) {
         if(algoBoxes[algoName] === undefined) return false;
         
         var $ele = algoBoxes[algoName];
+        $ele.addClass('loading');
+    }
+    
+    function refreshAlgoBox(algoName, score, info, annots) {
+        if(algoBoxes[algoName] === undefined) return false;
+        
+        if(algoName === activeAlgoBox) {
+            overdraw(annots);
+        }
+        
+        var $ele = algoBoxes[algoName];
+        $ele.data('annots', annots);
+        $ele.removeClass('loading');
         $ele.find('h2').html(score);
         $ele.find('p:first').html(info);
     }
@@ -173,6 +206,7 @@ var GUI = function(settings) {
         draw : draw,
         getPoints : getPoints,
         initAlgoBox : initAlgoBox,
-        refreshAlgoBox : refreshAlgoBox
+        refreshAlgoBox : refreshAlgoBox,
+        setAlgoBoxLoading : setAlgoBoxLoading
     }
 }
