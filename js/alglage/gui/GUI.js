@@ -18,16 +18,16 @@ var GUI = function(settings) {
     // Private Variablen
     var points = []; // Punkte des Graphen
     var edges = []; // Kanten des Graphen
-    var boardPoints = []; // Darstellung von points
-    var boardEdges = []; // Darstellung von edges (vmtl. nicht nötig)
+    var graph = new Graph([], []);
+    var boardPoints = []; // Darstellung von graph.points
+    var boardEdges = []; // Darstellung von graph.edges
 
     var $dummyBox = $('#' + settings.dummyContainer);
     var algoData = {}; // Alle Daten zu den Algos
 
     var activeAlgoBox = ''; // Name der activen algoBox
-        
-    // JSXGraph-Board initialisieren
-    var board = JXG.JSXGraph.initBoard(settings.containerId, {
+        // JSXGraph-Board initialisieren
+        var board = JXG.JSXGraph.initBoard(settings.containerId, {
         boundingbox: [0, settings.maxY, settings.maxX, 0],
         axis : true,
         showCopyright : false,
@@ -41,9 +41,10 @@ var GUI = function(settings) {
         } */
     });
     
-    function initGraph(graph) {
-        points = graph.points;
-        edges = graph.edges;
+    function initGraph(gr) {
+        // graph.points = gr.points;
+        // graph.edges = gr.edges;
+        graph = gr;
         _drawGraph();
     }
 
@@ -52,18 +53,16 @@ var GUI = function(settings) {
     }
 
     function _drawGraph() {
-        if(points !== undefined) {
+        if(graph.points !== undefined) {
             // alle Punkte neuzeichnen
             for(var i = 0; i < boardPoints.length; i++) {
                 board.removeObject(boardPoints[i]);
             }
             boardPoints = [];
 
-            for (var i = 0; i < points.length; i++) {
-                var p = board.create('point', [ points[i].x, points[i].y ], {withLabel:false});
-                //var src = points[i];
-                //p.srcPoint = src;
-                p.srcPoint = points[i];
+            for (var i = 0; i < graph.points.length; i++) {
+                var p = board.create('point', [ graph.points[i].x, graph.points[i].y ], {withLabel:false});
+                p.srcPoint = graph.points[i];
                 boardPoints.push(p);
 
                 p.on('mouseup', function(){
@@ -82,15 +81,15 @@ var GUI = function(settings) {
             }
         }
 
-        if(edges !== undefined) {
+        if(graph.edges !== undefined) {
             // alle Kanten neuzeichnen
             for(var i = 0; i < boardEdges.length; i++) {
                 p = board.removeObject(boardEdges[i]);
             }
 
-            for (var i = 0; i < edges.length; i++) {
-                var pt1 = boardPoints[points.indexOf(edges[i].pt1)];
-                var pt2 = boardPoints[points.indexOf(edges[i].pt2)];
+            for (var i = 0; i < graph.edges.length; i++) {
+                var pt1 = boardPoints[graph.points.indexOf(graph.edges[i].pt1)];
+                var pt2 = boardPoints[graph.points.indexOf(graph.edges[i].pt2)];
                 var line = board.create('line', [ pt1, pt2 ], {strokeWidth:5, strokeColor:'#ff0000', straightFirst:false, straightLast:false});
                 boardEdges.push(line);
 
@@ -109,9 +108,17 @@ var GUI = function(settings) {
         draw(obj, algoName);
     }
 
-    // mit draw() kann unabhängig vom Graphen gezeichnet werden
+    // mit draw() können unabhängig vom Graphen Annotations gezeichnet werden
+    // durch die Angabe von algoName werden die in obj übergebenen Annotations
+    // eine eigene Lage gezeichnet
     function draw(obj, algoName) {
         // TODO Annotations undraggable machen
+        if(obj.points !== undefined) {
+            for(var i = 0; i < obj.points.length; i++) {
+                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false});
+                algoData[algoName].jsxObjects.push(point);
+            }
+        }
         if(obj.lines !== undefined) {
             for(var i = 0; i < obj.lines.length; i++) {
                 var line = board.create('line', [
