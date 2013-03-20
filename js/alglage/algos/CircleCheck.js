@@ -2,17 +2,20 @@ importScripts('../core/Core.js');
 
 self.onmessage = function(event) {
     var points = event.data.graph.points;
+    var name = event.data.name;
 
     // durch die Serialisierung in eine Nachricht haben die Punkte ihre
     // Methoden verloren. Daher zurückcasten!
     points = Vector.cast(points);
 
-    calculate(points);
+    calculate(points, name);
 };
 
-// Dieser Algorithmus guck, ob mehr als drei Punkte auf einem Kreis
-// liegen und gibt diesen Kreis dann zurück
-function calculate(points) {
+// Dieser Algorithmus guckt, ob mehr als drei Punkte auf einem Kreis
+// liegen und gibt diese Kreise dann zurück
+function calculate(points, name) {
+
+    var retCircles = []; // Kreise die zurückgegeben werden
 
     var xMax = -1;
     var yMax = -1;
@@ -40,7 +43,6 @@ function calculate(points) {
     var bestRad;
     var bestX;
     var bestY;
-    var max = 0;
     
     var nPoints = [];
     for(var i = 0; i < points.length; i++) {
@@ -68,46 +70,39 @@ function calculate(points) {
         
         // Maximum suchen
         for(var k in arr) {
-            if(arr[k] > max) {
-                bestRad = nRadius;
+            if(arr[k] > 3) {
+                bestRad = nRadius / precision;
                 var splt = k.split("|");
-                bestX = parseInt(splt[0]);
-                bestY = parseInt(splt[1]);
-                max = arr[k];
-                var asd = 0;
+                bestX = parseInt(splt[0]) / precision;
+                bestY = parseInt(splt[1]) / precision;
+                
+                retCircles.push(new Circle(new Point(bestX, bestY), bestRad));
             }
         }
         
         r += 0.1;
     }
-
-    // Werte zurückrechnen
-    bestRad = bestRad / precision;
-    bestX = bestX / precision;
-    bestY = bestY / precision;
     
     var infoText;
-    if(max <= 3) {
-        infoText = 'Es befinden sich nur 3 Punkte auf einem Kreis und somit ist nach diesem '
+    if(retCircles.length == 0) {
+        infoText = 'Es befinden sich nicht mehr als 3 Punkte auf einem Kreis und somit ist nach diesem '
             + 'Kriterium die allgemeine Lage gegeben.<br>'
             + 'Der Score berechnet sich aus den Abständen aller Punkte, die annähernd auf einem '
             + 'Kreis liegen.'
     }
     else {
-        infoText = 'Es befinden sich ' + max + ' Punkte auf einem Kreis und somit ist nach diesem '
-            + 'Kriterium die allgemeine Lage <strong>nicht</strong> gegeben.<br>'
+        infoText = 'Es befinden sich ' + retCircles.length + ' mal mehr als 3 Punkte auf einem Kreis und somit ist '
+            + 'nach diesem Kriterium die allgemeine Lage <strong>nicht</strong> gegeben.<br>'
             + 'Der Score berechnet sich aus den Abständen aller Punkte, die annähernd auf einem '
             + 'Kreis liegen.'
     }
     
     self.postMessage({
-        score : 0.1234,
+        score : retCircles.length,
         annotations : {
-            'circles' : [
-                new Circle(new Point(bestX, bestY), bestRad)
-            ]
+            'circles' : retCircles
         },
-        name : 'circleCheck',
+        name : name,
         info : infoText
     });
 };

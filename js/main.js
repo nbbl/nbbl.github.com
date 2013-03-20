@@ -36,7 +36,8 @@ var edges = [
 var graph = new Graph(points, edges);
 alc.setGraph(graph);
 
-alc.addAlgo('circleCheck', 'js/alglage/algos/CircleCheck.js');
+alc.addAlgo('XCoord', 'js/alglage/algos/XCoordinates.js');
+alc.addAlgo('CircleCheck', 'js/alglage/algos/CircleCheck.js');
 alc.addAlgo('CollinearityTest', 'js/alglage/algos/CollinearityTest.js');
 alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF.js');
 alc.addAlgo('EdgeIntersections_BF', 'js/alglage/algos/EdgeIntersections_Brutal.js');

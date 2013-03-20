@@ -6,6 +6,7 @@
 
 div.algoBox {
 	position: relative;
+	overflow: hidden;
 }
 
 div.algoBox.loading > .loader {
@@ -26,7 +27,7 @@ div.algoBox > .loader {
 
 div.algoBox > .loader > img {
 	position: relative;
-	margin-top: 45%;
+	margin-top: 35%;
 }
 
 

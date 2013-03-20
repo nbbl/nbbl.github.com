@@ -1,7 +1,7 @@
 importScripts('../core/Core.js');
 
 self.onmessage = function(event){
-    var points = event.data.graph.points;
+    var points = Point.cast(event.data.graph.points);
     var name = event.data.name;
 
     calculate(points, name);
