@@ -7,7 +7,7 @@ self.onmessage = function(event) {
 };
 
 function calculate(edges, name) {
-    var info = "Hallo Algo"
+    var info = "";
     var res = shortestDistIntersectEdge(calculateIntersections(edges),edges);
 
 
@@ -42,9 +42,14 @@ function calculateIntersections(edges) {
     for (var i = 0; i<edges.length-2; ++i) {
         for (var j = i+1; j<edges.length-1; ++j) {
             tmp = edges[i].edgeIntersection(edges[j]);
-            if (tmp !== null && tmp !=="parallel_lines" && tmp !== "identical_lines" ){ 
-		res.push(new Intersection(tmp,edges[i],edges[j]));
-	    }
+            if (tmp !== null && 
+                !tmp.equals(edges[i].pt1) &&
+                !tmp.equals(edges[i].pt2) && 
+                !tmp.equals(edges[j].pt1) &&
+                !tmp.equals(edges[j].pt2) &&
+                tmp !== "parallel_lines"  && tmp !== "identical_lines" ){ 
+                res.push(new Intersection(tmp,edges[i],edges[j]));
+            }
         }
     }
     return res;
