@@ -42,14 +42,12 @@ var GUI = function(settings) {
     });
     
     function initGraph(gr) {
-        // graph.points = gr.points;
-        // graph.edges = gr.edges;
         graph = gr;
         _drawGraph();
     }
 
     function getPoints() {
-        return points;
+        return graph.points;
     }
 
     function _drawGraph() {
