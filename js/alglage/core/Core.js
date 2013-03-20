@@ -6,8 +6,7 @@ var ORIGIN = new Vector(0,0);  // Ursprungspunkt
 var SPATIAL_TOLERANCE = 1e-10; // Die Toleranz bei Abständen zu Strecken & Geraden
 var ANGULAR_TOLERANCE = undefined; // yet to be defined.
 
-function approx(skalar1,skalar2){
-    return Math.abs(skalar1 - skalar2) < SPATIAL_TOLERANCE;
+function approx(skalar1,skalar2){ return Math.abs(skalar1 - skalar2) < SPATIAL_TOLERANCE;
 }
 
 // Vector Klasse
@@ -234,57 +233,19 @@ Edge.prototype.edgeIntersection = function(edge){ //der Schnittpunkt der beiden 
     return null; //kein Schnittpunkt
 };
 
+
 function Graph(points, edges) {
     this.points = points;
     this.edges = edges;
 };
 
-Graph.prototype.addPoint = function(point) {
-    if(point === undefined) {
-        console.log('cannot add undefined point to graph');
-    }
-    else {
-        this.points.push(point);
-    }
-};
 
-Graph.prototype.removePoint = function(point) {
-    if(point === undefined) {
-        console.log('cannot remove undefined point from graph');
-    }
-    else {
-        for(var i = 0; i < this.points.length; i++) {
-            if(this.points[i].x === point.x && this.points[i].y === point.y) {
-                this.points.splice(i, 1);
-            }
-        }
-    }
-};
+function Angle(points) {
+    this.a = points[0];
+    this.b = points[1];
+    this.c = points[2];
+}
 
-Graph.prototype.addEdge = function(edge) {
-    if(edge === undefined || edge.pt1 === undefined || edge.pt2 === undefined) {
-        console.log('cannot add undefined edge to graph');
-    }
-    else {
-        // was soll passieren, wenn man einen Punkt löscht, der in einer noch
-        // bestehenden Kante enthalten ist?
-        this.edges.push(edge);
-    }
-};
-
-Graph.prototype.removeEdge = function(edge) {
-    if(edge === undefined || edge.pt1 === undefined || edge.pt2 === undefined) {
-        console.log('cannot remove undefined edge from graph');
-    }
-    else {
-        for(var i = 0; i < this.edges.length; i++) {
-            if(this.edges[i].pt1.equals(edge.pt1) && this.edges[i].pt2.equals(edge.pt2)) {
-                this.edges.splice(i, 1);
-                return;
-            }
-        }
-    }
-};
 
 /* 
 *  Kreis-Klasse
