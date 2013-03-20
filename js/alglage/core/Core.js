@@ -107,6 +107,9 @@ Vector.skalarProd = function(v1,v2){
 };
 
 Vector.cast = function(p) {
+    if(p === undefined) {
+        return false;
+    }
     if( Object.prototype.toString.call(p) === '[object Array]' ) {
         for(var i = 0; i < p.length; i++) {
             p[i].__proto__ = Point.prototype;
@@ -200,22 +203,6 @@ function Graph(points, edges) {
     this.points = points;
     this.edges = edges;
 };
-Graph.prototype.getPoints = function() {
-    return this.points;
-};
-Graph.prototype.getEdges = function() {
-    return this.edges;
-};
-Graph.prototype.setGraph = function(points, edges) {
-    this.points = points;
-    this.edges = edges;
-}
-Graph.prototype.setPoints = function(points) {
-    this.points = points;
-}
-Graph.prototype.setEdges = function(edges) {
-    this.edges = edges;
-}
 
 Graph.prototype.addPoint = function(point) {
     if(point === undefined) {

@@ -5,9 +5,9 @@
 var AlgLageController = function(gui) {
         
     // Private Variablen
-    var points = [];
-    var edges = [];
-    var graph = new Graph(points, edges);
+    // var points = [];
+    // var edges = [];
+    var graph = new Graph([], []);
     var algos = {};
     var gui = gui;
     
@@ -67,7 +67,8 @@ var AlgLageController = function(gui) {
             
             algos[a].worker.postMessage({
                 name : algos[a].name,
-                points : points
+                graph : graph,
+                points : graph.points
             });
         }
     }
@@ -89,7 +90,7 @@ var AlgLageController = function(gui) {
     
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {
-        points = gui.getPoints();
+        graph.points = gui.getPoints();
         gui.overdraw({});
         calculateAlgos();
     });

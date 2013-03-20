@@ -43,8 +43,8 @@ var GUI = function(settings) {
     });
     
     function initGraph(graph) {
-        points = graph.getPoints();
-        edges = graph.getEdges();
+        points = graph.points;
+        edges = graph.edges;
         _drawGraph();
     }
 

@@ -1,7 +1,7 @@
 importScripts('../core/Core.js');
 
 self.onmessage = function(event) {
-    var points = event.data.points;
+    var points = event.data.graph.points;
 
     // durch die Serialisierung in eine Nachricht haben die Punkte ihre
     // Methoden verloren. Daher zurückcasten!
@@ -42,6 +42,6 @@ function calculate(points) {
         score : shortestDistance,
         annotations : { lineSegments : result },
         name : 'ShortestDistance_BF',
-        info : 'plz put some information here'
+        info : 'Kürzester Abstand zweier Punkte'
     });
 };

@@ -4,7 +4,7 @@ importScripts('../core/Core.js');
 CollinearityTest_SPATIAL_TOLERANCE = 0.1;
 
 self.onmessage = function(event) {
-    var points = Point.cast(event.data.points);
+    var points = Point.cast(event.data.graph.points);
     var name = event.data.name;
     calculate(points, name);
 };
