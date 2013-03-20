@@ -163,8 +163,21 @@ Edge.prototype.getRight = function(){
     else return this.pt1;
 };
 
+Edge.prototype.projectionToLine = function(pt){
+    return pt.add(Vector.skalarMult(this.signedDistanceToLine(pt),this.normal));
+};
+
+Edge.prototype.projectionToEdge = function(pt){
+    var res = this.projectionToLine(pt);
+    return this.contains(res) ? res : null; 
+};
+
 Edge.prototype.distanceToLine = function(pt){
-    return Math.abs(Vector.skalarProd(pt,this.normal) - this.dist);
+    return Math.abs(Vector.skalaPrrod(pt,this.normal) - this.dist);
+};
+
+Edge.prototype.signedDistanceToLine = function(pt){
+    return Vector.skalarProd(pt,this.normal) - this.dist;
 };
 
 Edge.prototype.lineContains = function(pt){ //enthält die Gerade zur Kante den Punkt?
