@@ -1,5 +1,5 @@
 /*
- * Hier wird sich um das Zeichnen und darstellen der Daten gekÃ¼mmert.
+ * Hier wird sich um das Zeichnen und darstellen der Daten gekümmert.
  */
 
 /*
@@ -8,8 +8,8 @@ Settings
 {
     containerId : '',       // Id des Containers
     dummyContainer : '',    // Id von Dummy-Box
-    maxX : 10,              // maximale X-Koordinate fÃ¼r Punkte
-    maxY : 10               // maximale Y-Koordinate fÃ¼r Punkte
+    maxX : 10,              // maximale X-Koordinate für Punkte
+    maxY : 10               // maximale Y-Koordinate für Punkte
 }
 
 */
@@ -19,11 +19,10 @@ var GUI = function(settings) {
     var points = []; // Punkte des Graphen
     var edges = []; // Kanten des Graphen
     var boardPoints = []; // Darstellung von points
-    var boardEdges = []; // Darstellung von edges (vmtl. nicht nÃ¶tig)
-    var annotations = []; // Graphische Hinweisobjekte
+    var boardEdges = []; // Darstellung von edges (vmtl. nicht nötig)
 
     var $dummyBox = $('#' + settings.dummyContainer);
-    var algoBoxes = {};
+    var algoData = {}; // Alle Daten zu den Algos
 
     var activeAlgoBox = ''; // Name der activen algoBox
         
@@ -73,7 +72,7 @@ var GUI = function(settings) {
                     $.publish('points-change');
                 });
 
-                // Bereich zum Verschieben der Punkte einschrÃ¤nken
+                // Bereich zum Verschieben der Punkte einschränken
                 p.on('drag', function(){
                     if(this.X() < 0) this.moveTo([0, this.Y()]);
                     if(this.X() > settings.maxX) this.moveTo([settings.maxX, this.Y()]);
@@ -99,26 +98,26 @@ var GUI = function(settings) {
                     $.publish('points-change');
                 });
                 line.on('drag', function() {
-                    // TODO implementieren, dass auch Linien nicht aus dem Feld herausgeschoben werden kÃ¶nnen
+                    // TODO implementieren, dass auch Linien nicht aus dem Feld herausgeschoben werden können
                 });
             }
         }
     }
 
-    function overdraw(obj) {
-        _eraseAnnotations();
-        draw(obj);
+    function overdraw(obj, algoName) {
+        eraseAnnotations();
+        draw(obj, algoName);
     }
 
-    // mit draw() kann unabhÃ¤ngig vom Graphen gezeichnet werden
-    function draw(obj) {
+    // mit draw() kann unabhängig vom Graphen gezeichnet werden
+    function draw(obj, algoName) {
         // TODO Annotations undraggable machen
         if(obj.lines !== undefined) {
             for(var i = 0; i < obj.lines.length; i++) {
                 var line = board.create('line', [
                                     [obj.lines[i].pt1.x, obj.lines[i].pt1.y],
                                     [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ] );
-                annotations.push(line);
+                algoData[algoName].jsxObjects.push(line);
             }
         }
         if(obj.lineSegments !== undefined) {
@@ -130,7 +129,7 @@ var GUI = function(settings) {
                                     [pt2.x, pt2.y] ],
                                     {straightFirst:false,
                                      straightLast:false});
-                annotations.push(line);
+                algoData[algoName].jsxObjects.push(line);
             }
         }
         if(obj.circles !== undefined) {
@@ -138,7 +137,7 @@ var GUI = function(settings) {
                 var p = obj.circles[i].point;
                 var r = obj.circles[i].radius;
                 var circle = board.create('circle', [[p.x, p.y],[p.x, p.y + r]], {strokeWidth:2, highlightStrokeColor : 'blue',});
-                annotations.push(circle);
+                algoData[algoName].jsxObjects.push(circle);
             }
         }
         if(obj.areas !== undefined) {
@@ -146,12 +145,24 @@ var GUI = function(settings) {
         }
     }   
 
-    // lÃ¶scht alle gezeichneten Markierungen
-    function _eraseAnnotations() {
-        for(var i = 0; i < annotations.length; i++) {
-            board.removeObject(annotations[i]);
+    // löscht alle gezeichneten Markierungen
+    function eraseAllAnnotations() {
+        for(var k in algoData) {
+            var jsxo = algoData[k].jsxObjects;
+            if(jsxo !== undefined) {
+                board.removeObject(jsxo);
+                algoData[k].jsxObjects = [];
+            }
         }
-        annotations = [];
+    }
+
+    // löscht gezeichnete Markierung von einem Algo
+    function eraseAnnotations(algoName) {
+        var jsxo = algoData[algoName].jsxObjects;
+        if(jsxo !== undefined) {
+            board.removeObject(jsxo);
+            algoData[algoName].jsxObjects = [];
+        }
     }
 
     function initAlgoBox(algoName) {
@@ -159,47 +170,49 @@ var GUI = function(settings) {
         
         var $btn = $ele.find('a.btn');
         $btn.click(function() {
-            var annots = $ele.data('annots');
-            if(annots !== undefined) {
-                activeAlgoBox = algoName;
-                $btn.parents('.row').find('.btn').removeClass('btn-success');
+            var annots = algoData[algoName].annotations;
+            if(!algoData[algoName].isActive) {
+                draw(annots, algoName);
                 $btn.addClass('btn-success');
-                overdraw(annots);
+                algoData[algoName].isActive = true;
+            }
+            else {
+                eraseAnnotations(algoName);
+                $btn.removeClass('btn-success');
+                algoData[algoName].isActive = false;
             }
             return false;
         });
         
-        if(activeAlgoBox === '') {
-            $btn.addClass('btn-success');
-            activeAlgoBox = algoName;
-        }
-        
-        algoBoxes[algoName] = $ele;
+        algoData[algoName] = {};
+        algoData[algoName].jsxObjects = [];
+        algoData[algoName].algoBox = $ele;
         $dummyBox.before($ele);
     }
     
     function setAlgoBoxLoading(algoName) {
-        if(algoBoxes[algoName] === undefined) return false;
+        if(algoData[algoName] === undefined) return false;
         
-        var $ele = algoBoxes[algoName];
+        var $ele = algoData[algoName].algoBox;
         $ele.addClass('loading');
     }
     
     function refreshAlgoBox(algoName, score, info, annots) {
-        if(algoBoxes[algoName] === undefined) return false;
+        if(algoData[algoName] === undefined) return false;
         
-        if(algoName === activeAlgoBox) {
-            overdraw(annots);
+        if(algoData[algoName].isActive) {
+            draw(annots, algoName);
         }
-        
-        var $ele = algoBoxes[algoName];
-        $ele.data('annots', annots);
+
+        algoData[algoName].annotations = annots;
+
+        var $ele = algoData[algoName].algoBox;
         $ele.removeClass('loading');
         $ele.find('h2').html(score);
         $ele.find('p:first').html(info);
     }
     
-    // Ã–ffentliches Interface
+    // Öffentliches Interface
     return {
         initGraph : initGraph,
         overdraw : overdraw,
@@ -207,6 +220,7 @@ var GUI = function(settings) {
         getPoints : getPoints,
         initAlgoBox : initAlgoBox,
         refreshAlgoBox : refreshAlgoBox,
+        eraseAllAnnotations : eraseAllAnnotations,
         setAlgoBoxLoading : setAlgoBoxLoading
     }
 }

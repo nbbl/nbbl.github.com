@@ -37,7 +37,7 @@ Subsets.prototype.__iterator__ = function(){
 //    outerloop:
     while(true){
         while(this.pointers[i]<=this.maxpointer[i]){
-            yield this.pointers.map(function(x){return array[x];});
+            yield (this.pointers.map(function(x){return array[x];}));
             this.pointers[i]++;
         }
         while(this.pointers[i]>this.maxpointer[i]){

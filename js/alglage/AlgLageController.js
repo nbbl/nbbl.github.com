@@ -64,7 +64,7 @@ var AlgLageController = function(gui) {
             
             // Ladeanimation setzten
             gui.setAlgoBoxLoading(a);
-            
+
             algos[a].worker.postMessage({
                 name : algos[a].name,
                 graph : graph,
@@ -91,7 +91,7 @@ var AlgLageController = function(gui) {
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {
         graph.points = gui.getPoints();
-        gui.overdraw({});
+        gui.eraseAllAnnotations();
         calculateAlgos();
     });
 
