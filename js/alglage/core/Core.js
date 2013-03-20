@@ -142,6 +142,28 @@ function Edge(pt1,pt2){
   
 };
 
+Edge.cast = function(p) {
+    
+    if(p === undefined) {
+        return false;
+    }
+    if( Object.prototype.toString.call(p) === '[object Array]' ) {
+        for(var i = 0; i < p.length; i++) {
+            p[i].__proto__ = Edge.prototype;
+            p[i].pt1 = Point.cast(p[i].pt1);
+            p[i].pt2 = Point.cast(p[i].pt2);
+	    p[i].normal = Vector.cast(p[i].normal);
+	}   
+    }
+    else {
+        p.__proto__ = Edge.prototype;
+        p.pt1 = Point.cast(p.pt1);
+        p.pt2 = Point.cast(p.pt2);
+	p.normal = Vector.cast(p.normal);
+    }
+    return p;
+};
+
 Edge.prototype.length = function() {
     return this.pt1.distance(this.pt2);
 };
@@ -173,7 +195,7 @@ Edge.prototype.projectionToEdge = function(pt){
 };
 
 Edge.prototype.distanceToLine = function(pt){
-    return Math.abs(Vector.skalaPrrod(pt,this.normal) - this.dist);
+    return Math.abs(Vector.skalarProd(pt,this.normal) - this.dist);
 };
 
 Edge.prototype.signedDistanceToLine = function(pt){

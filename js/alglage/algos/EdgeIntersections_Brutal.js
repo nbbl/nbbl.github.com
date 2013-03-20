@@ -15,7 +15,7 @@ function calculate(edges, name) {
         score       : res !== null,
         annotations : { lineSegments: res },
         name        : name,
-	info  : info
+	info  : "Schnittpunkte: x1="+res.pt1.x +" y2="+res.pt1.y+"; x2=" +res.pt2.x +" y2="+res.pt2.y
     });
 }
 
@@ -23,13 +23,15 @@ function shortestDistIntersectEdge(intersections,edges){
     var shortestEdge = null;
     var projection   = null;
     for(var i=0; i<intersections.length-1; ++i){
-	for(var j=0; j<edges.length-1; ++j){
-	    projection = edges[j].projectionToEdge(intersections[i]);
-	    if(projection !== null && 
-	       (shortestEdge === null || projection.distance(intersections[i]) < shortestEdge.length)){
-		shortestEdge = new Edge(projection,intersections[i]);
-	    }
-	}
+        for(var j=0; j<edges.length-1; ++j){
+            if (edges[j]!=intersections[i].edge1 && edges[j]!=intersections[i].edge2 ) {
+                projection = edges[j].projectionToEdge(intersections[i].pt);
+                if(projection !== null && 
+                  (shortestEdge === null || projection.distance(intersections[i]) < shortestEdge.length)){
+                    shortestEdge = new Edge(projection,intersections[i].pt);
+                }
+            }
+        }
     }
     return shortestEdge;
 }
@@ -39,9 +41,9 @@ function calculateIntersections(edges) {
     var tmp = null;
     for (var i = 0; i<edges.length-2; ++i) {
         for (var j = i+1; j<edges.length-1; ++j) {
-            tmp = edge[i].edgeIntersection(edge[j]);
+            tmp = edges[i].edgeIntersection(edges[j]);
             if (tmp !== null && tmp !=="parallel_lines" && tmp !== "identical_lines" ){ 
-		res.push(new Intersection(tmp,edge[i],edge[j]));
+		res.push(new Intersection(tmp,edges[i],edges[j]));
 	    }
         }
     }
