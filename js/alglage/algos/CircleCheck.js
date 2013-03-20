@@ -2,17 +2,18 @@ importScripts('../core/Core.js');
 
 self.onmessage = function(event) {
     var points = event.data.graph.points;
+    var name = event.data.name;
 
     // durch die Serialisierung in eine Nachricht haben die Punkte ihre
     // Methoden verloren. Daher zurückcasten!
     points = Vector.cast(points);
 
-    calculate(points);
+    calculate(points, name);
 };
 
 // Dieser Algorithmus guckt, ob mehr als drei Punkte auf einem Kreis
 // liegen und gibt diese Kreise dann zurück
-function calculate(points) {
+function calculate(points, name) {
 
     var retCircles = []; // Kreise die zurückgegeben werden
 
@@ -101,7 +102,7 @@ function calculate(points) {
         annotations : {
             'circles' : retCircles
         },
-        name : 'circleCheck',
+        name : name,
         info : infoText
     });
 };

@@ -6,6 +6,7 @@
 
 div.algoBox {
 	position: relative;
+	overflow: hidden;
 }
 
 div.algoBox.loading > .loader {
