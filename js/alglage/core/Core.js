@@ -248,6 +248,11 @@ Edge.prototype.edgeIntersection = function(edge){ //der Schnittpunkt der beiden 
 function Graph(points, edges) {
     this.points = points;
     this.edges = edges;
+    // Punkten im Graph Referenz auf inzidente Kanten geben
+    for(var i = 0; i < this.edges.length; i++) {
+        this.edges[i].pt1.incidentEdges.push(this.edges[i]);
+        this.edges[i].pt2.incidentEdges.push(this.edges[i]);
+    }
 };
 
 
