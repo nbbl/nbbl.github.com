@@ -73,6 +73,7 @@ Vector.prototype.orbit = function(ORIGIN, arcWidth, arcHeight, degrees) {
 Vector.prototype.moveTo = function(coordX, coordY) {
   this.x = coordX;
   this.y = coordY;
+};
 
 Vector.prototype.offset = function(dx, dy) {
     this.x += dx;
