@@ -52,8 +52,8 @@ function calculate(edges, name) {
 
     self.postMessage({
         score       : currshortest,
-        annotations : { lineSegments: [result]
-			//points: intersections.map(function(inters){return inters.pt;}) 
+        annotations : { lineSegments: [result],
+			points: [result.pt1,result.pt2]
 		      },
         name        : name,
         info  : "kleinster Abstand eines Schnittpunktes zu einer Kante"
