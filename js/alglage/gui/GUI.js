@@ -39,7 +39,8 @@ var GUI = function(settings) {
             needShift: false,
             enabled: true
         } */
-    });
+
+   });
     
     function initGraph(gr) {
         graph = gr;
@@ -106,6 +107,8 @@ var GUI = function(settings) {
         draw(obj, algoName);
     }
 
+
+
     // mit draw() können unabhängig vom Graphen Annotations gezeichnet werden
     // durch die Angabe von algoName werden die in obj übergebenen Annotations
     // eine eigene Lage gezeichnet
@@ -113,7 +116,7 @@ var GUI = function(settings) {
         // TODO Annotations undraggable machen
         if(obj.points !== undefined) {
             for(var i = 0; i < obj.points.length; i++) {
-                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false});
+                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, fixed:true});
                 algoData[algoName].jsxObjects.push(point);
             }
         }
@@ -121,7 +124,7 @@ var GUI = function(settings) {
             for(var i = 0; i < obj.lines.length; i++) {
                 var line = board.create('line', [
                                     [obj.lines[i].pt1.x, obj.lines[i].pt1.y],
-                                    [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ] );
+                                    [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ], {fixed:true});
                 algoData[algoName].jsxObjects.push(line);
             }
         }
@@ -133,7 +136,8 @@ var GUI = function(settings) {
                                     [pt1.x, pt1.y],
                                     [pt2.x, pt2.y] ],
                                     {straightFirst:false,
-                                     straightLast:false});
+                                     straightLast:false,
+                                     fixed:true});
                 algoData[algoName].jsxObjects.push(line);
             }
         }
@@ -141,8 +145,21 @@ var GUI = function(settings) {
             for(var i = 0; i < obj.circles.length; i++) {
                 var p = obj.circles[i].point;
                 var r = obj.circles[i].radius;
-                var circle = board.create('circle', [[p.x, p.y],[p.x, p.y + r]], {strokeWidth:2, highlightStrokeColor : 'blue',});
+                var circle = board.create('circle', [[p.x, p.y],[p.x, p.y + r]], {strokeWidth : 2,
+                                                                                  highlightStrokeColor : 'blue',
+                                                                                  fixed : true });
                 algoData[algoName].jsxObjects.push(circle);
+            }
+        }
+        if(obj.angles !== undefined) {
+            for(var i = 0; i < obj.angles.length; i++) {
+                // TODO checken, ob der winkel größer als 180 grad ist, wenn ja, dann punkte vertauschen
+
+                var A = board.create('point', [obj.angles[i].a.x, obj.angles[i].a.y], {visible:false});
+                var B = board.create('point', [obj.angles[i].b.x, obj.angles[i].b.y], {visible:false});
+                var C = board.create('point', [obj.angles[i].c.x, obj.angles[i].c.y], {visible:false});
+                var angle = board.create('angle', [B, A, C], {type:'sector', orthoType:'sector', orthoSensitivity:1, radius:1, withLabel:false});
+                algoData[algoName].jsxObjects.push(angle);
             }
         }
         if(obj.areas !== undefined) {
