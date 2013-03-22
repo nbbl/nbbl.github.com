@@ -14,10 +14,8 @@ Settings
 
 */
 var GUI = function(settings) {
-        
+
     // Private Variablen
-    var points = []; // Punkte des Graphen
-    var edges = []; // Kanten des Graphen
     var graph = new Graph([], []);
     var boardPoints = []; // Darstellung von graph.points
     var boardEdges = []; // Darstellung von graph.edges
@@ -40,8 +38,8 @@ var GUI = function(settings) {
             enabled: true
         } */
 
-   });
-    
+    });
+
     function initGraph(gr) {
         graph = gr;
         _drawGraph();
@@ -93,6 +91,8 @@ var GUI = function(settings) {
                 boardEdges.push(line);
 
                 line.on('mouseup', function(){
+                    this.pt1.moveTo(this.point1.X(), this.point1.Y());
+                    this.pt2.moveTo(this.point2.X(), this.point2.Y());
                     $.publish('points-change');
                 });
                 line.on('drag', function() {
@@ -106,7 +106,6 @@ var GUI = function(settings) {
         eraseAnnotations();
         draw(obj, algoName);
     }
-
 
 
     // mit draw() können unabhängig vom Graphen Annotations gezeichnet werden
@@ -189,7 +188,6 @@ var GUI = function(settings) {
 
     function initAlgoBox(algoName) {
         var $ele = $dummyBox.clone().attr('id', algoName);
-        
         var $btn = $ele.find('a.btn');
         $btn.click(function() {
             var annots = algoData[algoName].annotations;
@@ -205,7 +203,7 @@ var GUI = function(settings) {
             }
             return false;
         });
-        
+
         algoData[algoName] = {};
         algoData[algoName].jsxObjects = [];
         algoData[algoName].algoBox = $ele;
