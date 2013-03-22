@@ -70,6 +70,10 @@ Vector.prototype.orbit = function(ORIGIN, arcWidth, arcHeight, degrees) {
     this.y = ORIGIN.y + arcHeight * Math.sin(radians);
 };
 
+Vector.prototype.moveTo = function(coordX, coordY) {
+  this.x = coordX;
+  this.y = coordY;
+
 Vector.prototype.offset = function(dx, dy) {
     this.x += dx;
     this.y += dy;
