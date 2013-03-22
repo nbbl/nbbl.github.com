@@ -65,6 +65,9 @@ var GUI = function(settings) {
                 p.on('mouseup', function(){
                     this.srcPoint.x = this.X();
                     this.srcPoint.y = this.Y();
+                    for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
+                        this.srcPoint.incidentEdges[i].reload();
+                    }
                     $.publish('points-change');
                 });
 
@@ -125,10 +128,9 @@ var GUI = function(settings) {
     // durch die Angabe von algoName werden die in obj übergebenen Annotations
     // eine eigene Lage gezeichnet
     function draw(obj, algoName) {
-        // TODO Annotations undraggable machen
         if(obj.points !== undefined) {
             for(var i = 0; i < obj.points.length; i++) {
-                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, fixed:true});
+                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, strokeColor:'blue', fillColor:'blue', fixed:true});
                 algoData[algoName].jsxObjects.push(point);
             }
         }
