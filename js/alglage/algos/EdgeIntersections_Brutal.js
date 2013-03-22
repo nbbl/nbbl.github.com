@@ -8,9 +8,10 @@ self.onmessage = function(event) {
 
 function calculate(edges, name) {
     var info = edges.map(function(ed){return "pt1: "+ed.pt1+"pt2: "+ed.pt2+" ";});
-    var res = [];
+    var intersections = [];
     var tmp = null;
-
+    
+    //Berechne alle echten Schnittpunkte
     for (var i = 0; i<edges.length-1; ++i) {
         for (var j = i+1; j<edges.length; ++j) {
             tmp = edges[i].edgeIntersection(edges[j]);
@@ -19,15 +20,37 @@ function calculate(edges, name) {
                    !tmp.equals(edges[i].pt2) && 
                    !tmp.equals(edges[j].pt1) && 
                    !tmp.equals(edges[j].pt2)) { 
-                    res.push(tmp);
+                    
+		    intersections.push({pt: tmp,
+		    			ed1: edges[i],
+		    			ed2: edges[j]});
                 }
             } 
         }
     }
+    
+    //Berechne kürzeste Distanz (>0) von Schnittpunkt zu Kante
+    var currshortest = Infinity;
+    var result = null;
+    var temp = null;
+    var projection = null;
+    for(var i=0; i<intersections.length; ++i){
+	for(var j=0; j<edges.length; ++j){
+	    if(intersections[i].ed1!==edges[j] && intersections[i].ed2!==edges[j]){
+		temp = edges[j].distanceToLine(intersections[i].pt);
+		projection = edges[j].projectionToEdge(intersections[i].pt);
+		if(temp < currshortest && projection !== null){
+		    result = new Edge(intersections[i].pt,projection);
+		    currshortest = temp;
+		}
+	    }
+	}
+    }
 
     self.postMessage({
-        score       : res !== [],
-        annotations : { lines: res.map(function(e){return new Edge(e,e.add(new Vector(0,1)));})},
+        score       : intersections !== [],
+        annotations : { lineSegements: [result],
+			points: intersections.map(function(inters){return inters.pt;}) },
         name        : name,
         info  : info
     });
