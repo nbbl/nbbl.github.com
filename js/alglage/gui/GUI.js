@@ -16,7 +16,7 @@ Settings
 var GUI = function(settings) {
 
     // Private Variablen
-    var graph = new Graph([], []);
+    var graph = new Graph([], []); // Referenz auf den Graphen des AlgLageControllers
     var boardPoints = []; // Darstellung von graph.points
     var boardEdges = []; // Darstellung von graph.edges
 
@@ -59,7 +59,7 @@ var GUI = function(settings) {
 
             for (var i = 0; i < graph.points.length; i++) {
                 var p = board.create('point', [ graph.points[i].x, graph.points[i].y ], {withLabel:false});
-                p.srcPoint = graph.points[i];
+                p.srcPoint = graph.points[i]; // Referenz auf zugrundeliegenden Punkt setzen
                 boardPoints.push(p);
 
                 p.on('mouseup', function(){
@@ -88,11 +88,13 @@ var GUI = function(settings) {
                 var pt1 = boardPoints[graph.points.indexOf(graph.edges[i].pt1)];
                 var pt2 = boardPoints[graph.points.indexOf(graph.edges[i].pt2)];
                 var line = board.create('line', [ pt1, pt2 ], {strokeWidth:5, strokeColor:'#ff0000', straightFirst:false, straightLast:false});
+                line.srcEdge = graph.edges[i]; // Referenz auf zugrundeliegende Kante setzen
                 boardEdges.push(line);
 
                 line.on('mouseup', function(){
-                    this.pt1.moveTo(this.point1.X(), this.point1.Y());
-                    this.pt2.moveTo(this.point2.X(), this.point2.Y());
+                    this.point1.srcPoint.moveTo(this.point1.X(), this.point1.Y());
+                    this.point2.srcPoint.moveTo(this.point2.X(), this.point2.Y());
+                    // this.srcEdge.reload();
                     $.publish('points-change');
                 });
                 line.on('drag', function() {
