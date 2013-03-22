@@ -196,7 +196,7 @@ Edge.prototype.getRight = function(){
 };
 
 Edge.prototype.projectionToLine = function(pt){
-    return pt.add(Vector.skalarMult(this.signedDistanceToLine(pt),this.normal));
+    return pt.substract(Vector.skalarMult(this.signedDistanceToLine(pt),this.normal));
 };
 
 Edge.prototype.projectionToEdge = function(pt){
