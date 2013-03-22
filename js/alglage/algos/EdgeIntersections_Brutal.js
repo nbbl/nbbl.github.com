@@ -7,7 +7,6 @@ self.onmessage = function(event) {
 };
 
 function calculate(edges, name) {
-    var info = edges.map(function(ed){return "pt1: "+ed.pt1+"pt2: "+ed.pt2+" ";});
     var intersections = [];
     var tmp = null;
     
@@ -39,19 +38,24 @@ function calculate(edges, name) {
 	    if(intersections[i].ed1!==edges[j] && intersections[i].ed2!==edges[j]){
 		temp = edges[j].distanceToLine(intersections[i].pt);
 		projection = edges[j].projectionToEdge(intersections[i].pt);
+		//info += ", p:"+projection;
+		
 		if(temp < currshortest && projection !== null){
 		    result = new Edge(intersections[i].pt,projection);
 		    currshortest = temp;
+		    //info += ", cs:"+currshortest;
+		    
 		}
 	    }
 	}
     }
 
     self.postMessage({
-        score       : intersections !== [],
-        annotations : { lineSegements: [result],
-			points: intersections.map(function(inters){return inters.pt;}) },
+        score       : currshortest,
+        annotations : { lineSegments: [result]
+			//points: intersections.map(function(inters){return inters.pt;}) 
+		      },
         name        : name,
-        info  : info
+        info  : "kleinster Abstand eines Schnittpunktes zu einer Kante"
     });
 }
