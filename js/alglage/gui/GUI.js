@@ -94,7 +94,18 @@ var GUI = function(settings) {
                 line.on('mouseup', function(){
                     this.point1.srcPoint.moveTo(this.point1.X(), this.point1.Y());
                     this.point2.srcPoint.moveTo(this.point2.X(), this.point2.Y());
-                    // this.srcEdge.reload();
+
+                    // alle inzidenten Kanten updaten (die gemeinsame Kante beider Punkte wird doppelt geupdatet)
+                    var inc1 = this.srcEdge.pt1.incidentEdges;
+                    var inc2 = this.srcEdge.pt2.incidentEdges;
+
+                    for(var i = 0; i < inc1.length; i++) {
+                        inc1[i].reload();
+                    }
+                    for(var i = 0; i < inc2.length; i++) {
+                        inc2[i].reload();
+                    }
+
                     $.publish('points-change');
                 });
                 line.on('drag', function() {
