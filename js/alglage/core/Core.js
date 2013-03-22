@@ -146,6 +146,12 @@ function Edge(pt1,pt2){
   
 };
 
+Edge.prototype.reload = function() {
+    this.normal = Vector.skalarMult(1/Math.sqrt(Math.pow(this.pt2.y-this.pt1.y,2)+Math.pow(this.pt1.x-this.pt2.x,2)),
+				    (function(v) { return new Vector(v.y,-v.x) }) (this.pt1.substract(this.pt2)));
+    this.dist = Vector.skalarProd(this.normal,this.pt1);
+};
+
 Edge.cast = function(p) {
     
     if(p === undefined) {

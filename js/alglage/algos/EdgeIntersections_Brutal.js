@@ -7,51 +7,28 @@ self.onmessage = function(event) {
 };
 
 function calculate(edges, name) {
-    var info = "";
-    var res = shortestDistIntersectEdge(calculateIntersections(edges),edges);
-
-
-    self.postMessage({
-        score       : res !== null,
-        annotations : { lineSegments: res },
-        name        : name,
-	info  : "Schnittpunkte: x1="+res.pt1.x +" y2="+res.pt1.y+"; x2=" +res.pt2.x +" y2="+res.pt2.y
-    });
-}
-
-function shortestDistIntersectEdge(intersections,edges){
-    var shortestEdge = null;
-    var projection   = null;
-    for(var i=0; i<intersections.length-1; ++i){
-        for(var j=0; j<edges.length-1; ++j){
-            if (edges[j]!=intersections[i].edge1 && edges[j]!=intersections[i].edge2 ) {
-                projection = edges[j].projectionToEdge(intersections[i].pt);
-                if(projection !== null && 
-                  (shortestEdge === null || projection.distance(intersections[i]) < shortestEdge.length)){
-                    shortestEdge = new Edge(projection,intersections[i].pt);
-                }
-            }
-        }
-    }
-    return shortestEdge;
-}
-
-function calculateIntersections(edges) {
+    var info = edges.map(function(ed){return "pt1: "+ed.pt1+"pt2: "+ed.pt2+" ";});
     var res = [];
     var tmp = null;
-    for (var i = 0; i<edges.length-2; ++i) {
-        for (var j = i+1; j<edges.length-1; ++j) {
+
+    for (var i = 0; i<edges.length-1; ++i) {
+        for (var j = i+1; j<edges.length; ++j) {
             tmp = edges[i].edgeIntersection(edges[j]);
-            if (tmp !== null && tmp !== "parallel_lines"  && tmp !== "identical_lines" ){ 
-                res.push(new Intersection(tmp,edges[i],edges[j]));
-            }
+            if (tmp !== null && tmp !=="parallel_lines" && tmp !== "identical_lines") {
+                if(!tmp.equals(edges[i].pt1) && 
+                   !tmp.equals(edges[i].pt2) && 
+                   !tmp.equals(edges[j].pt1) && 
+                   !tmp.equals(edges[j].pt2)) { 
+                    res.push(tmp);
+                }
+            } 
         }
     }
-    return res;
-}
 
-function Intersection(pt, edge1, edge2){
-    this.edge1 = edge1;
-    this.edge2 = edge2;
-    this.pt = pt;
+    self.postMessage({
+        score       : res !== [],
+        annotations : { lines: res.map(function(e){return new Edge(e,e.add(new Vector(0,1)));})},
+        name        : name,
+        info  : info
+    });
 }
