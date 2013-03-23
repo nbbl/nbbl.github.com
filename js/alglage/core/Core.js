@@ -27,6 +27,10 @@ Vector.prototype.abs = function() {
     return this.distance(ORIGIN);
 };
 
+Vector.prototype.inv = function() {
+    return new Vector(-this.x, -this.y);
+};
+
 Vector.prototype.add = function(v) {
     return new Vector(this.x + v.x, this.y + v.y);
 };
@@ -195,6 +199,12 @@ Edge.prototype.getRight = function(){
     else return this.pt1;
 };
 
+Edge.prototype.getAdjacent = function(point) {
+    if(point === this.pt1) return this.pt2;
+    else if(point === this.pt2) return this.pt1;
+    else return false;
+};
+
 Edge.prototype.projectionToLine = function(pt){
     return pt.add(Vector.skalarMult(this.signedDistanceToLine(pt),this.normal));
 };
@@ -264,6 +274,10 @@ function Angle(points) {
     this.b = points[1];
     this.c = points[2];
 }
+
+/* Angle.prototype.getDegrees() {
+    // return vector(-a, b).degreesTo(vector(b, c));
+}; */
 
 
 /* 
