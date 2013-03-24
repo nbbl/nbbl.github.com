@@ -243,6 +243,7 @@ var GUI = function(settings) {
 
         var $ele = algoData[algoName].algoBox;
         $ele.removeClass('loading');
+        $ele.find('h3').html(algoName);
         $ele.find('h2').html(score);
         $ele.find('p:first').html(info);
     }

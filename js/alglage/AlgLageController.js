@@ -18,6 +18,7 @@ var AlgLageController = function(gui) {
    
     function addAlgo(algoName, algoPath) {
         var w = new Worker(algoPath);
+        // Dieser Check macht nicht viel Sinn...
         if (!w) {
             console.log('could not create worker with path' + algoPath);
         };
