@@ -2,19 +2,21 @@ importScripts('../core/Core.js');
 
 self.onmessage = function(event) {
     var points = event.data.graph.points;
+    var name = event.data.name,
 
     // durch die Serialisierung in eine Nachricht haben die Punkte ihre
     // Methoden verloren. Daher zurückcasten!
     points = Vector.cast(points);
 
-    calculate(points);
-};
+    calculate(points, name);
+}
+
+function calculate(points, name) {
 
 // dieser Algorithmus berechnet brute-force die kürzeste Distanz aller
 // übergebenen Punkte in *points* aus, und gibt den Betrag der kürzesten
 // Distanz und eine Liste von Edge-Objekten aller kürzesten Paare von
 // Punkten zurück
-function calculate(points) {
     var shortestDistance = Infinity;
     var edges = [];
 
@@ -41,7 +43,7 @@ function calculate(points) {
     self.postMessage({
         score : shortestDistance,
         annotations : { lineSegments : result },
-        name : 'ShortestDistance_BF',
+        name : name,
         info : 'Kürzester Abstand zweier Punkte'
     });
-};
+}

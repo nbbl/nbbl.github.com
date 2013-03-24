@@ -273,11 +273,17 @@ function Angle(points) {
     this.a = points[0];
     this.b = points[1];
     this.c = points[2];
-}
+};
 
-/* Angle.prototype.getDegrees() {
-    // return vector(-a, b).degreesTo(vector(b, c));
-}; */
+Angle.prototype.getDegrees = function() {
+    return Angle.getDegrees(this.a, this.b, this.c);
+};
+
+Angle.getDegrees = function(pointA, pointB, pointC) {
+    var AminusB = new Vector( pointB.inv().add(pointA) );
+    var CminusB = new Vector( pointB.inv().add(pointC) );
+    return AminusB.degreesTo(CminusB);
+};
 
 
 /* 
