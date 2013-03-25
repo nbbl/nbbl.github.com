@@ -12,11 +12,44 @@ self.onmessage = function(event) {
 function calculate(points, name) {
     var res = [];
     var info = "";
+    var edge = null;
+    var dist, dist2 = null;
+    var start, middle, end = null;
+    var endPointCases = 1; //1:=(i,j); 2:=(i,k); 3:=(j,k) Paare entspr. Endpunktindizes
+
     for (var i = 0; i < points.length-2; ++i) {
         for (var j = i+1; j < points.length-1; ++j) {
             for (var k = j+1; k < points.length; ++k) {
-                var edge = new Edge(points[i], points[j]);
-                var dist = edge.distanceToLine(points[k]);
+                //finde die aeusseren Punkte
+                dist = points[i].distance(points[j]);
+                dist2 = points[i].distance(points[k]);
+                if (dist < dist2) { //default ist endPointcases = 1;
+                    endPointCases = 2;
+                    dist = dist2;
+                }
+                if (dist < points[j].distance(points[k])) endPointCases = 3;
+                switch (endPointCases) {
+                    case 1: 
+                        start  = points[i];
+                        end    = points[j];
+                        middle = points[k];
+                        break;
+                    case 2:
+                        start  = points[i];
+                        end    = points[k];
+                        middle = points[j];
+                        break;
+                    case 3:
+                        start  = points[j];
+                        end    = points[k];
+                        middle = points[i];
+                        break;
+                    default:
+                        start = middle = end = null;
+                }
+                //teste ob die drei Punkt auf einer Geraden liegen
+                edge = new Edge(start, end);
+                dist = edge.distanceToLine(middle);
                 if (dist < CollinearityTest_SPATIAL_TOLERANCE) {
                     res.push(edge);
                     info = info + dist + ", ";
