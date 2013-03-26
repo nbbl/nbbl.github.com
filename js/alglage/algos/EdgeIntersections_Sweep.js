@@ -82,7 +82,7 @@ function sweep(edges,name) {
 	var intersection1, intersection2 = null;
 	var inserted = false;
 	
-	if (i > 0 &&
+	if (smaller > 0 &&
             (intersection1 = sls[smaller].edgeIntersection(sls[smaller-1])) !== null &&
             !intersection1.equals(sls[smaller].pt1)   && 
             !intersection1.equals(sls[smaller].pt2)   && 
@@ -150,7 +150,7 @@ function sweep(edges,name) {
                !intersection1.equals(sls[index-1].pt1)   && 
                !intersection1.equals(sls[index-1].pt2) ) {
 		   info += sls[index+1];
-		   evq.push(new Event("intersection",sls[index-1],sls[index],intersection1));
+		   evq.push(new Event("intersection",sls[index-1],sls[index+1],intersection1));
                    inserted = true;
 	    }
 	    if (inserted) evq.sort(function(x,y){return x.key-y.key;});

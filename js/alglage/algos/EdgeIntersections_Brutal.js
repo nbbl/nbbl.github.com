@@ -38,12 +38,10 @@ function calculate(edges, name) {
 	    if(intersections[i].ed1!==edges[j] && intersections[i].ed2!==edges[j]){
 		temp = edges[j].distanceToLine(intersections[i].pt);
 		projection = edges[j].projectionToEdge(intersections[i].pt);
-		//info += ", p:"+projection;
 		
 		if(temp < currshortest && projection !== null){
 		    result = new Edge(intersections[i].pt,projection);
 		    currshortest = temp;
-		    //info += ", cs:"+currshortest;
 		    
 		}
 	    }
@@ -53,7 +51,8 @@ function calculate(edges, name) {
     self.postMessage({
         score       : currshortest,
         annotations : { lineSegments: [result],
-			points: [result.pt1,result.pt2]
+			points: [result.pt1,result.pt2],
+			lines: 
 		      },
         name        : name,
         info  : "kleinster Abstand eines Schnittpunktes zu einer Kante"

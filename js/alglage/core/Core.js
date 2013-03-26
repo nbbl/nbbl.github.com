@@ -188,14 +188,12 @@ Edge.prototype.getY = function(x){
  * Gleiche X-Koordinaten müssen im vorhinein ausgeschlossen werden!
  */
 Edge.prototype.getLeft = function(){
-    if (this.pt1.x === this.pt2.x) return null;
-    else if (this.pt1.x < this.pt2.x) return this.pt1;
+    if (this.pt1.x <= this.pt2.x) return this.pt1;
     else return this.pt2;
 };
 
 Edge.prototype.getRight = function(){
-    if (this.pt1.x === this.pt2.x) return null;
-    else if (this.pt1.x < this.pt2.x) return this.pt2;
+    if (this.pt1.x <= this.pt2.x) return this.pt2;
     else return this.pt1;
 };
 
