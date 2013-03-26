@@ -178,6 +178,10 @@ Edge.prototype.length = function() {
     return this.pt1.distance(this.pt2);
 };
 
+Edge.prototype.getY = function(x){
+    return (this.dist - this.normal.x * x) / this.normal.y;
+};
+
 /* diese beiden Funktionen sind nötig da Punkte nicht zwingend in der
  * Sortierung zur Initialisierung bleiben. 
  *
@@ -225,7 +229,7 @@ Edge.prototype.contains = function(pt){ //enthält die Kante den Punkt?
  *
  */
 Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
-    if (this.normal.equals(edge.normal) || this.normal.equals(-edge.normal)) {
+    if (this.normal.equals(edge.normal) || this.normal.equals(Vector.skalarMult(-1,edge.normal))) {
 	if (approx(this.dist,edge.dist)) return "identical_lines";
 	return "parallel_lines"; 
     }
