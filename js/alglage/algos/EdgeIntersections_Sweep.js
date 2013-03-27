@@ -111,7 +111,7 @@ function sweep(edges,name) {
         var intersection1, intersection2 = null;
         var inserted = false;
         if (index<0) {
-            alert("EdgeInterseciton_Sweep: some edge was not inserted into sls!!");
+            alert("EdgeIntersection_Sweep: some edge was not inserted into sls!!");
         } else {
             if (index > 0 &&
                 (intersection1 = sls[index].edgeIntersection(sls[index-1])) !== null &&
