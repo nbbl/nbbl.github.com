@@ -224,23 +224,41 @@ Edge.prototype.contains = function(pt){ //enthält die Kante den Punkt?
 };
 
 /*
- *
+ * Veraltete Version
  */
-Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
-    if (this.normal.equals(edge.normal) || this.normal.equals(Vector.skalarMult(-1,edge.normal))) {
-	if (approx(this.dist,edge.dist)) return "identical_lines";
-	return "parallel_lines"; 
+//Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
+//    if (this.normal.equals(edge.normal) || this.normal.equals(Vector.skalarMult(-1,edge.normal))) {
+//        if (approx(this.dist,edge.dist)) return "identical_lines";
+//        return "parallel_lines"; 
+//    }
+//    var y = (this.normal.x * edge.dist     - edge.normal.x * this.dist) / 
+//        (this.normal.x * edge.normal.y - this.normal.y * edge.normal.x);
+//    var x = (this.dist - this.normal.y * y) / this.normal.x;
+//    if (!isFinite(x) || !isFinite(y)) return null; 
+//    return new Point(x,y);
+//}; 
+
+//zuverlaessigere Version
+Edge.prototype.lineIntersection = function(edge) {
+    if (this.normal.equals(edge.normal) || this.normal.equals(Vector.skalarMult(-1, edge.normal))) {
+        if (approx(this.dist, edge.dist)) return "identical_lines";
+        return "parallel_lines";
     }
-    var y = (this.normal.x * edge.dist     - edge.normal.x * this.dist) / 
-	    (this.normal.x * edge.normal.y - this.normal.y * edge.normal.x);
-    var x = (this.dist - this.normal.y * y) / this.normal.x;
-    if (!isFinite(x) || !isFinite(y)) return null; 
+
+    var y, x = null;
+    y = (this.dist*edge.normal.x - edge.dist*this.normal.x) / 
+        (this.normal.y*edge.normal.x - this.normal.x*edge.normal.y);
+    if (this.normal.x !== 0) {
+        x = (this.dist - this.normal.y*y) / this.normal.x;
+    } else {
+        x = (edge.dist - edge.normal.y*y) / edge.normal.x;
+    }
     return new Point(x,y);
-}; 
+};
 
 Edge.prototype.edgeIntersection = function(edge){ //der Schnittpunkt der beiden Kanten.
     var potIntsec = this.lineIntersection(edge);
-    if (potIntsec === "parallel_lines") return null; //kein Schnittpunkt
+    if (potIntsec === "parallel_lines") return "parallel_lines"; //kein Schnittpunkt
     if (potIntsec === "identical_lines") return "identical_lines"; //sollte nicht passieren
     if (potIntsec !== null && edge.contains(potIntsec) && this.contains(potIntsec)) return potIntsec;
     return null; //kein Schnittpunkt
