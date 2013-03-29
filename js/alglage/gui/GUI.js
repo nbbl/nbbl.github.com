@@ -223,6 +223,7 @@ var GUI = function(settings) {
         algoData[algoName].jsxObjects = [];
         algoData[algoName].algoBox = $ele;
         $dummyBox.before($ele);
+        $ele.find('h3').html(algoName);
     }
     
     function setAlgoBoxLoading(algoName) {

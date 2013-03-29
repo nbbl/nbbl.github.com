@@ -5,8 +5,6 @@
 var AlgLageController = function(gui) {
         
     // Private Variablen
-    // var points = [];
-    // var edges = [];
     var graph = new Graph([], []);
     var algos = {};
     var gui = gui;
@@ -58,12 +56,13 @@ var AlgLageController = function(gui) {
         }
     }
 
-    // Füllt das Feld zw. Ursprung und maxX/maxY zufällig mit <amount> vielen Punkten
+
     function fillRandomly(amount, maxX, maxY) {
-        for(i = 0; i < amount; i++) {
-            var x = Math.random() * maxX;
-            var y = Math.random() * maxY;
-            this.addPoint(new Point(x, y));
+        this.graph.points = [];
+        this.graph.edges = [];
+        var points = randomPoints(amount, maxX, maxY);
+        for(var i = 0; i < points.length; i++) {
+            this.graph.points.push(points[i]);
         }
     }
     

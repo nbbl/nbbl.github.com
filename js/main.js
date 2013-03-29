@@ -41,6 +41,7 @@ alc.addAlgo('CircleCheck', 'js/alglage/algos/CircleCheck.js');
 alc.addAlgo('CollinearityTest', 'js/alglage/algos/CollinearityTest.js');
 alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF.js');
 alc.addAlgo('EdgeIntersections_BF', 'js/alglage/algos/EdgeIntersections_Brutal.js');
+alc.addAlgo('EdgeIntersections_Sweep', 'js/alglage/algos/EdgeIntersections_Sweep.js');
 alc.addAlgo('SmallestAngle_BF', 'js/alglage/algos/SmallestAngle_BF');
 
 alc.calculateAlgos();

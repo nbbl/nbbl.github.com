@@ -33,17 +33,16 @@ function calculate(edges, name) {
     var result = null;
     var temp = null;
     var projection = null;
+
     for(var i=0; i<intersections.length; ++i){
 	for(var j=0; j<edges.length; ++j){
 	    if(intersections[i].ed1!==edges[j] && intersections[i].ed2!==edges[j]){
 		temp = edges[j].distanceToLine(intersections[i].pt);
 		projection = edges[j].projectionToEdge(intersections[i].pt);
-		//info += ", p:"+projection;
 		
 		if(temp < currshortest && projection !== null){
 		    result = new Edge(intersections[i].pt,projection);
 		    currshortest = temp;
-		    //info += ", cs:"+currshortest;
 		    
 		}
 	    }
@@ -53,9 +52,11 @@ function calculate(edges, name) {
     self.postMessage({
         score       : currshortest,
         annotations : { lineSegments: [result],
-			points: [result.pt1,result.pt2]
+			points: [result.pt1,result.pt2],
+			lines: intersections.map(function(x){return new Edge(new Point(x.pt.x,0),new Point(x.pt.x,1));})
 		      },
-        name        : name,
-        info  : "kleinster Abstand eines Schnittpunktes zu einer Kante"
+        name  : name,
+        info  : "kleinster Abstand eines Schnittpunktes zu einer Kante, \n"+
+	        "Anzahl der Schnittpunkte: "+intersections.length
     });
 }
