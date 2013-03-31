@@ -50,12 +50,18 @@ var GUI = function(settings) {
     }
 
     function _drawGraph() {
+        // alle Punkte neuzeichnen
+        for(var i = 0; i < boardPoints.length; i++) {
+            board.removeObject(boardPoints[i]);
+        }
+        boardPoints = [];       
+        for(var i = 0; i < boardEdges.length; i++) {
+           p = board.removeObject(boardEdges[i]);
+        }
+        boardEdges = [];
+
         if(graph.points !== undefined) {
-            // alle Punkte neuzeichnen
-            for(var i = 0; i < boardPoints.length; i++) {
-                board.removeObject(boardPoints[i]);
-            }
-            boardPoints = [];
+
 
             for (var i = 0; i < graph.points.length; i++) {
                 var p = board.create('point', [ graph.points[i].x, graph.points[i].y ], {withLabel:false});
@@ -67,8 +73,7 @@ var GUI = function(settings) {
                     this.srcPoint.y = this.Y();
                     for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
                         this.srcPoint.incidentEdges[i].reload();
-                    }
-                    $.publish('points-change');
+                    } $.publish('points-change');
                 });
 
                 // Bereich zum Verschieben der Punkte einschränken
@@ -83,9 +88,7 @@ var GUI = function(settings) {
 
         if(graph.edges !== undefined) {
             // alle Kanten neuzeichnen
-            for(var i = 0; i < boardEdges.length; i++) {
-                p = board.removeObject(boardEdges[i]);
-            }
+
 
             for (var i = 0; i < graph.edges.length; i++) {
                 var pt1 = boardPoints[graph.points.indexOf(graph.edges[i].pt1)];
