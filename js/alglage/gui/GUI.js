@@ -1,5 +1,5 @@
 /*
- * Hier wird sich um das Zeichnen und darstellen der Daten gekümmert.
+ * Hier wird sich um das Zeichnen und darstellen der Daten gekï¿½mmert.
  */
 
 /*
@@ -8,8 +8,11 @@ Settings
 {
     containerId : '',       // Id des Containers
     dummyContainer : '',    // Id von Dummy-Box
-    maxX : 10,              // maximale X-Koordinate für Punkte
-    maxY : 10               // maximale Y-Koordinate für Punkte
+    levelDummy : '',        // Selector von Dummy-LevelmenÃ¼
+    pageHeader : '',        // Selector vom Page-Header
+    highscoreDummy : '',    // Selector zum Highscore-Dummy
+    maxX : 10,              // maximale X-Koordinate fÃ¼r Punkte
+    maxY : 10               // maximale Y-Koordinate fÃ¼r Punkte
 }
 
 */
@@ -22,7 +25,11 @@ var GUI = function(settings) {
 
     var $dummyBox = $('#' + settings.dummyContainer);
     var algoData = {}; // Alle Daten zu den Algos
-
+    
+    var $levDummy = $(settings.levelDummy);
+    var $pageHeader = $(settings.pageHeader);
+    var $hsDummy = $(settings.highscoreDummy);
+    
     var activeAlgoBox = ''; // Name der activen algoBox
         // JSXGraph-Board initialisieren
         var board = JXG.JSXGraph.initBoard(settings.containerId, {
@@ -49,6 +56,19 @@ var GUI = function(settings) {
         return graph.points;
     }
 
+    function setPoints(points) {
+        if(boardPoints.length != points.length) return false;
+        for(var i = 0; i < points.length; i++) {
+            var x = points[i][0];
+            var y = points[i][1];
+            boardPoints[i].moveTo([x, y]);
+            
+            boardPoints[i].srcPoint.x = boardPoints[i].X();
+            boardPoints[i].srcPoint.y = boardPoints[i].Y();
+        }
+        $.publish('points-change');
+    }
+
     function _drawGraph() {
         // alle Punkte neuzeichnen
         for(var i = 0; i < boardPoints.length; i++) {
@@ -73,10 +93,11 @@ var GUI = function(settings) {
                     this.srcPoint.y = this.Y();
                     for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
                         this.srcPoint.incidentEdges[i].reload();
-                    } $.publish('points-change');
+                    }
+                    $.publish('points-change');
                 });
 
-                // Bereich zum Verschieben der Punkte einschränken
+                // Bereich zum Verschieben der Punkte einschrï¿½nken
                 p.on('drag', function(){
                     if(this.X() < 0) this.moveTo([0, this.Y()]);
                     if(this.X() > settings.maxX) this.moveTo([settings.maxX, this.Y()]);
@@ -115,7 +136,7 @@ var GUI = function(settings) {
                     $.publish('points-change');
                 });
                 line.on('drag', function() {
-                    // TODO implementieren, dass auch Linien nicht aus dem Feld herausgeschoben werden können
+                    // TODO implementieren, dass auch Linien nicht aus dem Feld herausgeschoben werden kï¿½nnen
                 });
             }
         }
@@ -127,8 +148,8 @@ var GUI = function(settings) {
     }
 
 
-    // mit draw() können unabhängig vom Graphen Annotations gezeichnet werden
-    // durch die Angabe von algoName werden die in obj übergebenen Annotations
+    // mit draw() kï¿½nnen unabhï¿½ngig vom Graphen Annotations gezeichnet werden
+    // durch die Angabe von algoName werden die in obj ï¿½bergebenen Annotations
     // eine eigene Lage gezeichnet
     function draw(obj, algoName) {
         if(obj.points !== undefined) {
@@ -170,7 +191,7 @@ var GUI = function(settings) {
         }
         if(obj.angles !== undefined) {
             for(var i = 0; i < obj.angles.length; i++) {
-                // TODO checken, ob der winkel größer als 180 grad ist, wenn ja, dann punkte vertauschen
+                // TODO checken, ob der winkel grï¿½ï¿½er als 180 grad ist, wenn ja, dann punkte vertauschen
 
                 var A = board.create('point', [obj.angles[i].a.x, obj.angles[i].a.y], {visible:false});
                 var B = board.create('point', [obj.angles[i].b.x, obj.angles[i].b.y], {visible:false});
@@ -184,7 +205,7 @@ var GUI = function(settings) {
         }
     }   
 
-    // löscht alle gezeichneten Markierungen
+    // lï¿½scht alle gezeichneten Markierungen
     function eraseAllAnnotations() {
         for(var k in algoData) {
             var jsxo = algoData[k].jsxObjects;
@@ -195,7 +216,7 @@ var GUI = function(settings) {
         }
     }
 
-    // löscht gezeichnete Markierung von einem Algo
+    // lï¿½scht gezeichnete Markierung von einem Algo
     function eraseAnnotations(algoName) {
         var jsxo = algoData[algoName].jsxObjects;
         if(jsxo !== undefined) {
@@ -252,7 +273,40 @@ var GUI = function(settings) {
         $ele.find('p:first').html(info);
     }
     
-    // Öffentliches Interface
+    function addLevelToNav(levelname) {
+        var $ele = $levDummy.clone().removeClass('dummy');
+        $ele.find('a').text(levelname).attr('href', '#'+levelname);
+        $levDummy.before($ele);
+    }
+    
+    function changePageHeader(text) {
+        $pageHeader.text(text);
+    }
+    
+    function showHighscore(data) {
+        clearHighscore();
+        
+        for(var i = 0; i < data.length; i++) {
+            var $d = $hsDummy.clone().removeClass('dummy');
+            var $t = $d.find('td');
+            $t.eq(0).text(i+1);
+            $t.eq(1).text(data[i].name);
+            $t.eq(2).text(data[i].score);
+            $t.eq(3).find('a').data('points', data[i].points).click(function() {
+                var pnts = JSON.parse($(this).data('points'));
+                setPoints(pnts);
+                return false;
+            });
+            
+            $hsDummy.before($d);
+        }
+    }
+
+    function clearHighscore() {
+        $hsDummy.parent().find('tr').not('.dummy').remove();
+    }
+        
+    // ï¿½ffentliches Interface
     return {
         initGraph : initGraph,
         overdraw : overdraw,
@@ -261,6 +315,10 @@ var GUI = function(settings) {
         initAlgoBox : initAlgoBox,
         refreshAlgoBox : refreshAlgoBox,
         eraseAllAnnotations : eraseAllAnnotations,
-        setAlgoBoxLoading : setAlgoBoxLoading
+        setAlgoBoxLoading : setAlgoBoxLoading,
+        addLevelToNav : addLevelToNav,
+        changePageHeader : changePageHeader,
+        showHighscore : showHighscore,
+        clearHighscore : clearHighscore
     }
 }

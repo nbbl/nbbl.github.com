@@ -3,17 +3,43 @@
  */
 
 var AlgLageController = function(gui) {
-        
+    
+    // Highscore Variablen
+    var GET_HS_URL = 'http://allglage.funpic.de/getscore.php';
+    var SET_HS_URL = 'http://allglage.funpic.de/setscore.php?';
+    
     // Private Variablen
     var graph = new Graph([], []);
     var algos = {};
+    var levels = {};
+    var highscore = {};
+    var currLevname;
+    
     var gui = gui;
-
+    
     function setGraph(gr) {
         graph = gr;
         gui.initGraph(graph);
     }
-   
+    
+    function addLevel(name, gr) {
+        levels[name] = gr;
+        gui.addLevelToNav(name);
+    }
+    
+    function loadLevel(name) {
+        if(levels[name] === undefined) return false;
+        
+        currLevname = name;
+        refreshHighscore();
+        
+        gui.changePageHeader(name);
+        gui.eraseAllAnnotations();
+        gui.clearHighscore();
+        setGraph(levels[name]);
+        calculateAlgos();
+    }
+    
     function addAlgo(algoName, algoPath) {
         var w = new Worker(algoPath);
         // Dieser Check macht nicht viel Sinn...
@@ -82,11 +108,64 @@ var AlgLageController = function(gui) {
         gui.refreshAlgoBox(name, score, info, annots);
     }
     
+    function showHighscore() {
+        var h = highscore[currLevname];
+        if(h === undefined) return false;
+        
+        gui.showHighscore(h)
+    }
+    
+    function refreshHighscore() {
+        var $s = $("<scri" + "pt type='text/javasc" + "ript' src=" + GET_HS_URL + "><\/script>");
+        $("body").append($s);
+        $s.remove();
+    }
+    
+    function setHighscore(hs) {
+        highscore = hs;
+        showHighscore();
+    }
+    
+    function postHighscore() {
+        var url = SET_HS_URL;
+        url += 'levname=' + currLevname + '&';
+        url += 'name=' + 'Tester' + '&';
+        url += 'score=' + Math.random() + '&';
+        url += 'points=' + getPointsAsStringArray();
+        
+        $('<img/>').attr('src', url);
+    }
+    
+    function getPointsAsStringArray() {
+        var ret = "[";
+        var points = graph.points;
+        
+        for(var i = 0; i < points.length; i++) {
+            if(i > 0) ret += ",";
+            
+            ret += "[";
+            ret += points[i].x + "," + points[i].y;
+            ret += "]";
+        }
+        
+        ret += "]";
+        return ret;
+    }
+    
+    // Abfangen wenn Level ausgewählt wird
+    window.onhashchange = function() {
+        currLevname = window.location.hash.substring(1);
+        loadLevel(currLevname);
+    }
+    
     // Öffentliches Interface
     return {
-        setGraph : setGraph,
+        addLevel : addLevel,
+        loadLevel : loadLevel,
         addAlgo : addAlgo,
         calculateAlgos : calculateAlgos,
-        fillRandomly : fillRandomly
+        fillRandomly : fillRandomly,
+        setHighscore : setHighscore,
+        postHighscore : postHighscore
     }
 };
