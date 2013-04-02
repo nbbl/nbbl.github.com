@@ -39,16 +39,28 @@ function sweep(edges,name) {
                 break;
             case "intersection":
                 swap_sls(sls.indexOf(currev.edge1),sls.indexOf(currev.edge2));
-                result.push(currev.key);
+                result.push(currev.pt);
                 break;
             case "end":
                 remove_edge(sls.indexOf(currev.edge1));
                 break;
         }
     }
+    
+    //entferne doppelte Elemente
+    result.sort(function(a,b){return a.x-b.x;});
+    var nextFree = 0; 
+    var nextElem = 0;
+    for (; nextElem<result.length; nextElem++) {
+        if (!result[nextElem].equals(result[nextElem-1])) { 
+            result[nextFree++] = result[nextElem];
+        }
+    }
+    result.length = nextFree;
+
     self.postMessage({
         score       : result.length,
-        annotations : { lines: result.map(function(x){return new Edge(new Point(x,0),new Point(x,1));})},
+        annotations : { points: result},
         name        : name,
         info  : info
     });
@@ -94,8 +106,9 @@ function sweep(edges,name) {
 
 //        if (smaller>0) info+="pre:"+sls[smaller-1].getLeft()+"--"+sls[smaller-1].getRight()+
 //            "sp:"+sls[smaller].edgeIntersection(sls[smaller-1])+"\n";//<--remove me
-        if (smaller > 0 &&
+        if (smaller > 0 && 
                 (intersection1 = sls[smaller].edgeIntersection(sls[smaller-1])) !== null &&
+                 intersection1 !== "parallel_lines"       &&
                 !intersection1.equals(sls[smaller].pt1)   && 
                 !intersection1.equals(sls[smaller].pt2)   && 
                 !intersection1.equals(sls[smaller-1].pt1) && 
@@ -111,6 +124,7 @@ function sweep(edges,name) {
 //            "sp:"+sls[bigger].edgeIntersection(sls[bigger+1])+"\n";//<--remove me
         if (bigger < sls.length-1 &&
                 (intersection2 = sls[bigger].edgeIntersection(sls[bigger+1])) !== null &&
+                 intersection1 !== "parallel_lines"      &&
                 !intersection2.equals(sls[bigger].pt1)   && 
                 !intersection2.equals(sls[bigger].pt2)   && 
                 !intersection2.equals(sls[bigger+1].pt1) && 
@@ -138,6 +152,7 @@ function sweep(edges,name) {
 //                "sp:"+sls[index].edgeIntersection(sls[index+1])+"\n";//<--remove me
             if (index > 0 &&
                     (intersection1 = sls[index].edgeIntersection(sls[index-1])) !== null &&
+                     intersection1 !== "parallel_lines"      &&
                     !intersection1.equals(sls[index].pt1)   && 
                     !intersection1.equals(sls[index].pt2)   && 
                     !intersection1.equals(sls[index-1].pt1) && 
@@ -150,6 +165,7 @@ function sweep(edges,name) {
                     }
             if (index < sls.length-1 &&
                     (intersection2 = sls[index].edgeIntersection(sls[index+1])) !== null &&
+                     intersection2 !== "parallel_lines"      &&
                     !intersection2.equals(sls[index].pt1)   && 
                     !intersection2.equals(sls[index].pt2)   && 
                     !intersection2.equals(sls[index+1].pt1) && 
@@ -178,6 +194,7 @@ function sweep(edges,name) {
 //            }
             if(index > 0 && index < sls.length-1 &&
                     (intersection1 = sls[index-1].edgeIntersection(sls[index+1])) !== null &&
+                     intersection1 !== "parallel_lines"       &&
                     !intersection1.equals(sls[index+1].pt1)   && 
                     !intersection1.equals(sls[index+1].pt2)   && 
                     !intersection1.equals(sls[index-1].pt1)   && 
@@ -205,6 +222,7 @@ function Event(type,edge) {
             this.key = edge.getLeft().x;
             break;
         case "intersection":
+            this.pt = arguments[3];
             this.key = arguments[3].x;
             this.edge2 = arguments[2];
             break;

@@ -51,7 +51,7 @@ Vector.prototype.distance = function(v) {
 };
 
 Vector.prototype.equals = function(toCompare) {
-    return approx(this.x,toCompare.x) && approx(this.y,toCompare.y);
+    return toCompare!==undefined &&  approx(this.x,toCompare.x) && approx(this.y,toCompare.y);
 };
 
 Vector.prototype.interpolate = function(v, f) {
