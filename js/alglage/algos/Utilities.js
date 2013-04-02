@@ -120,6 +120,29 @@ function ChainElem(elem) {
 /*------------------------------------------------------------------*/
 /*END Sorted Double Linked List-----------------------------------*/
 /*------------------------------------------------------------------*/
+function randomPoints(amount, maxX, maxY) {
+    var points = [];
+    for(i = 0; i < amount; i++) {
+        var x = Math.random() * maxX;
+        var y = Math.random() * maxY;
+        points.push(new Point(x, y));
+    }
+    return points;
+}
+
+
+function randomGraph(amountPoints, amountEdges, maxX, maxY) {
+    var graph = new Graph(points, []);
+    var graph.points = randomPoints(amountPoints, maxX, maxY);
+
+    for(var i = 0; i < amountEdges; i++) {
+        do {
+            var p1 = graph.points[Math.random() * graph.points.length];
+            var p2 = graph.points[Math.random() * graph.points.length];
+        } while(p1.equals(p2) && graph.edges// AAAAAAh)
+        graph.edges.push(new Edge(p1, p2));
+    }
+}
 
 
 Array.prototype.remove = function(from, to) {
