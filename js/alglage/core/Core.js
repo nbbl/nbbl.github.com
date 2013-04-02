@@ -35,13 +35,17 @@ Vector.prototype.add = function(v) {
     return new Vector(this.x + v.x, this.y + v.y);
 };
 
-Vector.prototype.degreesTo = function(v) {
-    var dx = this.x - v.x;
-    var dy = this.y - v.y;
-    var angle = Math.atan2(dy, dx);
-    // radians
-    return angle * (180 / Math.PI);
-    // degrees
+// Vector.prototype.degreesTo = function(v) {
+//     var dx = this.x - v.x;
+//     var dy = this.y - v.y;
+//     var angle = Math.atan2(dy, dx);
+//     // radians
+//     return angle * (180 / Math.PI);
+//     // degrees
+// };
+
+Vector.prototype.degreesTo = function(v) { //nur für Winkel <= PI verwenden!
+    return Math.acos(Vector.skalarProd(v,this)/(this.length() * v.length()));
 };
 
 Vector.prototype.distance = function(v) {
@@ -293,18 +297,18 @@ function Angle(points) {
     this.a = points[0];
     this.b = points[1];
     this.c = points[2];
+    this.degrees = Angle.getDegrees(this.a,this.b,this.c);
 };
 
-Angle.prototype.getDegrees = function() {
-    return Angle.getDegrees(this.a, this.b, this.c);
-};
+// Angle.getDegrees = function(pointA, pointB, pointC) {
+//     var AminusB = new Vector( pointB.inv().add(pointA) );
+//     var CminusB = new Vector( pointB.inv().add(pointC) );
+//     return AminusB.degreesTo(CminusB);
+// };
 
-Angle.getDegrees = function(pointA, pointB, pointC) {
-    var AminusB = new Vector( pointB.inv().add(pointA) );
-    var CminusB = new Vector( pointB.inv().add(pointC) );
-    return AminusB.degreesTo(CminusB);
+Angle.getDegrees = function(a, b, c) {
+    return a.substract(b).degreesTo(c.substract(b));
 };
-
 
 /* 
 *  Kreis-Klasse
