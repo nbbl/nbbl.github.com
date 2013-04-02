@@ -39,7 +39,7 @@ function sweep(edges,name) {
                 break;
             case "intersection":
                 swap_sls(sls.indexOf(currev.edge1),sls.indexOf(currev.edge2));
-                result.push(currev.pt);
+                result.push(currev);
                 break;
             case "end":
                 remove_edge(sls.indexOf(currev.edge1));
@@ -48,19 +48,30 @@ function sweep(edges,name) {
     }
     
     //entferne doppelte Elemente
-    result.sort(function(a,b){return a.x-b.x;});
-    var nextFree = 0; 
-    var nextElem = 0;
+    result.sort(function(a,b){return a.key-b.key;});
+    var nextFree = 1; 
+    var nextElem = 1;
     for (; nextElem<result.length; nextElem++) {
-        if (!result[nextElem].equals(result[nextElem-1])) { 
-            result[nextFree++] = result[nextElem];
+        if (!result[nextElem].pt.equals(result[nextElem-1].pt)) { 
+            result[nextFree++].pt = result[nextElem].pt;
         }
     }
+    
+    //suche kleinsten Winkel
+    var smallestAngle = {degrees: Infinity};
+    
+    for(var i=0; i<result.length; ++i) { 
+	smallestAngle = [new Angle([result[i].edge1.pt1,result[i].pt,result[i].edge2.pt1]),
+			 new Angle([result[i].edge1.pt1,result[i].pt,result[i].edge2.pt2]),
+			smallestAngle].reduce(function(a,b){return (a.degrees<=b.degrees)?a:b;});	
+    }
+
     result.length = nextFree;
 
     self.postMessage({
         score       : result.length,
-        annotations : { points: result},
+        annotations : { points: result,
+		        angles: [smallestAngle]},
         name        : name,
         info  : info
     });
