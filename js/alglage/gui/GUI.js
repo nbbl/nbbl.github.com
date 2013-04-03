@@ -60,11 +60,14 @@ var GUI = function(settings) {
         if(boardPoints.length != points.length) return false;
         for(var i = 0; i < points.length; i++) {
             var x = points[i][0];
-            var y = points[i][1];
+            var y = points[i][1];i
             boardPoints[i].moveTo([x, y]);
             
             boardPoints[i].srcPoint.x = boardPoints[i].X();
             boardPoints[i].srcPoint.y = boardPoints[i].Y();
+        }
+        for(var i = 0; i < boardEdges.length; i++) {
+            boardEdges[i].srcEdge.reload();
         }
         $.publish('points-change');
     }
