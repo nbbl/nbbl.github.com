@@ -25,6 +25,7 @@ alc = new AlgLageController(gui);
 
 alc.addLevel('Test', graph_t);
 alc.addLevel('Haus vom Nikolaus', graph_hvn);
+alc.addLevel('Random', randomGraph(10, 10, 20, 10));
 
 alc.addAlgo('XCoord', 'js/alglage/algos/XCoordinates.js');
 alc.addAlgo('CircleCheck', 'js/alglage/algos/CircleCheck.js');

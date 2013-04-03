@@ -136,6 +136,17 @@ Vector.cast = function(p) {
 //Punkt als Alias fuer einen Vektor
 var Point = Vector; 
 
+Point.prototype.isAdjacentTo = function(point) {
+    if(this.incidentEdges === undefined) return false;
+    if(point.incidentEdges === undefined) return false;
+
+    var edges = this.incidentEdges;
+    for(var i = 0; i < edges.length; i++) {
+        if(edges[i].getAdjacent(this).equals(this)) return true;
+    }
+    return false;
+};
+
 // Kanten Prototyp
 
 function Edge(pt1,pt2){
@@ -290,6 +301,33 @@ function Graph(points, edges) {
         this.edges[i].pt1.incidentEdges.push(this.edges[i]);
         this.edges[i].pt2.incidentEdges.push(this.edges[i]);
     }
+};
+
+Graph.prototype.addPoint = function(point) {
+    point.incidentEdges = [];
+    this.points.push(point);
+};
+
+Graph.prototype.addEdge = function(edge) {
+    // checken, ob die punkte der kante bereits im graph vorhanden sind
+    var pt1 = this.points.indexOf(edge.pt1);
+    var pt2 = this.points.indexOf(edge.pt2);
+
+    // noch nicht vorhandene werden hinzugefügt
+    if(pt1 == -1) {
+        pt1 = new Point(edge.pt1.x, edge.pt1.y);
+        this.addPoint(pt1);
+    }
+    if(pt2 == -1) {
+        pt2 = new Point(edge.pt2.x, edge.pt2.y);
+        this.addPoint(pt2);
+    }
+    
+    // den Punkten die Inzidenz hinzufügen
+    edge.pt1.incidentEdges.push(edge);
+    edge.pt2.incidentEdges.push(edge);
+
+    this.edges.push(edge);
 };
 
 

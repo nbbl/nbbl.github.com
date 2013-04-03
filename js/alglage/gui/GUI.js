@@ -191,8 +191,6 @@ var GUI = function(settings) {
         }
         if(obj.angles !== undefined) {
             for(var i = 0; i < obj.angles.length; i++) {
-                // TODO checken, ob der winkel gr��er als 180 grad ist, wenn ja, dann punkte vertauschen
-
                 var A = board.create('point', [obj.angles[i].a.x, obj.angles[i].a.y], {visible:false});
                 var B = board.create('point', [obj.angles[i].b.x, obj.angles[i].b.y], {visible:false});
                 var C = board.create('point', [obj.angles[i].c.x, obj.angles[i].c.y], {visible:false});
