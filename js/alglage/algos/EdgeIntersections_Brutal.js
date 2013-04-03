@@ -2,11 +2,13 @@ importScripts('../core/Core.js');
 
 self.onmessage = function(event) {
     var edges = Edge.cast(event.data.graph.edges);
+    var points = Point.cast(event.data.graph.points);
     var name = event.data.name;
-    calculate(edges, name);
+    calculate(edges, name, points);
 };
 
-function calculate(edges, name) {
+function calculate(edges, name, points) {
+    var start = new Date();
     var intersections = [];
     var tmp = null;
     
@@ -28,7 +30,7 @@ function calculate(edges, name) {
         }
     }
     
-    //Berechne kürzeste Distanz (>0) von Schnittpunkt zu Kante
+    //Berechne kürzeste Distanz (>0) von Schnittpunkten zu Kanten
     var currshortest = Infinity;
     var result = null;
     var temp = null;
@@ -49,14 +51,31 @@ function calculate(edges, name) {
 	}
     }
 
+    //Berechne kürzeste Distanz (>0) von Graphknoten zu Kanten
+    for(var i=0; i<points.length; ++i) {
+        for(var j=0; j<edges.length; ++j) {
+            if(points[i]!==edges[j].pt1 && points[i]!==edges[j].pt2) {
+		temp = edges[j].distanceToLine(points[i]);
+		projection = edges[j].projectionToEdge(points[i]);
+		
+		if(temp < currshortest && projection !== null){
+		    result = new Edge(points[i],projection);
+		    currshortest = temp;
+		    
+		}		
+	    }
+        }
+    }
+    var end = new Date();
+
     self.postMessage({
         score       : currshortest,
         annotations : { lineSegments: [result],
-			points: [result.pt1,result.pt2],
-			lines: intersections.map(function(x){return new Edge(new Point(x.pt.x,0),new Point(x.pt.x,1));})
+			points: [result.pt1,result.pt2]
 		      },
         name  : name,
-        info  : "kleinster Abstand eines Schnittpunktes zu einer Kante, \n"+
+        info  : (end.getTime() - start.getTime()) +
+                "kleinster Abstand eines Schnittpunktes zu einer Kante, \n"+
 	        "Anzahl der Schnittpunkte: "+intersections.length
     });
 }

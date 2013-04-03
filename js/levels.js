@@ -68,7 +68,17 @@ var get_edges_complete_graph = function(points) {
     return resEdges;
 }   
 
+//vollstaendiger 7 Graph
+var points_complete_7 = get_points_complete_graph(7);
+var edges_complete_7 = get_edges_complete_graph(points_complete_7);
+var graph_complete_7 = new Graph(points_complete_7, edges_complete_7);
+
 //vollstaendiger 11 Graph
 var points_complete_11 = get_points_complete_graph(11);
 var edges_complete_11 = get_edges_complete_graph(points_complete_11);
 var graph_complete_11 = new Graph(points_complete_11, edges_complete_11);
+
+//vollstaendiger 22 Graph
+var points_complete_22 = get_points_complete_graph(22);
+var edges_complete_22 = get_edges_complete_graph(points_complete_22);
+var graph_complete_22 = new Graph(points_complete_22, edges_complete_22);
