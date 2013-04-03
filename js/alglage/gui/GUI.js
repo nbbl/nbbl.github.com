@@ -46,7 +46,20 @@ var GUI = function(settings) {
         } */
 
     });
-
+    
+    // Rechteck für den Handlungsbereich
+    var frameOpts = {
+        straightFirst:false,
+        straightLast:false,
+        strokeColor:'#000',
+        highlightStrokeColor : '#000',
+        fixed : true
+    };
+    board.create('line',[[0, 0], [0, settings.maxY]], frameOpts);
+    board.create('line',[[0, 0], [settings.maxX, 0]], frameOpts);
+    board.create('line',[[settings.maxX, settings.maxY], [0, settings.maxY]], frameOpts);
+    board.create('line',[[settings.maxX, settings.maxY], [settings.maxX, 0]], frameOpts);
+    
     function initGraph(gr) {
         graph = gr;
         _drawGraph();
@@ -60,11 +73,14 @@ var GUI = function(settings) {
         if(boardPoints.length != points.length) return false;
         for(var i = 0; i < points.length; i++) {
             var x = points[i][0];
-            var y = points[i][1];
+            var y = points[i][1];i
             boardPoints[i].moveTo([x, y]);
             
             boardPoints[i].srcPoint.x = boardPoints[i].X();
             boardPoints[i].srcPoint.y = boardPoints[i].Y();
+        }
+        for(var i = 0; i < boardEdges.length; i++) {
+            boardEdges[i].srcEdge.reload();
         }
         $.publish('points-change');
     }
@@ -266,9 +282,9 @@ var GUI = function(settings) {
 
         var $ele = algoData[algoName].algoBox;
         $ele.removeClass('loading');
-        $ele.find('h3').html(algoName);
-        $ele.find('h2').html(score);
-        $ele.find('p:first').html(info);
+        $ele.find('.aname').html(algoName);
+        $ele.find('.score').html(score);
+        //$ele.find('p:first').html(info);
     }
     
     function addLevelToNav(levelname) {

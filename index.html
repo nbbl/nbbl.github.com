@@ -88,13 +88,34 @@
 </div>
             
             <!-- Main hero unit for a primary marketing message or call to action -->
-            <div class="hero-unit">
-                <div id="jxgbox" class="jxgbox" style="height: 400px;">
-                    
+            <div class="row" style="margin-top: 5px;">
+                <div class="span8">
+                    <div id="jxgbox" class="jxgbox" style="height: 400px;">
+                        
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="algoBox" id="dummyBox">
+                        <div class="loader">
+                            <img src="img/loader.gif"/>
+                        </div>
+                        
+                        <blockquote style="height: 48px; margin-bottom: 5px;">
+                            <div class="pull-left" style="overflow: hidden; width: 175px;">
+                                <small class="aname">AlgoName</small>
+                                <p class="score">Score</p>
+                            </div>
+                            <div class="pull-right">
+                                <a class="btn" href="#" style="margin-top: 8px;">Aktivieren</a>
+                            </div>
+                        </blockquote>
+                        
+                    </div>
                 </div>
             </div>
 
             <!-- Example row of columns -->
+            <!--
             <div class="row">
                 <div class="span4 algoBox" id="dummyBox">
                 	<div class="loader">
@@ -106,9 +127,17 @@
                     <p><a class="btn" href="#">View details &raquo;</a></p>
                 </div>
             </div>
+            -->
 
+            <legend><h3>Graph Laden/Anzeigen</h3></legend>
+            <textarea class="span12" rows="15"></textarea>
+            
+                <a href="#" class="btn btn-primary">Show graph</a>
+                <a href="#" class="btn btn-primary">Get graph</a>
+                <a href="#" class="btn btn-primary">Get recent best graph</a>
+            
+            
             <hr>
-
             <footer>
                 <p>&copy; Company 2012</p>
             </footer>
