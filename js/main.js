@@ -9,7 +9,7 @@ var gui = new GUI({
     pageHeader : '.page-header h2',
     dummyContainer : 'dummyBox', // Id von Dummy-Box
     highscoreDummy : '.highscore .dummy',
-    maxX : 20,              // maximale X-Koordinate für Punkte
+    maxX : 15,              // maximale X-Koordinate für Punkte
     maxY : 10               // maximale Y-Koordinate für Punkte
 });
 
