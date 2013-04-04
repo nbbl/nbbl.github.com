@@ -174,7 +174,7 @@ var GUI = function(settings) {
                     }
                     if((tmp = this.point1.X()-settings.maxX) > 0) {
                         this.point1.moveTo([settings.maxX,this.point1.Y()]);
-                        this.point2.moveTo([this.point2.X()-tmp,this.point1.Y()]);
+                        this.point2.moveTo([this.point2.X()-tmp,this.point2.Y()]);
                     }
                     if((tmp = this.point2.X()-settings.maxX) > 0) {
                         this.point2.moveTo([settings.maxX,this.point2.Y()]);
