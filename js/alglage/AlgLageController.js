@@ -11,6 +11,7 @@ var AlgLageController = function(gui) {
     // Private Variablen
     var graph = new Graph([], []);
     var algos = {};
+    var colors = [];
     var levels = {};
     var highscore = {};
     var currLevname;
@@ -57,9 +58,12 @@ var AlgLageController = function(gui) {
         };
 
         algos[algoName] = a;
-        
+        // Farbe hinzufügen (zirkulär aus annotationsColors ausgewählt)
+        var nrOfAddedAlgos = Object.keys(algos).length;
+        var color = annotationsColors[(nrOfAddedAlgos-1) % annotationsColors.length];
+        algos[algoName].color = color;
         // Algo-Box initialisieren
-        gui.initAlgoBox(algoName);
+        gui.initAlgoBox(algoName, color);
     }
     
     function calculateAlgos() {
@@ -105,7 +109,7 @@ var AlgLageController = function(gui) {
         var score = event.data.score;
         var info = event.data.info;
         var annots = event.data.annotations;
-        gui.refreshAlgoBox(name, score, info, annots);
+        gui.refreshAlgoBox(name, score, info, annots, algos[name].color);
     }
     
     function showHighscore() {
