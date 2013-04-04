@@ -58,6 +58,8 @@ var GUI = function(settings) {
     board.create('line',[[0, 0], [settings.maxX, 0]], frameOpts);
     board.create('line',[[settings.maxX, settings.maxY], [0, settings.maxY]], frameOpts);
     board.create('line',[[settings.maxX, settings.maxY], [settings.maxX, 0]], frameOpts);
+
+    $("#btn_ShowGraph").click(function() { showGraph(); });
     
     function initGraph(gr) {
         graph = gr;
@@ -371,7 +373,12 @@ var GUI = function(settings) {
     function clearHighscore() {
         $hsDummy.parent().find('tr').not('.dummy').remove();
     }
-        
+
+    // der aktuell angezeigte Graph wird zu in der GraphTextArea genannten textarea serialisiert dargestellt
+    function showGraph() {
+        $('textarea#GraphTextArea').val(graph.toString());
+    }
+       
     // �ffentliches Interface
     return {
         initGraph : initGraph,
