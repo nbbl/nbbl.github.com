@@ -333,12 +333,14 @@ Graph.prototype.addEdge = function(edge) {
 Graph.prototype.toString = function() {
     var ret = "{points: [";
     for(var i = 0; i < this.points.length; i++) {
-        var tmp = "[" + this.points[i].x + ", " + this.points[i].y + "], ";
+        var tmp = "[" + this.points[i].x + ", " + this.points[i].y + "]";
+        if(i < this.points.length-1) tmp += ", ";
         ret += tmp; 
     }
-    ret += " edges: [";
+    ret += "], edges: [";
     for(var i = 0; i < this.edges.length; i++) {
-        var tmp = "[" + this.points.indexOf(this.edges[i].pt1) + ", " + this.points.indexOf(this.edges[i].pt2) + "], ";
+        var tmp = "[" + this.points.indexOf(this.edges[i].pt1) + ", " + this.points.indexOf(this.edges[i].pt2) + "]";
+        if(i < this.edges.length-1) tmp += ", ";
         ret += tmp;
     }
     ret += "]}";
