@@ -45,7 +45,7 @@ var graph_hvn = new Graph(points_hvn, edges_hvn);
 //vollstaendiger n-Graph
 var get_points_complete_graph = function(n) {
     var yMax = 10;
-    var xMax = 20;
+    var xMax = 15;
     var r = 4;
     var resPoints = [];
 
