@@ -162,3 +162,17 @@ Array.prototype.remove = function(from, to) {
   this.length = from < 0 ? this.length + from : from;
   return this.push.apply(this, rest);
 };
+
+
+// source: http://stackoverflow.com/questions/1484506/random-color-generator-in-javascript
+function randomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+         color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
+}
+
+// Liste von HTML-Farben für die Einfärbung der Annotations
+annotationsColors = ["#00FF00", "#0000FF", "#FFFF00", "#00FFFF", "#FF00FF", "#FF6600", "#9933CC"];

@@ -2,8 +2,7 @@
  * Hier wird sich um das Zeichnen und darstellen der Daten gek�mmert.
  */
 
-/*
-Settings
+/* Settings
 --------
 {
     containerId : '',       // Id des Containers
@@ -158,19 +157,19 @@ var GUI = function(settings) {
         }
     }
 
-    function overdraw(obj, algoName) {
+    function overdraw(obj, algoName, color) {
         eraseAnnotations();
-        draw(obj, algoName);
+        draw(obj, algoName, color);
     }
 
 
     // mit draw() k�nnen unabh�ngig vom Graphen Annotations gezeichnet werden
     // durch die Angabe von algoName werden die in obj �bergebenen Annotations
     // eine eigene Lage gezeichnet
-    function draw(obj, algoName) {
+    function draw(obj, algoName, color) {
         if(obj.points !== undefined) {
             for(var i = 0; i < obj.points.length; i++) {
-                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, strokeColor:'blue', fillColor:'blue', fixed:true});
+                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, strokeColor:color, fillColor:color, fixed:true});
                 algoData[algoName].jsxObjects.push(point);
             }
         }
@@ -178,7 +177,7 @@ var GUI = function(settings) {
             for(var i = 0; i < obj.lines.length; i++) {
                 var line = board.create('line', [
                                     [obj.lines[i].pt1.x, obj.lines[i].pt1.y],
-                                    [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ], {fixed:true});
+                                    [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ], {fixed:true, strokeColor:color});
                 algoData[algoName].jsxObjects.push(line);
             }
         }
@@ -191,7 +190,8 @@ var GUI = function(settings) {
                                     [pt2.x, pt2.y] ],
                                     {straightFirst:false,
                                      straightLast:false,
-                                     fixed:true});
+                                     fixed:true,
+                                     strokeColor:color});
                 algoData[algoName].jsxObjects.push(line);
             }
         }
@@ -201,7 +201,8 @@ var GUI = function(settings) {
                 var r = obj.circles[i].radius;
                 var circle = board.create('circle', [[p.x, p.y],[p.x, p.y + r]], {strokeWidth : 2,
                                                                                   highlightStrokeColor : 'blue',
-                                                                                  fixed : true });
+                                                                                  fixed : true,
+                                                                                  strokeColor:color});
                 algoData[algoName].jsxObjects.push(circle);
             }
         }
@@ -210,7 +211,9 @@ var GUI = function(settings) {
                 var A = board.create('point', [obj.angles[i].a.x, obj.angles[i].a.y], {visible:false});
                 var B = board.create('point', [obj.angles[i].b.x, obj.angles[i].b.y], {visible:false});
                 var C = board.create('point', [obj.angles[i].c.x, obj.angles[i].c.y], {visible:false});
-                var angle = board.create('angle', [B, A, C], {type:'sector', orthoType:'sector', orthoSensitivity:1, radius:1, withLabel:false});
+                var angle = board.create('angle', [B, A, C], {type:'sector', orthoType:'sector', orthoSensitivity:1, radius:1,
+                                                              withLabel:false,
+                                                              strokeColor:color});
                 algoData[algoName].jsxObjects.push(angle);
             }
         }
@@ -239,13 +242,13 @@ var GUI = function(settings) {
         }
     }
 
-    function initAlgoBox(algoName) {
+    function initAlgoBox(algoName, color) {
         var $ele = $dummyBox.clone().attr('id', algoName);
         var $btn = $ele.find('a.btn');
         $btn.click(function() {
             var annots = algoData[algoName].annotations;
             if(!algoData[algoName].isActive) {
-                draw(annots, algoName);
+                draw(annots, algoName, color);
                 $btn.addClass('btn-success');
                 algoData[algoName].isActive = true;
             }
@@ -262,6 +265,7 @@ var GUI = function(settings) {
         algoData[algoName].algoBox = $ele;
         $dummyBox.before($ele);
         $ele.find('h3').html(algoName);
+        // TODO color Markierung für den Algorithmus setzen
     }
     
     function setAlgoBoxLoading(algoName) {
@@ -271,11 +275,11 @@ var GUI = function(settings) {
         $ele.addClass('loading');
     }
     
-    function refreshAlgoBox(algoName, score, info, annots) {
+    function refreshAlgoBox(algoName, score, info, annots, color) {
         if(algoData[algoName] === undefined) return false;
         
         if(algoData[algoName].isActive) {
-            draw(annots, algoName);
+            draw(annots, algoName, color);
         }
 
         algoData[algoName].annotations = annots;

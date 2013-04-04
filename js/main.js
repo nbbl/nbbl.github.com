@@ -25,7 +25,7 @@ alc = new AlgLageController(gui);
 
 alc.addLevel('Test', graph_t);
 alc.addLevel('Haus vom Nikolaus', graph_hvn);
-alc.addLevel('Random', randomGraph(10, 10, 20, 10));
+alc.addLevel('Random', randomGraph(10, 20, 15, 10));
 alc.addLevel('Sieben', graph_complete_7);
 alc.addLevel('Elf', graph_complete_11);
 alc.addLevel('Zweiundzwanzig', graph_complete_22);
