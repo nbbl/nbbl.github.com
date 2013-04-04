@@ -330,6 +330,20 @@ Graph.prototype.addEdge = function(edge) {
     this.edges.push(edge);
 };
 
+Graph.prototype.toString = function() {
+    var ret = "{points: [";
+    for(var i = 0; i < this.points.length; i++) {
+        var tmp = "[" + this.points[i].x + ", " + this.points[i].y + "], ";
+        ret += tmp; 
+    }
+    ret += " edges: [";
+    for(var i = 0; i < this.edges.length; i++) {
+        var tmp = "[" + this.points.indexOf(this.edges[i].pt1) + ", " + this.points.indexOf(this.edges[i].pt2) + "], ";
+        ret += tmp;
+    }
+    ret += "]}";
+    return ret;
+};
 
 function Angle(points) {
     this.a = points[0];
