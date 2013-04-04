@@ -151,9 +151,57 @@ var GUI = function(settings) {
 
                     $.publish('points-change');
                 });
+
+                // Kanten bleiben steif, wenn sie den Rand beruehren
                 line.on('drag', function() {
-                    // TODO implementieren, dass auch Linien nicht aus dem Feld herausgeschoben werden k�nnen
+                    var tmp = 0;
+                    if((tmp = this.point1.X())< 0) { 
+                        this.point1.moveTo([0,this.point1.Y()]);
+                        this.point2.moveTo([this.point2.X()-tmp, this.point2.Y()])
+                    }
+                    if((tmp = this.point2.X())< 0) { 
+                        this.point2.moveTo([0,this.point2.Y()]);
+                        this.point1.moveTo([this.point1.X()-tmp, this.point1.Y()])
+                    }
+                    if((tmp = this.point1.Y())< 0) { 
+                        this.point1.moveTo([this.point1.X(),0]);
+                        this.point2.moveTo([this.point2.X(), this.point2.Y()-tmp])
+                    }
+                    if((tmp = this.point2.Y())< 0) { 
+                        this.point2.moveTo([this.point2.X(),0]);
+                        this.point1.moveTo([this.point1.X(), this.point1.Y()-tmp])
+                    }
+                    if((tmp = this.point1.X()-settings.maxX) > 0) {
+                        this.point1.moveTo([settings.maxX,this.point1.Y()]);
+                        this.point2.moveTo([this.point2.X()-tmp,this.point1.Y()]);
+                    }
+                    if((tmp = this.point2.X()-settings.maxX) > 0) {
+                        this.point2.moveTo([settings.maxX,this.point2.Y()]);
+                        this.point1.moveTo([this.point1.X()-tmp,this.point1.Y()]);
+                    }
+                    if((tmp = this.point1.Y()-settings.maxY) > 0) {
+                        this.point1.moveTo([this.point1.X(),settings.maxY]);
+                        this.point2.moveTo([this.point2.X(),this.point2.Y()-tmp]);
+                    }
+                    if((tmp = this.point2.Y()-settings.maxY) > 0) {
+                        this.point2.moveTo([this.point2.X(),settings.maxY]);
+                        this.point1.moveTo([this.point1.X(),this.point1.Y()-tmp]);
+                    }
                 });
+
+                /*
+                // Kanten werden gestaucht, wenn sie den Rand beruehren
+                line.on('drag', function() {
+                    if(this.point1.X() < 0) this.point1.moveTo([0,this.point1.Y()]);
+                    if(this.point2.X() < 0) this.point2.moveTo([0,this.point2.Y()]);
+                    if(this.point1.Y() < 0) this.point1.moveTo([this.point1.X(),0]);
+                    if(this.point2.Y() < 0) this.point2.moveTo([this.point2.X(),0]);
+                    if(this.point1.X() > settings.maxX) this.point1.moveTo([settings.maxX,this.point1.Y()]);
+                    if(this.point2.X() > settings.maxX) this.point2.moveTo([settings.maxX,this.point2.Y()]);
+                    if(this.point1.Y() > settings.maxY) this.point1.moveTo([this.point1.X(),settings.maxY]);
+                    if(this.point2.Y() > settings.maxY) this.point2.moveTo([this.point2.X(),settings.maxY]);
+                });
+                */
             }
         }
     }
