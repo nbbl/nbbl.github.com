@@ -69,6 +69,9 @@ var AlgLageController = function(gui) {
     function calculateAlgos() {
         for(var a in algos) {
             
+            // Active checken
+            if(!gui.isActive(a)) continue;
+            
             // Ladeanimation setzten
             gui.setAlgoBoxLoading(a);
 
@@ -102,7 +105,12 @@ var AlgLageController = function(gui) {
         gui.eraseAllAnnotations();
         calculateAlgos();
     });
-
+    
+    // Wird ausgeführt wenn Highscore
+    $.subscribe('post-highscore', function() {
+        postHighscore();
+    });
+    
     function handleResponse(event) {
         // Algo-Boxen neuladen
         var name = event.data.name;
@@ -131,13 +139,20 @@ var AlgLageController = function(gui) {
     }
     
     function postHighscore() {
+        var tscore = $('#EdgeIntersections_BF .score').text();
+        if(tscore == '' || tscore == '-') return false;
+        
         var url = SET_HS_URL;
         url += 'levname=' + currLevname + '&';
-        url += 'name=' + 'Tester' + '&';
-        url += 'score=' + Math.random() + '&';
+        url += 'name=' + $('#scoreText').val() + '&';
+        url += 'score=' + tscore + '&';
         url += 'points=' + getPointsAsStringArray();
         
         $('<img/>').attr('src', url);
+        
+        setTimeout(function() {
+            refreshHighscore();
+        }, 300);
     }
     
     function getPointsAsStringArray() {

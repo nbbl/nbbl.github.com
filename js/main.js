@@ -30,18 +30,12 @@ alc.addLevel('Sieben', graph_complete_7);
 alc.addLevel('Elf', graph_complete_11);
 alc.addLevel('Zweiundzwanzig', graph_complete_22);
 
+alc.addAlgo('EdgeIntersections_BF', 'js/alglage/algos/EdgeIntersections_Brutal.js');
+alc.addAlgo('EdgeIntersections_Sweep', 'js/alglage/algos/EdgeIntersections_Sweep.js');
 alc.addAlgo('XCoord', 'js/alglage/algos/XCoordinates.js');
 alc.addAlgo('CircleCheck', 'js/alglage/algos/CircleCheck.js');
 alc.addAlgo('CollinearityTest', 'js/alglage/algos/CollinearityTest.js');
 alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF.js');
-alc.addAlgo('EdgeIntersections_BF', 'js/alglage/algos/EdgeIntersections_Brutal.js');
-alc.addAlgo('EdgeIntersections_Sweep', 'js/alglage/algos/EdgeIntersections_Sweep.js');
 alc.addAlgo('SmallestAngle_BF', 'js/alglage/algos/SmallestAngle_BF.js');
 
 alc.loadLevel('Test');
-
-// Nur zum testen!!
-$('ul.nav > li > a:last').click(function() {
-    alc.postHighscore();
-    return false;
-});

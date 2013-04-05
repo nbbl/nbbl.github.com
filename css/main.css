@@ -25,11 +25,16 @@ div.algoBox > .loader {
     text-align: center;
 }
 
-div.algoBox > .loader > img {
-	position: relative;
-	margin-top: 35%;
+.algoBox blockquote {
+    height: 48px;
+    margin-bottom: 5px;
 }
 
+#EdgeIntersections_Sweep blockquote {
+    border-bottom: 5px solid #EEEEEE;
+    height: 48px;
+    margin-bottom: 20px;
+}
 
 
 

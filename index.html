@@ -22,6 +22,13 @@
             .dummy {
                 display: none;
             }
+            
+            .colorSpan {
+                font-size: 7px;
+                margin-left: 6px;
+                padding-left: 7px;
+                vertical-align: middle;
+            }
         </style>
         <link rel="stylesheet" href="css/main.css">
         
@@ -86,6 +93,24 @@
         </table>
     </div>
 </div>
+
+<div class="row" style="margin-bottom: 10px;">
+    <div class="span6" style="margin-top: 8px;">
+        <label class="checkbox">
+            <input type="checkbox" class="alwCalc">
+            Dauerhafte Berechnung </label>
+    </div>
+
+    <div class="span6">
+        <div class="input-append pull-right">
+            <input class="span2" type="text" id="scoreText">
+            <button class="btn disabled" type="button" id="scoreButton">
+                Score absenden!
+            </button>
+        </div>
+    </div>
+    
+</div>
             
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="row" style="margin-top: 5px;">
@@ -100,10 +125,10 @@
                             <img src="img/loader.gif"/>
                         </div>
                         
-                        <blockquote style="height: 48px; margin-bottom: 5px;">
+                        <blockquote>
                             <div class="pull-left" style="overflow: hidden; width: 175px;">
-                                <small class="aname">AlgoName</small>
-                                <p class="score">Score</p>
+                                <small><span class="aname">AlgoName</span><span class="colorSpan"></span></small>
+                                <p class="score">-</p>
                             </div>
                             <div class="pull-right">
                                 <a class="btn" href="#" style="margin-top: 8px;">Aktivieren</a>
@@ -113,21 +138,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Example row of columns -->
-            <!--
-            <div class="row">
-                <div class="span4 algoBox" id="dummyBox">
-                	<div class="loader">
-                		<img src="img/loader.gif"/>
-                	</div>
-                    <h3>AlgoName</h3>
-                    <h2>Score</h2>
-                    <p>INFOS</p>
-                    <p><a class="btn" href="#">View details &raquo;</a></p>
-                </div>
-            </div>
-            -->
 
             <legend><h3>Graph Laden/Anzeigen</h3></legend>
             <textarea class="span12" rows="15" id="GraphTextArea"></textarea>

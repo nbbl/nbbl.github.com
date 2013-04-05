@@ -35,16 +35,39 @@ var GUI = function(settings) {
         boundingbox: [0, settings.maxY, settings.maxX, 0],
         axis : true,
         showCopyright : false,
-        /* zoom : {
+        zoom : {
             wheel: true,
             needShift: false
         },
         pan : {
             needShift: false,
             enabled: true
-        } */
+        }
 
     });
+    
+    // Highscore
+    var $button = $('#scoreButton');
+    $button.click(function() {
+        if($(this).hasClass('disabled')) return false;
+        
+        $.publish('post-highscore');
+    });
+    
+    var $scText = $('#scoreText');
+    $scText.keyup(function() {
+        var text = $(this).val();
+        if(text != '' && $button.hasClass('disabled')) {
+            $button.removeClass('disabled');
+        }
+        else if(text == ''){
+            $button.addClass('disabled');
+        }
+    });
+    
+    if($scText.val() != '') {
+        $button.removeClass('disabled');
+    }
     
     // Rechteck für den Handlungsbereich
     var frameOpts = {
@@ -217,6 +240,8 @@ var GUI = function(settings) {
     // durch die Angabe von algoName werden die in obj �bergebenen Annotations
     // eine eigene Lage gezeichnet
     function draw(obj, algoName, color) {
+        if(obj === undefined) return false;
+        
         if(obj.points !== undefined) {
             for(var i = 0; i < obj.points.length; i++) {
                 var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, strokeColor:color, fillColor:color, fixed:true});
@@ -301,11 +326,13 @@ var GUI = function(settings) {
                 draw(annots, algoName, color);
                 $btn.addClass('btn-success');
                 algoData[algoName].isActive = true;
+                $.publish('points-change');
             }
             else {
                 eraseAnnotations(algoName);
                 $btn.removeClass('btn-success');
                 algoData[algoName].isActive = false;
+                $ele.find('.score').html('-');
             }
             return false;
         });
@@ -313,9 +340,9 @@ var GUI = function(settings) {
         algoData[algoName] = {};
         algoData[algoName].jsxObjects = [];
         algoData[algoName].algoBox = $ele;
+        $ele.find('.aname').html(algoName);
+        $ele.find('.colorSpan').css('background', color);
         $dummyBox.before($ele);
-        $ele.find('h3').html(algoName);
-        // TODO color Markierung für den Algorithmus setzen
     }
     
     function setAlgoBoxLoading(algoName) {
@@ -378,7 +405,11 @@ var GUI = function(settings) {
     function showGraph() {
         $('textarea#GraphTextArea').val(graph.toString());
     }
-       
+    
+    function isActive(algoName) {
+        return algoData[algoName].isActive;
+    }
+    
     // �ffentliches Interface
     return {
         initGraph : initGraph,
@@ -392,6 +423,7 @@ var GUI = function(settings) {
         addLevelToNav : addLevelToNav,
         changePageHeader : changePageHeader,
         showHighscore : showHighscore,
-        clearHighscore : clearHighscore
+        clearHighscore : clearHighscore,
+        isActive : isActive
     }
 }
