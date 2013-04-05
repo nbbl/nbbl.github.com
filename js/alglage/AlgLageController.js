@@ -9,7 +9,7 @@ var AlgLageController = function(gui) {
     var SET_HS_URL = 'http://allglage.funpic.de/setscore.php?';
     
     // Private Variablen
-    var graph = new Graph([], []);
+    var graph = new Graph([]);
     var algos = {};
     var colors = [];
     var levels = {};

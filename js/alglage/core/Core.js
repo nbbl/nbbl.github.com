@@ -290,57 +290,68 @@ Edge.prototype.edgeIntersection = function(edge){ //der Schnittpunkt der beiden 
 };
 
 
-function Graph(points, edges) {
-    this.points = points;
-    this.edges = edges;
-    for(var i = 0; i < this.points.length; i++) {
-        this.points[i].incidentEdges = [];
-    }
-    // Punkten im Graph Referenz auf inzidente Kanten geben
-    for(var i = 0; i < this.edges.length; i++) {
-        this.edges[i].pt1.incidentEdges.push(this.edges[i]);
-        this.edges[i].pt2.incidentEdges.push(this.edges[i]);
-    }
+function Graph(edges) {
+    this.edges =  [];
+    this.points = [];
+    var me = this;
+
+    edges.map(function(e){me.addEdge(e);});
+
 };
 
-Graph.prototype.addPoint = function(point) {
-    point.incidentEdges = [];
-    this.points.push(point);
-};
+// Graph.prototype.addPoint = function(point) {
+//     point.incidentEdges = [];
+//     this.points.push(point);
+// };
 
 Graph.prototype.addEdge = function(edge) {
-    // checken, ob die punkte der kante bereits im graph vorhanden sind
-    var pt1 = this.points.indexOf(edge.pt1);
-    var pt2 = this.points.indexOf(edge.pt2);
-
-    // noch nicht vorhandene werden hinzugefügt
-    if(pt1 == -1) {
-        pt1 = new Point(edge.pt1.x, edge.pt1.y);
-        this.addPoint(pt1);
+    var ind1 = null;
+    var ind2 = null;
+    if((ind1 = this.points.indexOf(edge.pt1))===-1){
+	this.points.push(edge.pt1);
+	edge.pt1.incidentEdges = [edge];
+    } else {
+	this.points[ind1].incidentEdges.push(edge);
     }
-    if(pt2 == -1) {
-        pt2 = new Point(edge.pt2.x, edge.pt2.y);
-        this.addPoint(pt2);
-    }
-    
-    // den Punkten die Inzidenz hinzufügen
-    edge.pt1.incidentEdges.push(edge);
-    edge.pt2.incidentEdges.push(edge);
 
-    this.edges.push(edge);
+    if((ind2 = this.points.indexOf(edge.pt2))===-1){
+	this.points.push(edge.pt2);
+	edge.pt2.incidentEdges = [edge];
+    } else {
+	this.points[ind2].incidentEdges.push(edge);
+    }    
+    this.edges.push(edge)
 };
+
+// Graph.prototype.addEdge = function(edge) {
+//     // checken, ob die punkte der kante bereits im graph vorhanden sind
+//     var ind1 = this.points.indexOf(edge.pt1);
+//     var ind2 = this.points.indexOf(edge.pt2);
+
+//     // noch nicht vorhandene werden hinzugefügt
+//     if(ind1 == -1) {
+//         this.addPoint(pt1);
+//     }
+//     if(ind2 == -1) {
+//         this.addPoint(pt2);
+//     }
+    
+//     // den Punkten die Inzidenz hinzufügen
+//     edge.pt1.incidentEdges.push(edge);
+//     edge.pt2.incidentEdges.push(edge);
+
+//     this.edges.push(edge);
+// };
 
 Graph.prototype.toString = function() {
     var ret = "{points: [";
     for(var i = 0; i < this.points.length; i++) {
-        var tmp = "[" + this.points[i].x + ", " + this.points[i].y + "]";
-        if(i < this.points.length-1) tmp += ", ";
+        var tmp = "[" + this.points[i].x + ", " + this.points[i].y + "], ";
         ret += tmp; 
     }
-    ret += "], edges: [";
+    ret += " edges: [";
     for(var i = 0; i < this.edges.length; i++) {
-        var tmp = "[" + this.points.indexOf(this.edges[i].pt1) + ", " + this.points.indexOf(this.edges[i].pt2) + "]";
-        if(i < this.edges.length-1) tmp += ", ";
+        var tmp = "[" + this.points.indexOf(this.edges[i].pt1) + ", " + this.points.indexOf(this.edges[i].pt2) + "], ";
         ret += tmp;
     }
     ret += "]}";

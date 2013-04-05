@@ -1,3 +1,5 @@
+//importScripts('alglage/core/Core.js');
+
 // Test
 var points_t = [
     new Point(4, 6),
@@ -20,7 +22,7 @@ var edges_t = [
     new Edge(points_t[4], points_t[6]),
     new Edge(points_t[7], points_t[5]) ];
 
-var graph_t = new Graph(points_t, edges_t);
+var graph_t = new Graph(edges_t);
 
 // Haus vom Nikolaus
 var points_hvn = [
@@ -40,7 +42,7 @@ var edges_hvn = [
     new Edge(points_hvn[3], points_hvn[0]),
     new Edge(points_hvn[0], points_hvn[2]) ];
 
-var graph_hvn = new Graph(points_hvn, edges_hvn);
+var graph_hvn = new Graph(edges_hvn);
 
 //vollstaendiger n-Graph
 var get_points_complete_graph = function(n) {
@@ -71,14 +73,14 @@ var get_edges_complete_graph = function(points) {
 //vollstaendiger 7 Graph
 var points_complete_7 = get_points_complete_graph(7);
 var edges_complete_7 = get_edges_complete_graph(points_complete_7);
-var graph_complete_7 = new Graph(points_complete_7, edges_complete_7);
+var graph_complete_7 = new Graph(edges_complete_7);
 
 //vollstaendiger 11 Graph
 var points_complete_11 = get_points_complete_graph(11);
 var edges_complete_11 = get_edges_complete_graph(points_complete_11);
-var graph_complete_11 = new Graph(points_complete_11, edges_complete_11);
+var graph_complete_11 = new Graph(edges_complete_11);
 
 //vollstaendiger 22 Graph
 var points_complete_22 = get_points_complete_graph(22);
 var edges_complete_22 = get_edges_complete_graph(points_complete_22);
-var graph_complete_22 = new Graph(points_complete_22, edges_complete_22);
+var graph_complete_22 = new Graph(edges_complete_22);

@@ -132,28 +132,25 @@ function randomPoints(amount, maxX, maxY) {
 
 
 function randomGraph(amountPoints, amountEdges, maxX, maxY) {
-    var graph = new Graph([], []);
-
-    // punkte auswürfeln und einzeln hinzufügen
+   
     var pts = randomPoints(amountPoints, maxX, maxY);
-    for(var i = 0; i < amountPoints; i++) {
-        graph.addPoint(pts[i]);
-    }
+    var edges = [];
+    var p1, p2;
 
-    var edge, p1, p2;
     for(var i = 0; i < amountEdges; i++) {
         // eine neue Kante auslosen
         do {
             // zwei verschiedene Punkte auslosen
-            p1 = graph.points[Math.floor(Math.random() * graph.points.length)];
+            p1 = pts[Math.floor(Math.random() * amountPoints)];
             do {
-                p2 = graph.points[Math.floor(Math.random() * graph.points.length)];
-            } while(p1.equals(p2))
+                p2 = pts[Math.floor(Math.random() * amountPoints)];
+            } while(p1===p2)
             
         } while(p1.isAdjacentTo(p2))
-        graph.addEdge(new Edge(p1, p2));
+        edges.push(new Edge(p1, p2));
     }
-    return graph;
+
+    return new Graph(edges);
 }
 
 
