@@ -10,7 +10,8 @@ var gui = new GUI({
     dummyContainer : 'dummyBox', // Id von Dummy-Box
     highscoreDummy : '.highscore .dummy',
     maxX : 15,              // maximale X-Koordinate für Punkte
-    maxY : 10               // maximale Y-Koordinate für Punkte
+    maxY : 10,               // maximale Y-Koordinate für Punkte
+    refreshTime : 100       // Zeit in der die Algorithmen neu ausgeführt werden
 });
 
 var alc;

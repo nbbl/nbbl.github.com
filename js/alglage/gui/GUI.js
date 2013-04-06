@@ -11,7 +11,8 @@
     pageHeader : '',        // Selector vom Page-Header
     highscoreDummy : '',    // Selector zum Highscore-Dummy
     maxX : 10,              // maximale X-Koordinate für Punkte
-    maxY : 10               // maximale Y-Koordinate für Punkte
+    maxY : 10,              // maximale Y-Koordinate für Punkte
+    refreshTime : 100       // Zeit in der die Algorithmen neu ausgeführt werden
 }
 
 */
@@ -28,6 +29,9 @@ var GUI = function(settings) {
     var $levDummy = $(settings.levelDummy);
     var $pageHeader = $(settings.pageHeader);
     var $hsDummy = $(settings.highscoreDummy);
+    
+    var timer;
+    var isChecked;
     
     var activeAlgoBox = ''; // Name der activen algoBox
         // JSXGraph-Board initialisieren
@@ -68,6 +72,13 @@ var GUI = function(settings) {
     if($scText.val() != '') {
         $button.removeClass('disabled');
     }
+    
+    // Checkbox für Berechnung
+    var $checkbox = $('.alwCalc');
+    isChecked = $checkbox.is(':checked');
+    $checkbox.change(function(){
+        isChecked = $checkbox.is(':checked');
+    }); 
     
     // Rechteck für den Handlungsbereich
     var frameOpts = {
@@ -127,14 +138,38 @@ var GUI = function(settings) {
                 var p = board.create('point', [ graph.points[i].x, graph.points[i].y ], {withLabel:false});
                 p.srcPoint = graph.points[i]; // Referenz auf zugrundeliegenden Punkt setzen
                 boardPoints.push(p);
-
-                p.on('mouseup', function(){
-                    this.srcPoint.x = this.X();
-                    this.srcPoint.y = this.Y();
-                    for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
-                        this.srcPoint.incidentEdges[i].reload();
+                
+                p.on('mousedown', function() {
+                    
+                    var self = this;
+                    
+                    if(isChecked) {
+                        timer = setInterval(function() {
+                            self.srcPoint.x = self.X();
+                            self.srcPoint.y = self.Y();
+                            for(var i = 0; i < self.srcPoint.incidentEdges.length; i++) {
+                                self.srcPoint.incidentEdges[i].reload();
+                            }
+                            $.publish('points-change');
+                        }, settings.refreshTime);
                     }
-                    $.publish('points-change');
+                    
+                });
+                
+                p.on('mouseup', function() {
+                    
+                    if(isChecked) {
+                        clearInterval(timer);
+                    }
+                    else {
+                        this.srcPoint.x = this.X();
+                        this.srcPoint.y = this.Y();
+                        for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
+                            this.srcPoint.incidentEdges[i].reload();
+                        }
+                        $.publish('points-change');
+                    }
+                    
                 });
 
                 // Bereich zum Verschieben der Punkte einschr�nken
