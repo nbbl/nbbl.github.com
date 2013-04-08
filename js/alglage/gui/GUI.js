@@ -437,6 +437,21 @@ var GUI = function(settings) {
         $hsDummy.parent().find('tr').not('.dummy').remove();
     }
 
+    // Macht die DOM-Elemente für den Highscore sichtbar / unsichtbar
+    function setHighscoreVisibility(visible) {
+        var $hs = $('table.highscore').parents('row');
+        var $sc = $('#scoreText').parents('.span6');
+
+        if(visible === true) {
+            $hs.show();
+            $sc.show();
+        }
+        else {
+            $hs.hide();
+            $sc.hide();
+        }
+    }
+
     // der aktuell angezeigte Graph wird zu in der GraphTextArea genannten textarea serialisiert dargestellt
     function showGraph() {
         $('textarea#GraphTextArea').val(graph.toString());
@@ -465,6 +480,7 @@ var GUI = function(settings) {
         changePageHeader : changePageHeader,
         showHighscore : showHighscore,
         clearHighscore : clearHighscore,
-        isActive : isActive
+        isActive : isActive,
+        setHighscoreVisibility : setHighscoreVisibility
     }
 }
