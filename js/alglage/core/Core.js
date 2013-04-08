@@ -363,16 +363,17 @@ function isArray(a) {
 };
 
 function parseGraph(graphString) {
-    var graph = jQuery.parseJSON(graphString);
+    var graph = JSON.parse(graphString);
     if(isArray(graph.edges)  &&
        isArray(graph.points) && 
-       graph.edges.reduce( function(a,b){return isArray(a) && isArray(b) && a.length==b.length==2}) &&
-       graph.points.reduce(function(a,b){return isArray(a) && isArray(b) && a.length==b.length==2})) {
+       graph.edges.reduce( function(a,b){return a && isArray(b) && b.length===2 && 
+					 b[0]<graph.points.length && b[1]<graph.points.length},true) &&
+       graph.points.reduce(function(a,b){return a && isArray(b) && b.length===2},true)) {
 	
 	var points = graph.points.map(function(ptarr){return new Point(ptarr[0],ptarr[1])});
 	var edges  = [];
-	for(var i=0; i<edges.length; ++i){
-	    edges.push(new Edge(points[edges[i][0]],points[edges[i][1]]));
+	for(var i=0; i<graph.edges.length; ++i){
+	    edges.push(new Edge(points[graph.edges[i][0]],points[graph.edges[i][1]]));
 	}
 	return new Graph(edges);
     }
