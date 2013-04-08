@@ -439,7 +439,7 @@ var GUI = function(settings) {
 
     // Macht die DOM-Elemente für den Highscore sichtbar / unsichtbar
     function setHighscoreVisibility(visible) {
-        var $hs = $('table.highscore').parents('row');
+        var $hs = $('table.highscore').parents('.row');
         var $sc = $('#scoreText').parents('.span6');
 
         if(visible === true) {
