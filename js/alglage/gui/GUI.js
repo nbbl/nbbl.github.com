@@ -160,6 +160,7 @@ var GUI = function(settings) {
                     var self = this;
                     
                     if(isChecked) {
+                        clearInterval(timer);
                         timer = setInterval(function() {
                             self.srcPoint.x = self.X();
                             self.srcPoint.y = self.Y();
