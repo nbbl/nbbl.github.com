@@ -139,7 +139,7 @@ var AlgLageController = function(gui) {
     }
     
     function postHighscore() {
-        var tscore = $('#EdgeIntersections_BF .score').text();
+        var tscore = $('#ShortestDistPoint-Edge .score').text();
         if(tscore == '' || tscore == '-') return false;
         
         var url = SET_HS_URL;
