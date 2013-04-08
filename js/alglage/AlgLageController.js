@@ -16,6 +16,8 @@ var AlgLageController = function(gui) {
     var highscore = {};
     var currLevname;
     
+    var algoReady = {}; // Wird gespeichert ob ein Algo fertig ist.
+    
     var gui = gui;
     
     function setGraph(gr) {
@@ -65,6 +67,7 @@ var AlgLageController = function(gui) {
         };
 
         algos[algoName] = a;
+        algoReady[algoName] = true;
         // Farbe hinzufügen (zirkulär aus annotationsColors ausgewählt)
         var nrOfAddedAlgos = Object.keys(algos).length;
         var color = annotationsColors[(nrOfAddedAlgos-1) % annotationsColors.length];
@@ -77,7 +80,10 @@ var AlgLageController = function(gui) {
         for(var a in algos) {
             
             // Active checken
-            if(!gui.isActive(a)) continue;
+            if(!gui.isActive(a) || !algoReady[a]) continue;
+            
+            // Algo auf "rechnen" setzen
+            algoReady[a] = false;
             
             // Ladeanimation setzten
             gui.setAlgoBoxLoading(a);
@@ -124,7 +130,9 @@ var AlgLageController = function(gui) {
         var score = event.data.score;
         var info = event.data.info;
         var annots = event.data.annotations;
+        
         gui.refreshAlgoBox(name, score, info, annots, algos[name].color);
+        algoReady[name] = true;
     }
     
     function showHighscore() {

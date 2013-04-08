@@ -13,7 +13,7 @@
     maxX : 10,              // maximale X-Koordinate für Punkte
     maxY : 10,              // maximale Y-Koordinate für Punkte
     scoringAlgoName : '',   // Name des Algos der als Score genommen wird
-    refreshTime : 100       // Zeit in der die Algorithmen neu ausgeführt werden
+    refreshTime : 50       // Zeit in der die Algorithmen neu ausgeführt werden
 }
 
 */

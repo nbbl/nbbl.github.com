@@ -12,7 +12,7 @@ var gui = new GUI({
     maxX : 15,              // maximale X-Koordinate für Punkte
     maxY : 10,               // maximale Y-Koordinate für Punkte
     scoringAlgoName : 'ShortestDistPoint-Edge',   // Name des Algos der als Score genommen wird
-    refreshTime : 100       // Zeit in der die Algorithmen neu ausgeführt werden
+    refreshTime : 50       // Zeit in der die Algorithmen neu ausgeführt werden
 });
 
 var alc;
