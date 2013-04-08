@@ -115,7 +115,7 @@ var AlgLageController = function(gui) {
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {
         graph.points = gui.getPoints();
-        gui.eraseAllAnnotations();
+        
         calculateAlgos();
     });
     
@@ -130,6 +130,7 @@ var AlgLageController = function(gui) {
         var score = event.data.score;
         var info = event.data.info;
         var annots = event.data.annotations;
+        
         
         gui.refreshAlgoBox(name, score, info, annots, algos[name].color);
         algoReady[name] = true;

@@ -418,6 +418,7 @@ var GUI = function(settings) {
         }
         
         if(algoData[algoName].isActive) {
+            eraseAnnotations(algoName);
             draw(annots, algoName, color);
         }
 
