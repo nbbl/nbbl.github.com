@@ -498,7 +498,7 @@ var GUI = function(settings) {
     	if(gra === null || gra === undefined) return false;
     	
     	alc.addLevel(name, gra);
-    	alc.loadLevel(name);
+    	window.location.hash = name;
     }
     
     function isActive(algoName) {
