@@ -29,21 +29,23 @@ var AlgLageController = function(gui) {
     }
     
     function loadLevel(name) {
+	currLevname = name;
         if(levels[name] === undefined) return false;
         
         if(name.indexOf('Custom') != -1) {
             gui.setHighscoreVisibility(false);
         }
+
         else {
             gui.setHighscoreVisibility(true);
-            currLevname = name;
+            
             refreshHighscore();
-        
-            gui.changePageHeader(name);
-            gui.eraseAllAnnotations();
-            setGraph(levels[name]);
-            calculateAlgos();
         }
+
+        gui.changePageHeader(name);
+        gui.eraseAllAnnotations();
+        setGraph(levels[name]);
+        calculateAlgos();
     }
     
     function addAlgo(algoName, algoPath) {
