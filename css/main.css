@@ -30,13 +30,15 @@ div.algoBox > .loader {
     margin-bottom: 5px;
 }
 
-#ShortestDistPoint-Edge blockquote {
+.iamscoring blockquote {
     border-bottom: 5px solid #EEEEEE;
     height: 48px;
     margin-bottom: 20px;
 }
 
-
+#tmpBestVal {
+    margin-left: 5px;
+}
 
 
 

@@ -12,6 +12,7 @@
     highscoreDummy : '',    // Selector zum Highscore-Dummy
     maxX : 10,              // maximale X-Koordinate für Punkte
     maxY : 10,              // maximale Y-Koordinate für Punkte
+    scoringAlgoName : '',   // Name des Algos der als Score genommen wird
     refreshTime : 100       // Zeit in der die Algorithmen neu ausgeführt werden
 }
 
@@ -29,6 +30,10 @@ var GUI = function(settings) {
     var $levDummy = $(settings.levelDummy);
     var $pageHeader = $(settings.pageHeader);
     var $hsDummy = $(settings.highscoreDummy);
+    
+    // aktuell besten Wert merken
+    var bestVal = 0;
+    var bestPoints;
     
     var timer;
     var isChecked;
@@ -94,10 +99,19 @@ var GUI = function(settings) {
     board.create('line',[[settings.maxX, settings.maxY], [settings.maxX, 0]], frameOpts);
 
     $("#btn_ShowGraph").click(function() { showGraph(); return false; }); // return false -> Sprung zum Seitenstart vermeiden
-    $("#btn_GetGraph").click(function()  {  getGraph();  return false; });
+    $("#btn_GetGraph").click(function() {  getGraph(); return false; });
+    $("#btn_showBest").click(function() {
+        setPoints(bestPoints);
+        return false;
+    });
     
     function initGraph(gr) {
         graph = gr;
+        
+        // init aktuellen Bestwert
+        bestVal = 0;
+        bestPoints = JSON.parse(gr.toString()).points;
+        
         _drawGraph();
     }
 
@@ -118,6 +132,7 @@ var GUI = function(settings) {
         for(var i = 0; i < boardEdges.length; i++) {
             boardEdges[i].srcEdge.reload();
         }
+        
         $.publish('points-change');
     }
 
@@ -151,6 +166,7 @@ var GUI = function(settings) {
                             for(var i = 0; i < self.srcPoint.incidentEdges.length; i++) {
                                 self.srcPoint.incidentEdges[i].reload();
                             }
+                            
                             $.publish('points-change');
                         }, settings.refreshTime);
                     }
@@ -168,6 +184,7 @@ var GUI = function(settings) {
                         for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
                             this.srcPoint.incidentEdges[i].reload();
                         }
+                        
                         $.publish('points-change');
                     }
                     
@@ -208,7 +225,7 @@ var GUI = function(settings) {
                     for(var i = 0; i < inc2.length; i++) {
                         inc2[i].reload();
                     }
-
+                    
                     $.publish('points-change');
                 });
 
@@ -355,6 +372,11 @@ var GUI = function(settings) {
 
     function initAlgoBox(algoName, color) {
         var $ele = $dummyBox.clone().attr('id', algoName);
+        
+        if(algoName === settings.scoringAlgoName) {
+            $ele.addClass('iamscoring');
+        }
+        
         var $btn = $ele.find('a.btn');
         $btn.click(function() {
             var annots = algoData[algoName].annotations;
@@ -390,6 +412,10 @@ var GUI = function(settings) {
     
     function refreshAlgoBox(algoName, score, info, annots, color) {
         if(algoData[algoName] === undefined) return false;
+        
+        if(algoName === settings.scoringAlgoName) {
+            checkTmpBestVal(score);
+        }
         
         if(algoData[algoName].isActive) {
             draw(annots, algoName, color);
@@ -440,7 +466,7 @@ var GUI = function(settings) {
     // Macht die DOM-Elemente für den Highscore sichtbar / unsichtbar
     function setHighscoreVisibility(visible) {
         var $hs = $('table.highscore').parents('.row');
-        var $sc = $('#scoreText').parents('.span6');
+        var $sc = $('#scoreText').parents('.span4');
 
         if(visible === true) {
             $hs.show();
@@ -458,12 +484,34 @@ var GUI = function(settings) {
     }
     
     function getGraph() {
-	this.counter = ++this.counter || 0;
-	alc.addLevel('Custom'+this.counter,parseGraph($('textarea#GraphTextArea').val()));
+    	this.counter = ++this.counter || 0;
+    	
+    	// Falls erster Custom-Graph geaddet wird
+    	if(this.counter == 0) {
+    	    $levDummy.before('<li class="divider"></li>');
+    	}
+    	
+    	var name = 'Custom '+this.counter;
+    	var gra = parseGraph($('textarea#GraphTextArea').val());
+    	
+    	if(gra === null || gra === undefined) return false;
+    	
+    	alc.addLevel(name, gra);
+    	alc.loadLevel(name);
     }
     
     function isActive(algoName) {
         return algoData[algoName].isActive;
+    }
+    
+    function checkTmpBestVal(val) {
+        if(isNaN(val)) return false;
+        
+        if(val > bestVal) {
+            $('#tmpBestVal').val(val);
+            bestPoints = JSON.parse(graph.toString()).points;
+            bestVal = val;
+        }
     }
     
     // �ffentliches Interface
