@@ -358,6 +358,28 @@ Graph.prototype.toString = function() {
     return ret;
 };
 
+function isArray(a) {
+    return Object.prototype.toString.apply(a) === '[object Array]';
+};
+
+function parseGraph(graphString) {
+    var graph = jQuery.parseJSON(graphString);
+    if(isArray(graph.edges)  &&
+       isArray(graph.points) && 
+       graph.edges.reduce( function(a,b){return isArray(a) && isArray(b) && a.length==b.length==2}) &&
+       graph.points.reduce(function(a,b){return isArray(a) && isArray(b) && a.length==b.length==2})) {
+	
+	var points = graph.points.map(function(ptarr){return new Point(ptarr[0],ptarr[1])});
+	var edges  = [];
+	for(var i=0; i<edges.length; ++i){
+	    edges.push(new Edge(points[edges[i][0]],points[edges[i][1]]));
+	}
+	return new Graph(edges);
+    }
+    
+    return null;
+};
+
 function Angle(points) {
     this.a = points[0];
     this.b = points[1];
