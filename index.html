@@ -95,13 +95,17 @@
 </div>
 
 <div class="row" style="margin-bottom: 10px;">
-    <div class="span6" style="margin-top: 8px;">
+    <div class="span4" style="margin-top: 6px;">
         <label class="checkbox">
             <input type="checkbox" class="alwCalc">
             Dauerhafte Berechnung </label>
     </div>
 
-    <div class="span6">
+    <div class="span4">
+        <a href="#" class="btn btn-primary" id="btn_showBest">Bisheriger Bestwert</a>
+    </div>
+
+    <div class="span4">
         <div class="input-append pull-right">
             <input class="span2" type="text" id="scoreText">
             <button class="btn disabled" type="button" id="scoreButton">
@@ -142,9 +146,8 @@
             <legend><h3>Graph Laden/Anzeigen</h3></legend>
             <textarea class="span12" rows="15" id="GraphTextArea"></textarea>
             
-                <a href="#" class="btn btn-primary" id="btn_ShowGraph">Show graph</a>
-                <a href="#" class="btn btn-primary" id="btn_GetGraph">Get graph</a>
-                <a href="#" class="btn btn-primary">Get recent best graph</a>
+                <a href="#" class="btn btn-primary" id="btn_ShowGraph">Graph <i class="icon-arrow-right icon-white"></i> Text</a>
+                <a href="#" class="btn btn-primary" id="btn_GetGraph">Text <i class="icon-arrow-right icon-white"></i> Graph</a>
             
             
             <hr>
