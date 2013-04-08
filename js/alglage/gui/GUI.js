@@ -41,7 +41,7 @@ var GUI = function(settings) {
         showCopyright : false,
         zoom : {
             wheel: true,
-            needShift: false
+	    needShift: false
         },
         pan : {
             needShift: false,
@@ -93,7 +93,8 @@ var GUI = function(settings) {
     board.create('line',[[settings.maxX, settings.maxY], [0, settings.maxY]], frameOpts);
     board.create('line',[[settings.maxX, settings.maxY], [settings.maxX, 0]], frameOpts);
 
-    $("#btn_ShowGraph").click(function() { showGraph(); });
+    $("#btn_ShowGraph").click(function() { showGraph(); return false; }); // return false -> Sprung zum Seitenstart vermeiden
+    $("#btn_GetGraph").click(function()  {  getGraph();  return false; });
     
     function initGraph(gr) {
         graph = gr;
@@ -439,6 +440,11 @@ var GUI = function(settings) {
     // der aktuell angezeigte Graph wird zu in der GraphTextArea genannten textarea serialisiert dargestellt
     function showGraph() {
         $('textarea#GraphTextArea').val(graph.toString());
+    }
+    
+    function getGraph() {
+	this.counter = ++this.counter || 0;
+	alc.addLevel('Custom'+this.counter,parseGraph($('textarea#GraphTextArea').val()));
     }
     
     function isActive(algoName) {
