@@ -1,0 +1,110 @@
+%        File: any.tex
+%     Created: Sat Mar 30 09:00 AM 2013 E
+% Last Change: Sat Mar 30 09:00 AM 2013 E
+%
+\documentclass[a4paper,twocolumn]{report}
+%\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+%\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{color}
+    \definecolor{lightgray}{gray}{.95}
+\usepackage{listings}
+    \lstset{
+    %basicstyle=\usefont{T1}{pcr}{m}{n}\small, 
+    %basicstlye=\small,
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    backgroundcolor=\color{lightgray},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false, 
+    frame=tb, 
+    framerule=.8pt, 
+    rulecolor=\color{black}, 
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=true,
+    title=\lstname,
+    keywordstyle=\bfseries,
+    stringstyle=\usefont{T1}{pcr}{m}{sl}\small,
+    escapeinside={@}{@},
+    morekeywords={process,in,out,is,begin,for,do,if,then, else, end, while}
+    }
+\newcommand{\lststyle}[1]{{\usefont{T1}{pcr}{m}{n}\small\selectfont#1}}
+
+\begin{document}
+
+\section{Datenstrukturen}
+
+\subsection{Einführung der arithmetischen Unschärfe}
+Bedingt durch die endliche Darstellung von Flie\ss kommazahlen im Prozessor waren wir gezwungen eine arithmetische
+Unsch\"arfe einzuf\"uhren. \\
+Wird zum Beispiel der Ausdruck $0.3-0.1$ berechnet, so wird anstelle des exakten Ergebnisses von $0.2$ 
+als n\"achstbeste  Näherung:
+\begin{lstlisting}
+js> 0.3-0.1
+0.19999999999999998
+\end{lstlisting}
+zur\"uckgeliefert. Die Differenz des exakten Wertes von der N\"aherung bel\"auft sich auf
+\begin{lstlisting}
+js> 0.2-(0.3-0.1)
+2.7755575615628914e-17
+\end{lstlisting}
+, weicht also um die Gr\"o\ss enordung $10^{-16}$ von der, der Operanden ab.
+Wir haben uns entschienden die aritmetische Unsch\"arfe auf $10^{-10}$ zu setzen. (\textbf{(remove me) Warum?}).
+\subsection{Punkte und Vektoren}
+Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
+Attribute und verf\"ugen \"uber die grundlegenden Eigenschaften und Funktionalit\"aten, welche von ihnen zu erwarten sind
+(Vektoraddition/-subtraktion,
+Multiplikation mit einem Skalar, Skalarmultiplikation, etc.). \textbf{(remove me) explizit dokumentieren}\\
+Ohne in ihrer programmatischen Funktionalit\"at von den Vektoren abzuweichen, wurden Punkte eingef\"uhrt. Es stellte
+sich heraus, dass beide Strukturen ihre Notwendigkeit hatten (der Abstand zweier Punkte sollte
+als Vekor und 
+nicht als Punkt ausgedr\"uckt werden, wohingegen ein Graph als Tupel von Verbindungskanten und Punkten, nicht Vektoren
+dargestellt wird).
+\textbf{(remove me) Was gibts noch zu sagen?}
+\subsection{Kanten}
+Die \lststyle{Edge} Datenstruktur repr\"asentiert eine  Strecke in einem kartesischen Koordinatensystem, als auch eine
+Kante in einem Graph. Wir w\"ahlten aufgrund ihrer arithmetischen Vorz\"uge die Geradendarstellung in \emph{Hessescher
+Normalform}. In ihr wird eine Gerade $g$ dargeschtellt durch ihren \emph{Normaleneinheitsvektor} $\widehat{n}$, sowie
+durch ihren Abstand zum Koordinatenursprung. Jeder Punkt $p=(x,y)$ auf der Geraden erf\"ullt somit die Gelichung: 
+\begin{align}
+  \widehat{n}\vec{p}-d=0  
+\end{align}
+, wobei $\vec{p}$ der Ortsvektor von $p$ bezeichne.\\
+Zus\"atzlich zu $\widehat{n}$ und $d$ speichert die \lststyle{Edge} Datenstruktur noch ihre zwei Endpunkte als
+Attribute.
+\subsubsection{Funktionen}
+\begin{description}[font=\normalfont]
+  \item{\lststyle{reload()}} 
+    Aktualisiert f\"ur eine Kante ihren Normaleneinheitsvektor, sowie ihren Abstand zum Koordinatenursprung. Wird z.B.
+    nach Verschieben eines Endpunktes aufgerufen.
+  \item{\lststyle{length()}}
+    Liefert die L\"ange einer Kante zur\"uck.
+  \item{\lststyle{getY(x)}}
+    Lifert die  $y$-Koordinate einer Geraden an $x$-Koordinate \lststyle{x}. \textbf{in fancy?}
+  \item{\lststyle{getLeft()}}
+    Liefert den Endpunkt einer Kante mit geringerer $x$-Koordinate. (Haben beide Endpunkte die selbe $x$-Koordinate so
+    liefert \lststyle{getLeft()} einen anderen Punkt zur\"uck als \lststyle{getRight()}).  
+  \item{\lststyle{getRight()}}
+    Analog zu oben.
+  \item{\lststyle{projectionToLine(pt)}}
+    Liefert die Projektion eines Punktes \lststyle{pt} auf die Geraden durch \textbf{Alle Kanten benennen!}
+  \item{\lststyle{projectionToEdge(pt)}}
+    Analog zu \lststyle{ProjectionToLine}, leifert jedoch \lststyle{null} sollte die Projektion nicht in \textbf{Alle
+    Kanten benennen!} liegen.
+  \item{\lststyle{distanceToLine(pt)}}
+    Liefert den Abstand eines Punktes zu
+  \item{\lststyle{signedDistanceToLine(pt)}}
+  \item{\lststyle{lineContains(pt)}}
+  \item{\lststyle{contains(pt)}}
+  \item{\lststyle{lineIntersection(edge)}}
+  \item{\lststyle{edgeIntersection(egde)}}
+\end{description}
+\end{document}
