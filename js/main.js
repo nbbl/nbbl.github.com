@@ -10,7 +10,9 @@ var gui = new GUI({
     dummyContainer : 'dummyBox', // Id von Dummy-Box
     highscoreDummy : '.highscore .dummy',
     maxX : 15,              // maximale X-Koordinate für Punkte
-    maxY : 10               // maximale Y-Koordinate für Punkte
+    maxY : 10,               // maximale Y-Koordinate für Punkte
+    scoringAlgoName : 'ShortestDistPoint-Edge',   // Name des Algos der als Score genommen wird
+    refreshTime : 50       // Zeit in der die Algorithmen neu ausgeführt werden
 });
 
 var alc;
@@ -25,23 +27,17 @@ alc = new AlgLageController(gui);
 
 alc.addLevel('Test', graph_t);
 alc.addLevel('Haus vom Nikolaus', graph_hvn);
-alc.addLevel('Random', randomGraph(10, 20, 15, 10));
+alc.addLevel('Random', randomGraph(10,20,15,10));
 alc.addLevel('Sieben', graph_complete_7);
 alc.addLevel('Elf', graph_complete_11);
 alc.addLevel('Zweiundzwanzig', graph_complete_22);
 
+alc.addAlgo('ShortestDistPoint-Edge', 'js/alglage/algos/EdgeIntersections_Brutal.js');
 alc.addAlgo('XCoord', 'js/alglage/algos/XCoordinates.js');
 alc.addAlgo('CircleCheck', 'js/alglage/algos/CircleCheck.js');
 alc.addAlgo('CollinearityTest', 'js/alglage/algos/CollinearityTest.js');
-alc.addAlgo('ShortestDistance_BF', 'js/alglage/algos/ShortestDistance_BF.js');
-alc.addAlgo('EdgeIntersections_BF', 'js/alglage/algos/EdgeIntersections_Brutal.js');
-alc.addAlgo('EdgeIntersections_Sweep', 'js/alglage/algos/EdgeIntersections_Sweep.js');
-alc.addAlgo('SmallestAngle_BF', 'js/alglage/algos/SmallestAngle_BF.js');
+alc.addAlgo('ShortestDistPoint-Point', 'js/alglage/algos/ShortestDistance_BF.js');
+//alc.addAlgo('SmallestAngle_BF', 'js/alglage/algos/SmallestAngle_BF.js'); //TO DO ?
 
-alc.loadLevel('Test');
-
-// Nur zum testen!!
-$('ul.nav > li > a:last').click(function() {
-    alc.postHighscore();
-    return false;
-});
+var levn = window.location.hash.substring(1) || 'Test';
+alc.loadLevel(levn);

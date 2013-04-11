@@ -11,14 +11,16 @@
     pageHeader : '',        // Selector vom Page-Header
     highscoreDummy : '',    // Selector zum Highscore-Dummy
     maxX : 10,              // maximale X-Koordinate für Punkte
-    maxY : 10               // maximale Y-Koordinate für Punkte
+    maxY : 10,              // maximale Y-Koordinate für Punkte
+    scoringAlgoName : '',   // Name des Algos der als Score genommen wird
+    refreshTime : 50       // Zeit in der die Algorithmen neu ausgeführt werden
 }
 
 */
 var GUI = function(settings) {
 
     // Private Variablen
-    var graph = new Graph([], []); // Referenz auf den Graphen des AlgLageControllers
+    var graph = new Graph([]); // Referenz auf den Graphen des AlgLageControllers
     var boardPoints = []; // Darstellung von graph.points
     var boardEdges = []; // Darstellung von graph.edges
 
@@ -29,22 +31,59 @@ var GUI = function(settings) {
     var $pageHeader = $(settings.pageHeader);
     var $hsDummy = $(settings.highscoreDummy);
     
+    // aktuell besten Wert merken
+    var bestVal = 0;
+    var bestPoints;
+    
+    var timer;
+    var isChecked;
+    
     var activeAlgoBox = ''; // Name der activen algoBox
         // JSXGraph-Board initialisieren
         var board = JXG.JSXGraph.initBoard(settings.containerId, {
         boundingbox: [0, settings.maxY, settings.maxX, 0],
         axis : true,
         showCopyright : false,
-        /* zoom : {
+        zoom : {
             wheel: true,
-            needShift: false
+	    needShift: false
         },
         pan : {
             needShift: false,
             enabled: true
-        } */
+        }
 
     });
+    
+    // Highscore
+    var $button = $('#scoreButton');
+    $button.click(function() {
+        if($(this).hasClass('disabled')) return false;
+        
+        $.publish('post-highscore');
+    });
+    
+    var $scText = $('#scoreText');
+    $scText.keyup(function() {
+        var text = $(this).val();
+        if(text != '' && $button.hasClass('disabled')) {
+            $button.removeClass('disabled');
+        }
+        else if(text == ''){
+            $button.addClass('disabled');
+        }
+    });
+    
+    if($scText.val() != '') {
+        $button.removeClass('disabled');
+    }
+    
+    // Checkbox für Berechnung
+    var $checkbox = $('.alwCalc');
+    isChecked = $checkbox.is(':checked');
+    $checkbox.change(function(){
+        isChecked = $checkbox.is(':checked');
+    }); 
     
     // Rechteck für den Handlungsbereich
     var frameOpts = {
@@ -59,10 +98,20 @@ var GUI = function(settings) {
     board.create('line',[[settings.maxX, settings.maxY], [0, settings.maxY]], frameOpts);
     board.create('line',[[settings.maxX, settings.maxY], [settings.maxX, 0]], frameOpts);
 
-    $("#btn_ShowGraph").click(function() { showGraph(); });
+    $("#btn_ShowGraph").click(function() { showGraph(); return false; }); // return false -> Sprung zum Seitenstart vermeiden
+    $("#btn_GetGraph").click(function() {  getGraph(); return false; });
+    $("#btn_showBest").click(function() {
+        setPoints(bestPoints);
+        return false;
+    });
     
     function initGraph(gr) {
         graph = gr;
+        
+        // init aktuellen Bestwert
+        bestVal = 0;
+        bestPoints = JSON.parse(gr.toString()).points;
+        
         _drawGraph();
     }
 
@@ -83,6 +132,7 @@ var GUI = function(settings) {
         for(var i = 0; i < boardEdges.length; i++) {
             boardEdges[i].srcEdge.reload();
         }
+        
         $.publish('points-change');
     }
 
@@ -104,14 +154,41 @@ var GUI = function(settings) {
                 var p = board.create('point', [ graph.points[i].x, graph.points[i].y ], {withLabel:false});
                 p.srcPoint = graph.points[i]; // Referenz auf zugrundeliegenden Punkt setzen
                 boardPoints.push(p);
-
-                p.on('mouseup', function(){
-                    this.srcPoint.x = this.X();
-                    this.srcPoint.y = this.Y();
-                    for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
-                        this.srcPoint.incidentEdges[i].reload();
+                
+                p.on('mousedown', function() {
+                    
+                    var self = this;
+                    
+                    if(isChecked) {
+                        clearInterval(timer);
+                        timer = setInterval(function() {
+                            self.srcPoint.x = self.X();
+                            self.srcPoint.y = self.Y();
+                            for(var i = 0; i < self.srcPoint.incidentEdges.length; i++) {
+                                self.srcPoint.incidentEdges[i].reload();
+                            }
+                            
+                            $.publish('points-change');
+                        }, settings.refreshTime);
                     }
-                    $.publish('points-change');
+                    
+                });
+                
+                p.on('mouseup', function() {
+                    
+                    if(isChecked) {
+                        clearInterval(timer);
+                    }
+                    else {
+                        this.srcPoint.x = this.X();
+                        this.srcPoint.y = this.Y();
+                        for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
+                            this.srcPoint.incidentEdges[i].reload();
+                        }
+                        
+                        $.publish('points-change');
+                    }
+                    
                 });
 
                 // Bereich zum Verschieben der Punkte einschr�nken
@@ -149,7 +226,7 @@ var GUI = function(settings) {
                     for(var i = 0; i < inc2.length; i++) {
                         inc2[i].reload();
                     }
-
+                    
                     $.publish('points-change');
                 });
 
@@ -174,7 +251,7 @@ var GUI = function(settings) {
                     }
                     if((tmp = this.point1.X()-settings.maxX) > 0) {
                         this.point1.moveTo([settings.maxX,this.point1.Y()]);
-                        this.point2.moveTo([this.point2.X()-tmp,this.point2.Y()]);
+                        this.point2.moveTo([this.point2.X()-tmp,this.point1.Y()]);
                     }
                     if((tmp = this.point2.X()-settings.maxX) > 0) {
                         this.point2.moveTo([settings.maxX,this.point2.Y()]);
@@ -217,6 +294,8 @@ var GUI = function(settings) {
     // durch die Angabe von algoName werden die in obj �bergebenen Annotations
     // eine eigene Lage gezeichnet
     function draw(obj, algoName, color) {
+        if(obj === undefined) return false;
+        
         if(obj.points !== undefined) {
             for(var i = 0; i < obj.points.length; i++) {
                 var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, strokeColor:color, fillColor:color, fixed:true});
@@ -294,6 +373,11 @@ var GUI = function(settings) {
 
     function initAlgoBox(algoName, color) {
         var $ele = $dummyBox.clone().attr('id', algoName);
+        
+        if(algoName === settings.scoringAlgoName) {
+            $ele.addClass('iamscoring');
+        }
+        
         var $btn = $ele.find('a.btn');
         $btn.click(function() {
             var annots = algoData[algoName].annotations;
@@ -301,11 +385,13 @@ var GUI = function(settings) {
                 draw(annots, algoName, color);
                 $btn.addClass('btn-success');
                 algoData[algoName].isActive = true;
+                $.publish('points-change');
             }
             else {
                 eraseAnnotations(algoName);
                 $btn.removeClass('btn-success');
                 algoData[algoName].isActive = false;
+                $ele.find('.score').html('-');
             }
             return false;
         });
@@ -313,9 +399,9 @@ var GUI = function(settings) {
         algoData[algoName] = {};
         algoData[algoName].jsxObjects = [];
         algoData[algoName].algoBox = $ele;
+        $ele.find('.aname').html(algoName);
+        $ele.find('.colorSpan').css('background', color);
         $dummyBox.before($ele);
-        $ele.find('h3').html(algoName);
-        // TODO color Markierung für den Algorithmus setzen
     }
     
     function setAlgoBoxLoading(algoName) {
@@ -328,7 +414,12 @@ var GUI = function(settings) {
     function refreshAlgoBox(algoName, score, info, annots, color) {
         if(algoData[algoName] === undefined) return false;
         
+        if(algoName === settings.scoringAlgoName) {
+            checkTmpBestVal(score);
+        }
+        
         if(algoData[algoName].isActive) {
+            eraseAnnotations(algoName);
             draw(annots, algoName, color);
         }
 
@@ -374,11 +465,57 @@ var GUI = function(settings) {
         $hsDummy.parent().find('tr').not('.dummy').remove();
     }
 
+    // Macht die DOM-Elemente für den Highscore sichtbar / unsichtbar
+    function setHighscoreVisibility(visible) {
+        var $hs = $('table.highscore').parents('.row');
+        var $sc = $('#scoreText').parents('.span4');
+
+        if(visible === true) {
+            $hs.show();
+            $sc.show();
+        }
+        else {
+            $hs.hide();
+            $sc.hide();
+        }
+    }
+
     // der aktuell angezeigte Graph wird zu in der GraphTextArea genannten textarea serialisiert dargestellt
     function showGraph() {
         $('textarea#GraphTextArea').val(graph.toString());
     }
-       
+    
+    function getGraph() {
+    	this.counter = ++this.counter || 0;
+    	
+    	// Falls erster Custom-Graph geaddet wird
+    	if(this.counter == 0) {
+    	    $levDummy.before('<li class="divider"></li>');
+    	}
+    	
+    	var name = 'Custom '+this.counter;
+    	var gra = parseGraph($('textarea#GraphTextArea').val());
+    	
+    	if(gra === null || gra === undefined) return false;
+    	
+    	alc.addLevel(name, gra);
+    	window.location.hash = name;
+    }
+    
+    function isActive(algoName) {
+        return algoData[algoName].isActive;
+    }
+    
+    function checkTmpBestVal(val) {
+        if(isNaN(val)) return false;
+        
+        if(val > bestVal) {
+            $('#tmpBestVal').val(val);
+            bestPoints = JSON.parse(graph.toString()).points;
+            bestVal = val;
+        }
+    }
+    
     // �ffentliches Interface
     return {
         initGraph : initGraph,
@@ -392,6 +529,8 @@ var GUI = function(settings) {
         addLevelToNav : addLevelToNav,
         changePageHeader : changePageHeader,
         showHighscore : showHighscore,
-        clearHighscore : clearHighscore
+        clearHighscore : clearHighscore,
+        isActive : isActive,
+        setHighscoreVisibility : setHighscoreVisibility
     }
 }
