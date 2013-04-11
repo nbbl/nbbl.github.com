@@ -1,7 +1,3 @@
-%        File: any.tex
-%     Created: Sat Mar 30 09:00 AM 2013 E
-% Last Change: Sat Mar 30 09:00 AM 2013 E
-%
 %\documentclass[a4paper,twocolumn]{report}
 \documentclass[a4paper,twocolumn]{scrartcl}
 \addtokomafont{sectioning}{\rmfamily}
@@ -17,7 +13,7 @@
     \lstset{
     %basicstyle=\usefont{T1}{pcr}{m}{n}\small, 
     %basicstlye=\small,
-    numbers=left,
+    numbers=none,
     numberstyle=\tiny,
     numbersep=5pt,
     backgroundcolor=\color{lightgray},
@@ -45,11 +41,22 @@
  
 
 \begin{document}
-\maketitle
+
+\twocolumn[
+  \begin{@twocolumnfalse}
+  \maketitle
+  \vspace{-5ex}
+  \rule{\textwidth}{1pt}
+    \begin{abstract}
+    \textbf{
+      Bacon ipsum dolor sit amet meatloaf id ball tip anim sunt, corned beef ad pork loin prosciutto non velit ut nisi deserunt. Eu beef ex tri-tip meatball in pork chop, officia drumstick proident laborum. Aute short loin spare ribs corned beef. Proident labore kielbasa ham hock sint ut, fugiat nisi prosciutto chuck chicken. Pig fugiat bresaola, ut strip steak boudin proident officia. Elit andouille pork chop ut cow adipisicing short loin, in et laborum dolore in.}
+    \end{abstract}
+  \end{@twocolumnfalse}
+]
+
 \tableofcontents
 
 \section{Einleitung}
-
 
 \section{Datenstrukturen}
 
