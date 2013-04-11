@@ -2,11 +2,12 @@
 %     Created: Sat Mar 30 09:00 AM 2013 E
 % Last Change: Sat Mar 30 09:00 AM 2013 E
 %
-\documentclass[a4paper,twocolumn]{report}
-%\documentclass[a4paper]{report}
+%\documentclass[a4paper,twocolumn]{report}
+\documentclass[a4paper,twocolumn]{scrartcl}
+\addtokomafont{sectioning}{\rmfamily}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
-%\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -38,7 +39,17 @@
     }
 \newcommand{\lststyle}[1]{{\usefont{T1}{pcr}{m}{n}\small\selectfont#1}}
 
+\author{Julian Dobmann, Frederik Feiten, Felix Herter, Johannes Sauer}
+\title{Softwareprojekt Anwendung von Algorithmen}
+\subtitle{Punkte in allgemeiner Lage}
+ 
+
 \begin{document}
+\maketitle
+\tableofcontents
+
+\section{Einleitung}
+
 
 \section{Datenstrukturen}
 
@@ -57,7 +68,7 @@ js> 0.2-(0.3-0.1)
 2.7755575615628914e-17
 \end{lstlisting}
 , weicht also um die Gr\"o\ss enordung $10^{-16}$ von der, der Operanden ab.
-Wir haben uns entschienden die aritmetische Unsch\"arfe auf $10^{-10}$ zu setzen. (\textbf{(remove me) Warum?}).
+Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ zu setzen. (\textbf{(remove me) Warum?}).
 \subsection{Punkte und Vektoren}
 Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
 Attribute und verf\"ugen \"uber die grundlegenden Eigenschaften und Funktionalit\"aten, welche von ihnen zu erwarten sind
