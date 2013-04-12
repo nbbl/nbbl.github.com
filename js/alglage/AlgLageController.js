@@ -16,6 +16,8 @@ var AlgLageController = function(gui) {
     var highscore = {};
     var currLevname;
     
+    var algoReady = {}; // Wird gespeichert ob ein Algo fertig ist.
+    
     var gui = gui;
     
     function setGraph(gr) {
@@ -29,21 +31,23 @@ var AlgLageController = function(gui) {
     }
     
     function loadLevel(name) {
+	currLevname = name;
         if(levels[name] === undefined) return false;
         
         if(name.indexOf('Custom') != -1) {
             gui.setHighscoreVisibility(false);
         }
+
         else {
             gui.setHighscoreVisibility(true);
-            currLevname = name;
+            
             refreshHighscore();
-        
-            gui.changePageHeader(name);
-            gui.eraseAllAnnotations();
-            setGraph(levels[name]);
-            calculateAlgos();
         }
+
+        gui.changePageHeader(name);
+        gui.eraseAllAnnotations();
+        setGraph(levels[name]);
+        calculateAlgos();
     }
     
     function addAlgo(algoName, algoPath) {
@@ -63,6 +67,7 @@ var AlgLageController = function(gui) {
         };
 
         algos[algoName] = a;
+        algoReady[algoName] = true;
         // Farbe hinzufügen (zirkulär aus annotationsColors ausgewählt)
         var nrOfAddedAlgos = Object.keys(algos).length;
         var color = annotationsColors[(nrOfAddedAlgos-1) % annotationsColors.length];
@@ -75,7 +80,10 @@ var AlgLageController = function(gui) {
         for(var a in algos) {
             
             // Active checken
-            if(!gui.isActive(a)) continue;
+            if(!gui.isActive(a) || !algoReady[a]) continue;
+            
+            // Algo auf "rechnen" setzen
+            algoReady[a] = false;
             
             // Ladeanimation setzten
             gui.setAlgoBoxLoading(a);
@@ -107,7 +115,7 @@ var AlgLageController = function(gui) {
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {
         graph.points = gui.getPoints();
-        gui.eraseAllAnnotations();
+        
         calculateAlgos();
     });
     
@@ -122,7 +130,10 @@ var AlgLageController = function(gui) {
         var score = event.data.score;
         var info = event.data.info;
         var annots = event.data.annotations;
+        
+        
         gui.refreshAlgoBox(name, score, info, annots, algos[name].color);
+        algoReady[name] = true;
     }
     
     function showHighscore() {
