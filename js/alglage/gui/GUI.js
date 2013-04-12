@@ -329,7 +329,25 @@ var GUI = function(settings) {
             }
         }
         if(obj.areas !== undefined) {
-            console.log("drawing areas not yet implemented");
+            for(var i = 0; i < obj.areas.length; i++) {
+                var p1 = obj.areas[i].pt1;
+                var p2 = obj.areas[i].pt2;
+                var p3 = obj.areas[i].pt3;
+                var p4 = obj.areas[i].pt4;
+                var area = board.create('curve',
+                                [[p1.x, p2.x, p3.x, p4.x],
+                                [p1.y, p2.y, p3.y, p4.y]],
+                                // [[1, 3, 3, 1], [0, 0, 7, 7]],
+                                {strokeWidth:1,
+                                strokeColor:color,
+                                fillColor:color,
+                                fillOpacity:0.2,
+                                highlightFillColor:color,
+                                highlightStrokeColor:0.2,
+                                highlightFillOpacity:0.2,
+                                fixed:true});
+                algoData[algoName].jsxObjects.push(area);
+            }
         }
     }   
 

@@ -409,3 +409,10 @@ function Circle(point, radius) {
     this.point = point;
     this.radius = radius;
 }
+
+function Area(pt1, pt2, pt3, pt4) {
+    this.pt1 = pt1;
+    this.pt2 = pt2;
+    this.pt3 = pt3;
+    this.pt4 = pt4;
+}
