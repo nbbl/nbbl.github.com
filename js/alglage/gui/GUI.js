@@ -212,24 +212,56 @@ var GUI = function(settings) {
                 line.srcEdge = graph.edges[i]; // Referenz auf zugrundeliegende Kante setzen
                 boardEdges.push(line);
 
-                line.on('mouseup', function(){
-                    this.point1.srcPoint.moveTo(this.point1.X(), this.point1.Y());
-                    this.point2.srcPoint.moveTo(this.point2.X(), this.point2.Y());
-
-                    // alle inzidenten Kanten updaten (die gemeinsame Kante beider Punkte wird doppelt geupdatet)
-                    var inc1 = this.srcEdge.pt1.incidentEdges;
-                    var inc2 = this.srcEdge.pt2.incidentEdges;
-
-                    for(var i = 0; i < inc1.length; i++) {
-                        inc1[i].reload();
-                    }
-                    for(var i = 0; i < inc2.length; i++) {
-                        inc2[i].reload();
-                    }
+                line.on('mousedown', function(){
                     
-                    $.publish('points-change');
+                    var self = this;
+                    
+                    if(isChecked) {
+                        clearInterval(timer);
+                        timer = setInterval(function() {
+                            self.point1.srcPoint.moveTo(self.point1.X(), self.point1.Y());
+                            self.point2.srcPoint.moveTo(self.point2.X(), self.point2.Y());
+        
+                            // alle inzidenten Kanten updaten (die gemeinsame Kante beider Punkte wird doppelt geupdatet)
+                            var inc1 = self.srcEdge.pt1.incidentEdges;
+                            var inc2 = self.srcEdge.pt2.incidentEdges;
+        
+                            for(var i = 0; i < inc1.length; i++) {
+                                inc1[i].reload();
+                            }
+                            for(var i = 0; i < inc2.length; i++) {
+                                inc2[i].reload();
+                            }
+                            
+                            $.publish('points-change');
+                        }, settings.refreshTime);
+                    }
                 });
-
+                
+                line.on('mouseup', function() {
+                    
+                    if(isChecked) {
+                        clearInterval(timer);
+                    }
+                    else {
+                        this.point1.srcPoint.moveTo(this.point1.X(), this.point1.Y());
+                        this.point2.srcPoint.moveTo(this.point2.X(), this.point2.Y());
+    
+                        // alle inzidenten Kanten updaten (die gemeinsame Kante beider Punkte wird doppelt geupdatet)
+                        var inc1 = this.srcEdge.pt1.incidentEdges;
+                        var inc2 = this.srcEdge.pt2.incidentEdges;
+    
+                        for(var i = 0; i < inc1.length; i++) {
+                            inc1[i].reload();
+                        }
+                        for(var i = 0; i < inc2.length; i++) {
+                            inc2[i].reload();
+                        }
+                        
+                        $.publish('points-change');
+                    }
+                });
+                
                 // Kanten bleiben steif, wenn sie den Rand beruehren
                 line.on('drag', function() {
                     var tmp = 0;
