@@ -7,6 +7,7 @@
 \usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage[pdftex]{graphicx}
 \usepackage{color}
     \definecolor{lightgray}{gray}{.95}
 \usepackage{listings}
@@ -125,4 +126,55 @@ Attribute.
   \item{\lststyle{lineIntersection(edge)}}
   \item{\lststyle{edgeIntersection(egde)}}
 \end{description}
+
+
+
+\section{Aufbau / Architektur !?}
+
+\subsection{Speicherung der Highscores}
+Blabla
+
+\section{Algorithmen}
+
+\subsection{Algo 1}
+\subsection{Algo 2}
+
+\subsection{Punkte befinden sich auf Kreis}
+Ein weiteres Kriterium für die Bewertung der allgemeinen Lage von Punkten, welches im Rahmen dieses Projekts umgesetzt wurde, besteht darin zu berechnen, ob mehr als drei Punkte auf einem Kreis liegen. Da drei Punkte immer auf einem Kreis liegen ist hierdurch noch keine Besonderheit gegeben, was die Lage der Punkte im Koordinatensystem anbelangt. Da mehr als drei Punkte jedoch nicht immer zwingend auf einem Kreis liegen müssen, kann eine solche Anordnung so als Sonderfall betrachtet werden, die einer allgemeinen Lage der Punkte wiederspricht.\\
+Um dieses Kriterium zu betrachten wurde kein mathematischer Ansatz gewählt, der auf der Berechnung von Kreisgleichungen basiert, sondern eher ein grafischer. Dieser soll im Folgenden genauer erläutert werden.\\
+Um zu untersuchen, ob verschiedene Punkte auf einem Kreis liegen könnte ein Ansatz darin bestehen viele Kreise mit verschiedenen Radien und Positionen durchzuprobieren und jedes Mal zu zählen, wie viele Punkte sich auf einem solchen Kreis befinden. Dabei würde es jedoch eine große Anzahl an Kreisen geben, auf denen sich gar keine der Punkte befinden und die somit umsonst betrachtet werden würden.\\
+Aus diesem Grund wurde hier der genau umgekehrte Ansatz gewählt die Kreise mit verschiedenen Radien um die Punkte selber zu ziehen und dann zu schauen, wie viele der Kreise sich im selben Schnittpunkt treffen. Gibt es einen Schnittpunkt in dem sich zum Beispiel vier Kreise treffen, dann bedeutet dies, dass sich um diesen Schnittpunkt ein Kreis mit dem gleichen Radius ziehen lässt, der dann wiederum genau diese vier Punkte schneidet.
+ 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{Bilder/kreise}
+\caption{Umgekehrte Heransgehensweise um Punkte auf Kreis zu finden}
+\label{img:kreise}
+\end{figure}
+
+Es muss somit also nur geschaut werden, ob es bei verschiedenen Radien Schnittpunkte gibt, in denen sich mehr als drei Kreise treffen. Die jeweiligen Schnittpunkte und Radien werden dann vom Algorithmus zurückgegeben und grafisch dargestellt.\\
+Der Algorithmus erstellt hierfür zunächst ein Array, welches von den Proportionen der Größe des Sichtbereiches entspricht. Die Kreise werden dann diskretisiert um die jeweiligen Punkte in das Array übertragen. Die Punkte sind hierbei vorher ebenfalls diskretisiert und auf die Größe des Arrays angepasst worden.\\
+Die Kreise werden nicht einfach nur „gezeichnet“, sondern es wird im Array, welches vom Typ Integer ist, an jeder Position an der sich der Kreis befindet um Eins inkrementiert. Ein Kreis ist also zunächst durch eine diskrete Anordnung von Einsen im Array dargestellt. Wird nun ein Kreis um einen weiteren Punkt eingezeichnet, der mit dem vorherigen Kreis einen Schnittpunkt hat, so ergibt sich an dem Schnittpunkt im Array ein Wert von Zwei. Sind alle Kreise eingezeichnet worden muss so am Ende nur im Array nach allen Werten gesucht werden, die größer als drei sind. Hier befindet sich ein Schnittpunkt von mehr als drei Kreisen mit dem betrachteten Radius.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{Bilder/diskret}
+\caption{Überscheidung von zwei diskretisierten Kreisen im Array}
+\label{img:diskret}
+\end{figure}
+
+Die Genauigkeit mit der die Punkte auf einem Kreis liegen lassen sich im Algorithmus über die Größe des Arrays bestimmen. Je größer das Array, desto genauer liegen die Punkte am Ende auf dem Kreis. Hier wurde eine relativ kleine Größe des Array gewählt, sodass Punkte auch dann als auf dem Kreis liegend bewertet werden, wenn sie sich etwas daneben befinden.\\
+Als Score ließe sich hier der Abstand der Punkte zu einer möglichen Lage auf einem Kreis angeben. In diesem Projekt wurde jedoch nur überprüft, ob sich mehr als drei Punkte mit einer gewissen Unschärfe auf einem Kreis befinden.
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
