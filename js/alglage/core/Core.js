@@ -344,20 +344,20 @@ Graph.prototype.addEdge = function(edge) {
 // };
 
 Graph.prototype.toString = function() {
-    var ret = "{\"points\": [";
+    var ret = "{\n    \"points\" : [";
     for(var i = 0; i < this.points.length; i++) {
-        var tmp = "[" + this.points[i].x + ", " + this.points[i].y + "]";
+        var tmp = "\n        [" + this.points[i].x + ", " + this.points[i].y + "]";
         ret += tmp; 
         if(i < this.points.length-1) ret += ", ";
     }
-    ret += "], ";
-    ret += " \"edges\": [";
+    ret += "\n    ], \n";
+    ret += "    \"edges\" : [";
     for(var i = 0; i < this.edges.length; i++) {
-        var tmp = "[" + this.points.indexOf(this.edges[i].pt1) + ", " + this.points.indexOf(this.edges[i].pt2) + "]";
+        var tmp = "\n        [" + this.points.indexOf(this.edges[i].pt1) + ", " + this.points.indexOf(this.edges[i].pt2) + "]";
         ret += tmp;
         if(i < this.edges.length-1) ret += ", ";
     }
-    ret += "]}";
+    ret += "\n    ]\n}";
     return ret;
 };
 
