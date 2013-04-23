@@ -181,7 +181,6 @@ var AlgLageController = function(gui) {
         loadLevel : loadLevel,
         addAlgo : addAlgo,
         calculateAlgos : calculateAlgos,
-        fillRandomly : fillRandomly,
         setHighscore : setHighscore,
         postHighscore : postHighscore
     }
