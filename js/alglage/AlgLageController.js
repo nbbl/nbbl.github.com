@@ -11,7 +11,6 @@ var AlgLageController = function(gui) {
     // Private Variablen
     var graph = new Graph([]);
     var algos = {};
-    var colors = [];
     var levels = {};
     var highscore = {};
     var currLevname;
