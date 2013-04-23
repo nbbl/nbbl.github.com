@@ -11,7 +11,6 @@ var AlgLageController = function(gui) {
     // Private Variablen
     var graph = new Graph([]);
     var algos = {};
-    var colors = [];
     var levels = {};
     var highscore = {};
     var currLevname;
@@ -52,7 +51,6 @@ var AlgLageController = function(gui) {
     
     function addAlgo(algoName, algoPath) {
         var w = new Worker(algoPath);
-        // Dieser Check macht nicht viel Sinn...
         if (!w) {
             console.log('could not create worker with path' + algoPath);
         };
@@ -93,12 +91,6 @@ var AlgLageController = function(gui) {
                 graph : graph,
                 points : graph.points
             });
-        }
-    }
-    
-    function stopAlgos() {
-        for(var i = 0; i < algos.length; i++) {
-            // algos[i].worker Macht noch nichts...
         }
     }
 

@@ -130,7 +130,28 @@ Attribute.
 
 
 
-\section{Aufbau / Architektur !?}
+\section{Aufbau / Architektur}
+Die grundsätzliche Architektur dieser Anwendung ist recht simpel aufgebaut. Es gibt drei Klassen von Akteuren: \emph{Webworker}, den zentralen \emph{Controller} und die \emph{GUI}, die grafische Benutzerschnittstelle.
+
+\subsection{Webworker}
+Um aus Benuztersicht die Ansprechbarkeit der Anwendung zu optimieren, haben wir uns dafür entschieden, die Berechnung der Algorithmen in Webworker auszulagern. Webworker ermöglichen es, in Javascript parallele Berechnungen ausführen zu lassen. So finden diese Berechnungen im Hintergrund statt, während die GUI weiterhin ansprechbar bleibt.
+Beim Erstellen eines Webworkers wird ihm der auszuführende Code in Form eines Pfades zu einem Skript übergeben.
+Da ein Webworker vom Hauptthread abgeschottet läuft und seinen eigenen Namensraum für Variablen besitzt, erfolgt jegliche Kommunikation über Nachrichten, welche neben Text auch ganze Objekte enthalten können.
+Auf Anfrage wendet ein Webworker den im Skript enthaltenen Algorithmus an und sendet seine Ergebnisse zurück an den Controller. Die Anfrage besteht aus einer Nachricht, welche ein Graphobjekt und einen Namen enthält.
+
+\subsection{Controller}
+Der Controller ist einerseits dafür zuständig, die Algorithmen aufzurufen, andererseits um eine Brücke zwischen GUI und den Webworkern zu bauen, also Ergebnisse weiterzuleiten und Benutzereingaben zu verarbeiten.
+Ursprünglich sollte der Status der Anwendung lediglich im Controller gespeichert sein, allerdings wurde auch hier aus Gründen der Benutzbarkeit ein Teil des Status in die GUI ausgelagert.
+Beim Erstellen eines Controllerobjektes (\emph{AlgLageController}) wird ein GUIobjekt übergeben, um dem Controller direkten Zugriff auf Elemente und Methoden der GUI zu ermöglichen.
+
+\subsubsection{Graphen}
+Um dem Controller einen neuen Graph zu übergeben kann entweder direkt ein Graph mit \textbf{setGraph(graph)} übergeben werden, welcher dann sofort geladen wird, oder man fügt ein neues \emph{Level} mit \textbf{addLevel(name, graph)} hinzu, wodurch der Graph unter dem übergebenen Namen im Controller abgespeichert wird. Mit \textbf{loadLevel(name)} wird ein vorher unter \emph{name} abgespeicherter Graph in die Ansicht geladen.
+
+\subsubsection{Algorithmen}
+Algorithmen müssen in einer Datei als Skript abgelegt sein, um mit \textbf{addAlgo( name, path )} dem Controller hinzugefügt werden zu können. Beim Hinzufügen eines Algorithmus wird ein neuer Webworker erstellt und eine Referenz auf ihn in einer Tabelle *algos* abgelegt. Zusätzlich wird eine Farbe für die Anzeige der Ergebnisse des Algorithmus gesetzt und das *ready*-Attribut des Algorithmus auf *true* gesetzt (das bedeutet, dass der dem Algorithmus zugehörige Webworker gerade nicht beschäftigt ist). Zuletzt wird mit \textbf{gui.initAlgoBox( name, color )} in der GUI eine neue Box für die Anzeige der Ergebnisse des Algorithmus eingefügt.
+Die Methode \textbf{calculateAlgos()} iteriert über alle mit \textbf{addAlgo(..)} hinzugefügten Algorithmen und sendet eine Neuberechnungsaufforderung an diejenigen Webworker, die nicht schon neuberechnen und auch in der GUI vom Benutzer als sichtbar eingestellt wurden.
+
+\subsection{GUI}
 
 \subsection{Speicherung der Highscores}
 Blabla
