@@ -330,7 +330,12 @@ var GUI = function(settings) {
         
         if(obj.points !== undefined) {
             for(var i = 0; i < obj.points.length; i++) {
-                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {withLabel:false, strokeColor:color, fillColor:color, fixed:true});
+                var point = board.create('point', [obj.points[i].x, obj.points[i].y] , {
+                                        withLabel:false,
+                                        strokeColor:color,
+                                        fillColor:color,
+                                        fixed:true,
+                                        highlightStrokeColor : color});
                 algoData[algoName].jsxObjects.push(point);
             }
         }
@@ -338,7 +343,10 @@ var GUI = function(settings) {
             for(var i = 0; i < obj.lines.length; i++) {
                 var line = board.create('line', [
                                     [obj.lines[i].pt1.x, obj.lines[i].pt1.y],
-                                    [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ], {fixed:true, strokeColor:color});
+                                    [obj.lines[i].pt2.x, obj.lines[i].pt2.y] ], {
+                                        fixed:true,
+                                        strokeColor:color,
+                                        highlightStrokeColor : color});
                 algoData[algoName].jsxObjects.push(line);
             }
         }
@@ -352,7 +360,8 @@ var GUI = function(settings) {
                                     {straightFirst:false,
                                      straightLast:false,
                                      fixed:true,
-                                     strokeColor:color});
+                                     strokeColor:color,
+                                     highlightStrokeColor : color});
                 algoData[algoName].jsxObjects.push(line);
             }
         }
@@ -360,10 +369,11 @@ var GUI = function(settings) {
             for(var i = 0; i < obj.circles.length; i++) {
                 var p = obj.circles[i].point;
                 var r = obj.circles[i].radius;
-                var circle = board.create('circle', [[p.x, p.y],[p.x, p.y + r]], {strokeWidth : 2,
-                                                                                  highlightStrokeColor : 'blue',
-                                                                                  fixed : true,
-                                                                                  strokeColor:color});
+                var circle = board.create('circle', [[p.x, p.y],[p.x, p.y + r]], {
+                                    strokeWidth : 2,
+                                    highlightStrokeColor : color,
+                                    fixed : true,
+                                    strokeColor:color});
                 algoData[algoName].jsxObjects.push(circle);
             }
         }
@@ -372,15 +382,18 @@ var GUI = function(settings) {
                 var A = board.create('point', [obj.angles[i].a.x, obj.angles[i].a.y], {visible:false});
                 var B = board.create('point', [obj.angles[i].b.x, obj.angles[i].b.y], {visible:false});
                 var C = board.create('point', [obj.angles[i].c.x, obj.angles[i].c.y], {visible:false});
-                var angle = board.create('angle', [B, A, C], {type:'sector', orthoType:'sector', orthoSensitivity:1, radius:1,
-                                                              withLabel:false,
-                                                              strokeColor:color});
+                var angle = board.create('angle', [B, A, C], {
+                                    type:'sector',
+                                    orthoType:'sector',
+                                    orthoSensitivity:1,
+                                    radius:1,
+                                    withLabel:false,
+                                    strokeColor:color,
+                                    highlightStrokeColor : color});
                 algoData[algoName].jsxObjects.push(angle);
             }
         }
-        if(obj.areas !== undefined) {
-            console.log("drawing areas not yet implemented");
-        }
+
     }   
 
     // l�scht alle gezeichneten Markierungen
