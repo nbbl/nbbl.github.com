@@ -93,16 +93,6 @@ var AlgLageController = function(gui) {
             });
         }
     }
-
-
-    function fillRandomly(amount, maxX, maxY) {
-        this.graph.points = [];
-        this.graph.edges = [];
-        var points = randomPoints(amount, maxX, maxY);
-        for(var i = 0; i < points.length; i++) {
-            this.graph.points.push(points[i]);
-        }
-    }
     
     // Wird ausgeführt wenn sich Punkte ändern
     $.subscribe('points-change', function() {
@@ -191,7 +181,6 @@ var AlgLageController = function(gui) {
         loadLevel : loadLevel,
         addAlgo : addAlgo,
         calculateAlgos : calculateAlgos,
-        fillRandomly : fillRandomly,
         setHighscore : setHighscore,
         postHighscore : postHighscore
     }
