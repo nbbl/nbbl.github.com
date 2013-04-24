@@ -51,7 +51,7 @@
   \rule{\textwidth}{1pt}
     \begin{abstract}
     \textbf{
-      Bacon ipsum dolor sit amet meatloaf id ball tip anim sunt, corned beef ad pork loin prosciutto non velit ut nisi deserunt. Eu beef ex tri-tip meatball in pork chop, officia drumstick proident laborum. Aute short loin spare ribs corned beef. Proident labore kielbasa ham hock sint ut, fugiat nisi prosciutto chuck chicken. Pig fugiat bresaola, ut strip steak boudin proident officia. Elit andouille pork chop ut cow adipisicing short loin, in et laborum dolore in.}
+      Im Rahmen des Softwareprojekts „Anwendungen von Algorithmen“ haben wir uns damit beschäftigt eine browserbasierte Anwendung zu entwickeln, die es auf spielerische Weise ermöglicht Punkte in eine allgemeine Lage zu versetzen. Die allgemeine Lage versteht sich hierbei als eine Anordnung der Punkte, in welcher deren Positionierung zueinander möglichst keine Sonderfälle einnimmt. So entsprechen zum Beispiel Anordnungen, bei denen sich mehrere Punkte auf einer Linie oder einem Kreis befinden einem Sonderfall. Neben der Umsetzung dieser Kriterien haben wir uns vor allem mit einem Kriterium beschäftigt, welches die Höhe aller Punkte und Schnittpunkte zu den umliegenden Kanten beschreibt. So geht es in der Anwendung hauptsächlich darum, all diese Höhen möglichst groß zu gestallten. Zur Orientierung dient hierbei die kleinste vorkommende Höhe, die zusätzlich grafisch dargestellt wird.}
     \end{abstract}
   \end{@twocolumnfalse}
 ]
@@ -156,8 +156,55 @@ Die Methode \texttt{calculateAlgos()} iteriert über alle mit \texttt{addAlgo(..
 
 \subsection{GUI}
 
-\subsection{Speicherung der Highscores}
-Blabla
+\subsection{Speicherung der Bestwerte}
+In der Anwendung besteht die Möglichkeit einen erreichten Punktestand mit einem Formular in einer Bestenliste zu speichern. Dieser wird, wenn er zu den drei höchsten eines Levels gehört, danach in der Liste angezeigt. Zusätzlich wird zu einem Punktestand der Name des Benutzers angezeigt und es besteht die Möglichkeit, die Punkte auf die Positionen zu setzten, mit welchen der Punktestand erreicht wurde. Wie die hierfür benötigten Daten gespeichert und angezeigt werden soll nun genauer erläutert werden.\\
+Um die Speicherung der Daten kümmert sich eine Datenbank, welche hierfür mit einer Tabelle versehen wurde. Diese enthält die Spalten „hid“, „levname“, „name“, „score“ und „points“. Hierbei ist „hid“ ein eindeutiger Schlüssel eines jeden Eintrags, „levname“ gibt an zu welchem Level ein Eintrag gehört, „name“ beinhaltet den Namen des Benutzers, „score“ entspricht dem erreichten Punktestand und in „points“ werden die Positionen der Punkte in einem String gespeichert. Da beim Anzeigen der Punktpositionen eines Bestwertes der Graph bereits geladen ist und sich die Reihenfolge der Punkte niemals ändert, genügt es nur die Positionen der jeweiligen Punkte zu speichern. Beim Klick auf den Pfeil werden dann die Punkte im Graph auf die gespeicherten Positionen verschoben.\\
+Damit die Bestenliste auch funktionsfähig ist, wenn die Anwendung von einer lokalen Datei oder einem anderen Server ausgeführt wird und unabhängig von der Datenbank bleibt wurde zum Speichern der Daten eine Technik namens „JSON-P“ ausgewählt. Hiermit ist es möglich Daten von einem Server zu laden, der sich nicht auf der gleichen Domain befindet. Das ist mit aktuellem Javascript normalerweise nicht möglich.\\
+Zum Laden der Punktestände wird eine PHP-Datei dynamisch wie folgt als Script in die HTML-Seite eingebunden:\\
+
+\begin{lstlisting}
+<script
+ src="http://DB_SERVER/getscore.php">
+</script>
+\end{lstlisting}
+Die Datei sieht dabei zum Beispiel wie folgt aus:
+
+\newblock
+\begin{lstlisting}
+getResults('{
+    "Haus vom Nikolaus": [
+        {
+            "name": "Wohoow",
+            "score": "3.71269",
+            "points": "[[7.34, 3.71], ...]"
+        }, {
+            "name": "Gut?",
+            "score": "3.63707",
+            "points": "[[0.18, 1.12], ...]"
+        }, {
+            "name": "mhh",
+            "score": "2.58643",
+            "points": "[[0,0], [11.64, 2.69], ...]"
+        }');
+    ]
+}
+\end{lstlisting}
+\newblock
+Durch das Einbinden der Datei als Script-Block wird der Inhalt danach vom Browser ausgeführt. Hier wird dann die Funktion „getResults“ mit den Daten aufgerufen. Diese befindet sich bereits von Beginn an in der Seite und kann somit die Daten entgegennehmen und verarbeiten.\\
+Zum Speichern der Daten wird auf die gleiche Weise die folgende URL eingebunden:\\
+
+\begin{lstlisting}
+<script
+ src="http://DB_SERVER/setscore.php?
+   levname=Test&
+   name=Name&
+   score=0.02204&
+   points=[[4,6],[12,4], ...]">
+</script>
+\end{lstlisting}
+Der Server bekommt über die URL die Daten übergeben. Eine Rückantwort an die Anwendung wird hierbei nicht benötigt.\\
+Somit ist es möglich die Bestenliste unabhängig vom Speicherort anzuzeigen, solange eine Internetverbindung besteht.
+
 
 \section{Algorithmen}
 
