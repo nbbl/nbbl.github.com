@@ -77,7 +77,7 @@ js> 0.2-(0.3-0.1)
 2.7755575615628914e-17
 \end{lstlisting}
 , weicht also um die Gr\"o\ss enordung $10^{-16}$ von der, der Operanden ab.
-Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ zu setzen. (\textbf{(remove me) Warum?}).
+Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ (im folgenden auch Epsilon oder Epsilonumgebung - wenn die Differenz von zwei Werten betrachtet wird - genannt) zu setzen. (\textbf{(remove me) Warum?}).
 \subsection{Punkte und Vektoren}
 Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
 Attribute und verf\"ugen \"uber die grundlegenden Eigenschaften und Funktionalit\"aten, welche von ihnen zu erwarten sind
@@ -133,7 +133,7 @@ Die folgenden Funktionen sind Klassenfunktionen der Vektoren, vergleichbar mit s
 \end{description}
 Ohne in ihrer programmatischen Funktionalit\"at von den Vektoren abzuweichen, wurden Punkte eingef\"uhrt. Es stellte
 sich heraus, dass beide Strukturen ihre Notwendigkeit hatten (der Abstand zweier Punkte sollte
-als Vekor und 
+als Vektor und 
 nicht als Punkt ausgedr\"uckt werden, wohingegen ein Graph als Tupel von Verbindungskanten und Punkten, nicht Vektoren
 dargestellt wird).
 Aus diesem Grund wurden Punkte um die folgende Instanzmethode erweitert.
@@ -162,6 +162,7 @@ Attribute.
   
   \item{\lststyle{e.length()}}
     Liefert die L\"ange einer Kante zur\"uck.
+
   \item{\lststyle{e.getY(x)}}
     Liefert die  $y$-Koordinate einer Geraden an $x$-Koordinate \lststyle{x}. \textbf{in fancy?}
   \item{\lststyle{e.getLeft()}}
@@ -172,15 +173,18 @@ Attribute.
   \item{\lststyle{e.projectionToLine(pt)}}
     Liefert die Projektion eines Punktes \lststyle{pt} auf die Geraden durch \textbf{Alle Kanten benennen!}
   \item{\lststyle{e.projectionToEdge(pt)}}
-    Analog zu \lststyle{ProjectionToLine}, liefert jedoch \lststyle{null} sollte die Projektion nicht in \textbf{Alle
-    Kanten benennen!} liegen.
+    Analog zu \lststyle{ProjectionToLine}, liefert jedoch \lststyle{null} sollte die Projektion nicht in \textbf{Alle Kanten benennen!} liegen.
   \item{\lststyle{e.distanceToLine(pt)}}
-    Liefert den Abstand eines Punktes zu
-  \item{\lststyle{signedDistanceToLine(pt)}}
-  \item{\lststyle{lineContains(pt)}}
-  \item{\lststyle{contains(pt)}}
-  \item{\lststyle{lineIntersection(edge)}}
-  \item{\lststyle{edgeIntersection(egde)}}
+    Liefert den Abstand eines Punktes pt zu der Geraden die durch die Endpunkte von e verläuft.
+  \item{\lststyle{e.signedDistanceToLine(pt)}}
+    Wie die vorherige Funktion, allerdings wird die je nachdem ob sie auf der linken oder rechten Halbebene der Geraden liegt positiv bzw. negativ.
+  \item{\lststyle{e.lineContains(pt)}}
+    Gibt einen Boolean zurück, der angibt ob der Punkt auf der Geraden durch e liegt. Das ist der Fall, wenn der Punkt eine Entfernung zur Geraden hat, die kleiner Epsilon ist.
+  \item{\lststyle{e.contains(pt)}}
+    Wie die vorherige Funktion, allerdings wird hier auch überprüft ob der Punkt auf der Kante selbst liegt. Dies wird überprüft, indem die Distanzen des Punktes zu den Vertices der Kante ermittelt werden. Die Summe der Distanzen zu der Länge der Kante in einer Epsilonumgebung liegen. Somit wird also getestet ob der Punkt in einer Ellipse liegt, deren Brennpunkte die Vertices der Kante sind und deren Distanz von einem Scheitelpunkt zu dem nächsten Brennpunkt gleich Epsilon ist. Uns erschien diese Implementierung als einfachste Lösung, da keine Sonderfälle behandelt werden müssen und für \lststyle{e.contains(pt)} \lststyle{e.lineContains(pt)} nur minimal erweitert werden muss. In der Praxis kam es durch die geringe Größe der Epsilonumgebung auch nie zu Problemen die auf die ungleichmäßige Form der Ellipse zurückzuführen wären.
+  \item{\lststyle{e1.lineIntersection(e2)}}
+    Mit dieser Funktion werden die Schnittpunkte von zwei Geraden, die durch e1 und e2 verlaufen berechnet, falls diese existieren. Da bei werden die beiden Sonderfälle von identischen und parallelen Geraden als erstes behandelt. Hierzu wird zunächst überprüft ob die Normalen der Geraden linear abhängig sind, ist dies der Fall so sind sie mindestens parallel zueinander, haben beide Geraden zusätzlich den gleichen Abstand zum Ursprung (bzw. liegen die Abstände in einer Epsilonumgebung zueinander), so sind sie identisch. In diesen Fällen wird von der Funktion ein String zurückgegeben (\emph{``identical\_lines''} bzw. \emph{``parallel\_lines''}).
+  \item{\lststyle{e1.edgeIntersection(e2)}}
 \end{description}
 
 
