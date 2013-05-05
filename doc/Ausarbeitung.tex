@@ -155,6 +155,7 @@ Algorithmen müssen in einer Datei als Skript abgelegt sein, um mit \texttt{addA
 Die Methode \texttt{calculateAlgos()} iteriert über alle mit \texttt{addAlgo(..)} hinzugefügten Algorithmen und sendet eine Neuberechnungsaufforderung an diejenigen Webworker, die nicht schon neuberechnen und auch in der GUI vom Benutzer als sichtbar eingestellt wurden.
 
 \subsection{GUI}
+Die GUI ist die Brücke zwischen Controller und Benutzer. Sie nimmt Benutzereingaben entgegen und gibt Statusinformationen des Programms graphisch aus. Die Darstellung der Graphen wird durch Einbindung von JSXGraph verwirklicht. JSXGraph stellt Werkzeuge zur Anzeige, Modifikation und Verwaltung von graphischen Objekten zur Verfügung. Neben der Grafikanzeige übernimmt die GUI auch die Anzeige von Textinformationen (wie z.B. den Score) und von Optionsmenüs \textbf{gehört das wirklich zur GUI?}.
 
 \subsection{Speicherung der Bestwerte}
 In der Anwendung besteht die Möglichkeit einen erreichten Punktestand mit einem Formular in einer Bestenliste zu speichern. Dieser wird, wenn er zu den drei höchsten eines Levels gehört, danach in der Liste angezeigt. Zusätzlich wird zu einem Punktestand der Name des Benutzers angezeigt und es besteht die Möglichkeit, die Punkte auf die Positionen zu setzten, mit welchen der Punktestand erreicht wurde. Wie die hierfür benötigten Daten gespeichert und angezeigt werden soll nun genauer erläutert werden.\\
