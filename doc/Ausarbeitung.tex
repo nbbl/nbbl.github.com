@@ -51,7 +51,7 @@
   \rule{\textwidth}{1pt}
     \begin{abstract}
     \textbf{
-      Im Rahmen des Softwareprojekts „Anwendungen von Algorithmen“ haben wir uns damit beschäftigt eine browserbasierte Anwendung zu entwickeln, die es auf spielerische Weise ermöglicht Punkte in eine allgemeine Lage zu versetzen. Die allgemeine Lage versteht sich hierbei als eine Anordnung der Punkte, in welcher deren Positionierung zueinander möglichst keine Sonderfälle einnimmt. So entsprechen zum Beispiel Anordnungen, bei denen sich mehrere Punkte auf einer Linie oder einem Kreis befinden einem Sonderfall. Neben der Umsetzung dieser Kriterien haben wir uns vor allem mit einem Kriterium beschäftigt, welches die Höhe aller Punkte und Schnittpunkte zu den umliegenden Kanten beschreibt. So geht es in der Anwendung hauptsächlich darum, all diese Höhen möglichst groß zu gestallten. Zur Orientierung dient hierbei die kleinste vorkommende Höhe, die zusätzlich grafisch dargestellt wird.}
+      Im Rahmen des Softwareprojekts „Anwendungen von Algorithmen“ haben wir uns damit beschäftigt eine browserbasierte Anwendung zu entwickeln, die es auf spielerische Weise ermöglicht Punkte in eine allgemeine Lage zu versetzen. Die allgemeine Lage versteht sich hierbei als eine Anordnung der Punkte, in welcher deren Positionierung zueinander möglichst keine Sonderfälle einnimmt. So entsprechen zum Beispiel Anordnungen, bei denen sich mehrere Punkte auf einer Linie oder einem Kreis befinden einem Sonderfall. Neben der Umsetzung dieser Kriterien haben wir uns vor allem mit einem Kriterium beschäftigt, welches die Höhe aller Punkte und Schnittpunkte zu den umliegenden Kanten beschreibt. So geht es in der Anwendung hauptsächlich darum, all diese Höhen möglichst groß zu gestalten. Zur Orientierung dient hierbei die kleinste vorkommende Höhe, die zusätzlich grafisch dargestellt wird.}
     \end{abstract}
   \end{@twocolumnfalse}
 ]
@@ -82,18 +82,71 @@ Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ zu setze
 Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
 Attribute und verf\"ugen \"uber die grundlegenden Eigenschaften und Funktionalit\"aten, welche von ihnen zu erwarten sind
 (Vektoraddition/-subtraktion,
-Multiplikation mit einem Skalar, Skalarmultiplikation, etc.). \textbf{(remove me) explizit dokumentieren}\\
+Multiplikation mit einem Skalar, Skalarmultiplikation, etc.).
+\subsubsection{Funktionen}
+Die folgenden Methoden sind Instanzfunktionen eines Vektors, vergleichbar mit Objektmethoden in Java.
+\begin{description}[font=\normalfont]
+  \item{\lststyle{clone()}}
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
+  \item{\lststyle{abs()}} 
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
+  \item{\lststyle{inv()}}
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)} 
+  \item{\lststyle{v1.add(v2)}} 
+    Addiert die Vektoren v1 und v2.
+  \item{\lststyle{v1.degreesTo(v2)}} 
+    Berechnet den Winkel zwischen den Vektoren v1 und v2.
+  \item{\lststyle{v1.distance(v2)}} 
+    Berechnet die euklidische Distanz zwischen v1 und v2 (als Ortsvektoren). 
+  \item{\lststyle{v1.equals(v2)}} 
+    Betragsweiser Vergleich der Vektoren, wobei diese nicht exakt übereinstimmen
+    müssen sondern in Epsilonumgebung zueinander liegen müssen. 
+  \item{\lststyle{interpolate(v,f)}} 
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
+  \item{\lststyle{v.length()}}
+    euklidische Norm des Vektors.
+  \item{\lststyle{normalize(thickness)}}
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
+  \item{\lststyle{orbit(ORIGIN,arcWidth,arcHeight,degrees}}
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)} 
+  \item{\lststyle{v.moveTo(coordX,coordY)}}
+    Ändert die Koordinaten des Vektors in die übergebenen ab.
+  \item{\lststyle{offset(dx,dy)}} 
+        \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
+  \item{\lststyle{substract(v)}} 
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
+  \item{\lststyle{v.toString()}} 
+    Erzeugt einen String, z.B.: \lststyle{(x=1, y=1)}.
+\end{description}
+Die folgenden Funktionen sind Klassenfunktionen der Vektoren, vergleichbar mit statischen Methoden in Java.
+\begin{description}[font=\normalfont]
+  \item{\lststyle{interpolate(pt1,pt2,f)}} 
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
+  \item{\lststyle{polar(len,angle)}} 
+    \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)} 
+  \item{\lststyle{skalarMult(s,v)}}
+    Erzeugt aus v einen neuen Vektor, indem dessen Einträge mit s multipliziert werden.
+  \item{\lststyle{skalarProd(v1,v2)}} 
+    Das Standardskalarprodukt der beiden Vektoren.
+  \item{\lststyle{cast(p)}}  
+    Konvertiert einen Vektor zu einem Punkt.
+\end{description}
 Ohne in ihrer programmatischen Funktionalit\"at von den Vektoren abzuweichen, wurden Punkte eingef\"uhrt. Es stellte
 sich heraus, dass beide Strukturen ihre Notwendigkeit hatten (der Abstand zweier Punkte sollte
 als Vekor und 
 nicht als Punkt ausgedr\"uckt werden, wohingegen ein Graph als Tupel von Verbindungskanten und Punkten, nicht Vektoren
 dargestellt wird).
+Aus diesem Grund wurden Punkte um die folgende Instanzmethode erweitert.
+\begin{description}[font=\normalfont]
+  \item{\lststyle{pt1.isAdjacentTo(pt2)}}
+    Iteriert durch die inzidenten Kanten von pt1 und überprüft durch \lststyle{getAdjacent}    (siehe Kantenfunktionen {\bf steht da noch nicht!}) ob pt2 in einer von diesen adjazent zu pt1 ist.   
+\end{description}
 \textbf{(remove me) Was gibts noch zu sagen?}
 \subsection{Kanten}
 Die \lststyle{Edge} Datenstruktur repr\"asentiert eine  Strecke in einem kartesischen Koordinatensystem, als auch eine
 Kante in einem Graph. Wir w\"ahlten aufgrund ihrer arithmetischen Vorz\"uge die Geradendarstellung in \emph{Hessescher
-Normalform}. In ihr wird eine Gerade $g$ dargeschtellt durch ihren \emph{Normaleneinheitsvektor} $\widehat{n}$, sowie
-durch ihren Abstand zum Koordinatenursprung. Jeder Punkt $p=(x,y)$ auf der Geraden erf\"ullt somit die Gelichung: 
+Normalform}. In ihr wird eine Gerade $g$ dargestellt durch ihren \emph{Normaleneinheitsvektor} $\widehat{n}$, sowie
+durch ihren Abstand zum Koordinatenursprung. Jeder Punkt $p=(x,y)$ auf der Geraden erf\"ullt somit die Gleichung: 
 \begin{align}
   \widehat{n}\vec{p}-d=0  
 \end{align}
@@ -101,25 +154,27 @@ durch ihren Abstand zum Koordinatenursprung. Jeder Punkt $p=(x,y)$ auf der Gerad
 Zus\"atzlich zu $\widehat{n}$ und $d$ speichert die \lststyle{Edge} Datenstruktur noch ihre zwei Endpunkte als
 Attribute.
 \subsubsection{Funktionen}
+\lststyle{Edge} besitzt die folgenden Instanzfunktionen.
 \begin{description}[font=\normalfont]
-  \item{\lststyle{reload()}} 
+  \item{\lststyle{e.reload()}} 
     Aktualisiert f\"ur eine Kante ihren Normaleneinheitsvektor, sowie ihren Abstand zum Koordinatenursprung. Wird z.B.
     nach Verschieben eines Endpunktes aufgerufen.
-  \item{\lststyle{length()}}
+  
+  \item{\lststyle{e.length()}}
     Liefert die L\"ange einer Kante zur\"uck.
-  \item{\lststyle{getY(x)}}
-    Lifert die  $y$-Koordinate einer Geraden an $x$-Koordinate \lststyle{x}. \textbf{in fancy?}
-  \item{\lststyle{getLeft()}}
+  \item{\lststyle{e.getY(x)}}
+    Liefert die  $y$-Koordinate einer Geraden an $x$-Koordinate \lststyle{x}. \textbf{in fancy?}
+  \item{\lststyle{e.getLeft()}}
     Liefert den Endpunkt einer Kante mit geringerer $x$-Koordinate. (Haben beide Endpunkte die selbe $x$-Koordinate so
-    liefert \lststyle{getLeft()} einen anderen Punkt zur\"uck als \lststyle{getRight()}).  
-  \item{\lststyle{getRight()}}
+    liefert \lststyle{e.getLeft()} einen anderen Punkt zur\"uck als \lststyle{e.getRight()}).  
+  \item{\lststyle{e.getRight()}}
     Analog zu oben.
-  \item{\lststyle{projectionToLine(pt)}}
+  \item{\lststyle{e.projectionToLine(pt)}}
     Liefert die Projektion eines Punktes \lststyle{pt} auf die Geraden durch \textbf{Alle Kanten benennen!}
-  \item{\lststyle{projectionToEdge(pt)}}
-    Analog zu \lststyle{ProjectionToLine}, leifert jedoch \lststyle{null} sollte die Projektion nicht in \textbf{Alle
+  \item{\lststyle{e.projectionToEdge(pt)}}
+    Analog zu \lststyle{ProjectionToLine}, liefert jedoch \lststyle{null} sollte die Projektion nicht in \textbf{Alle
     Kanten benennen!} liegen.
-  \item{\lststyle{distanceToLine(pt)}}
+  \item{\lststyle{e.distanceToLine(pt)}}
     Liefert den Abstand eines Punktes zu
   \item{\lststyle{signedDistanceToLine(pt)}}
   \item{\lststyle{lineContains(pt)}}
