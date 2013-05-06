@@ -39,5 +39,6 @@ alc.addAlgo('CollinearityTest', 'js/alglage/algos/CollinearityTest.js');
 alc.addAlgo('ShortestDistPoint-Point', 'js/alglage/algos/ShortestDistance_BF.js');
 //alc.addAlgo('SmallestAngle_BF', 'js/alglage/algos/SmallestAngle_BF.js'); //TO DO ?
 
+if(window.location.hash.indexOf('Custom') !== -1) { window.location.href = window.location.href.split('#')[0]; } // remove hash if custom level not existent
 var levn = window.location.hash.substring(1) || 'Test';
 alc.loadLevel(levn);
