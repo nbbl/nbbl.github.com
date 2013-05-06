@@ -26,11 +26,11 @@ var graph_t = new Graph(edges_t);
 
 // Haus vom Nikolaus
 var points_hvn = [
-    new Point(7, 0.5),
-    new Point(7, 6.5),
-    new Point(13, 0.5),
-    new Point(13, 6.5),
-    new Point(10, 9.5)];
+    new Point(4.5, 0.5),
+    new Point(4.5, 6.5),
+    new Point(10.5, 0.5),
+    new Point(10.5, 6.5),
+    new Point(7.5, 9.5)];
 
 var edges_hvn = [
     new Edge(points_hvn[0], points_hvn[1]),
