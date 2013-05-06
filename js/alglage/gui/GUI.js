@@ -298,32 +298,18 @@ var GUI = function(settings) {
                         this.point1.moveTo([this.point1.X(),this.point1.Y()-tmp]);
                     }
                 });
-
-                /*
-                // Kanten werden gestaucht, wenn sie den Rand beruehren
-                line.on('drag', function() {
-                    if(this.point1.X() < 0) this.point1.moveTo([0,this.point1.Y()]);
-                    if(this.point2.X() < 0) this.point2.moveTo([0,this.point2.Y()]);
-                    if(this.point1.Y() < 0) this.point1.moveTo([this.point1.X(),0]);
-                    if(this.point2.Y() < 0) this.point2.moveTo([this.point2.X(),0]);
-                    if(this.point1.X() > settings.maxX) this.point1.moveTo([settings.maxX,this.point1.Y()]);
-                    if(this.point2.X() > settings.maxX) this.point2.moveTo([settings.maxX,this.point2.Y()]);
-                    if(this.point1.Y() > settings.maxY) this.point1.moveTo([this.point1.X(),settings.maxY]);
-                    if(this.point2.Y() > settings.maxY) this.point2.moveTo([this.point2.X(),settings.maxY]);
-                });
-                */
             }
         }
     }
 
     function overdraw(obj, algoName, color) {
-        eraseAnnotations();
+        eraseAnnotations(algoName);
         draw(obj, algoName, color);
     }
 
 
-    // mit draw() k�nnen unabh�ngig vom Graphen Annotations gezeichnet werden
-    // durch die Angabe von algoName werden die in obj �bergebenen Annotations
+    // mit draw() können unabhängig vom Graphen Annotations gezeichnet werden
+    // durch die Angabe von algoName werden die in obj übergebenen Annotations
     // eine eigene Lage gezeichnet
     function draw(obj, algoName, color) {
         if(obj === undefined) return false;
