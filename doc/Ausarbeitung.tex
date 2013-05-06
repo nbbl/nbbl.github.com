@@ -77,7 +77,7 @@ js> 0.2-(0.3-0.1)
 2.7755575615628914e-17
 \end{lstlisting}
 , weicht also um die Gr\"o\ss enordung $10^{-16}$ von der, der Operanden ab.
-Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ (im folgenden auch Epsilon oder Epsilonumgebung - wenn die Differenz von zwei Werten betrachtet wird - genannt) zu setzen. (\textbf{(remove me) Warum?}).
+Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ (im folgenden auch Epsilon oder Epsilonumgebung ~-- wenn die Differenz von zwei Werten betrachtet wird ~-- genannt) zu setzen. (\textbf{(remove me) Warum?}).
 \subsection{Punkte und Vektoren}
 Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
 Attribute und verf\"ugen \"uber die grundlegenden Eigenschaften und Funktionalit\"aten, welche von ihnen zu erwarten sind
@@ -93,18 +93,18 @@ Die folgenden Methoden sind Instanzfunktionen eines Vektors, vergleichbar mit Ob
   \item{\lststyle{inv()}}
     \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)} 
   \item{\lststyle{v1.add(v2)}} 
-    Addiert die Vektoren v1 und v2.
+    Addiert die Vektoren \lststyle{v1} und \lststyle{v2}.
   \item{\lststyle{v1.degreesTo(v2)}} 
-    Berechnet den Winkel zwischen den Vektoren v1 und v2.
+    Berechnet den Winkel zwischen den Vektoren \lststyle{v1} und \lststyle{v2}.
   \item{\lststyle{v1.distance(v2)}} 
-    Berechnet die euklidische Distanz zwischen v1 und v2 (als Ortsvektoren). 
+    Berechnet die euklidische Distanz zwischen \lststyle{v1} und \lststyle{v2} (als Ortsvektoren). 
   \item{\lststyle{v1.equals(v2)}} 
     Betragsweiser Vergleich der Vektoren, wobei diese nicht exakt übereinstimmen
     müssen sondern in Epsilonumgebung zueinander liegen müssen. 
   \item{\lststyle{interpolate(v,f)}} 
     \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
   \item{\lststyle{v.length()}}
-    euklidische Norm des Vektors.
+    euklidische Norm des Vektors \lststyle{v}.
   \item{\lststyle{normalize(thickness)}}
     \textbf{(Haben wir anscheinend nie benutzt, falls doch hier ergänzen)}
   \item{\lststyle{orbit(ORIGIN,arcWidth,arcHeight,degrees}}
@@ -139,7 +139,7 @@ dargestellt wird).
 Aus diesem Grund wurden Punkte um die folgende Instanzmethode erweitert.
 \begin{description}[font=\normalfont]
   \item{\lststyle{pt1.isAdjacentTo(pt2)}}
-    Iteriert durch die inzidenten Kanten von pt1 und überprüft durch \lststyle{getAdjacent}    (siehe Kantenfunktionen {\bf steht da noch nicht!}) ob pt2 in einer von diesen adjazent zu pt1 ist.   
+    Iteriert durch die inzidenten Kanten von pt1 und überprüft durch \lststyle{getAdjacent}    (siehe Kantenfunktionen) ob pt2 in einer von diesen adjazent zu pt1 ist.   
 \end{description}
 \textbf{(remove me) Was gibts noch zu sagen?}
 \subsection{Kanten}
@@ -170,12 +170,15 @@ Attribute.
     liefert \lststyle{e.getLeft()} einen anderen Punkt zur\"uck als \lststyle{e.getRight()}).  
   \item{\lststyle{e.getRight()}}
     Analog zu oben.
+  \item{\lststyle{e.getAdjacent(pt)}}
+    Falls \lststyle{pt} in \lststyle{e} enthalten ist wird der zu zweite Knoten von \lststyle{e} ausgegeben, ansonsten \lststyle{false}.
+
   \item{\lststyle{e.projectionToLine(pt)}}
-    Liefert die Projektion eines Punktes \lststyle{pt} auf die Geraden durch \textbf{Alle Kanten benennen!}
+    Liefert die Projektion eines Punktes \lststyle{pt} auf die Geraden durch die Knoten von \lststyle{e}.
   \item{\lststyle{e.projectionToEdge(pt)}}
-    Analog zu \lststyle{ProjectionToLine}, liefert jedoch \lststyle{null} sollte die Projektion nicht in \textbf{Alle Kanten benennen!} liegen.
+    Analog zu \lststyle{ProjectionToLine}, liefert jedoch \lststyle{null} sollte die Projektion nicht in \lststyle{e} liegen.
   \item{\lststyle{e.distanceToLine(pt)}}
-    Liefert den Abstand eines Punktes pt zu der Geraden die durch die Endpunkte von e verläuft.
+    Liefert den Abstand eines Punktes \lststyle{pt} zu der Geraden die durch die Endpunkte von \lststyle{e} verläuft.
   \item{\lststyle{e.signedDistanceToLine(pt)}}
     Wie die vorherige Funktion, allerdings wird die je nachdem ob sie auf der linken oder rechten Halbebene der Geraden liegt positiv bzw. negativ.
   \item{\lststyle{e.lineContains(pt)}}
@@ -183,8 +186,9 @@ Attribute.
   \item{\lststyle{e.contains(pt)}}
     Wie die vorherige Funktion, allerdings wird hier auch überprüft ob der Punkt auf der Kante selbst liegt. Dies wird überprüft, indem die Distanzen des Punktes zu den Vertices der Kante ermittelt werden. Die Summe der Distanzen zu der Länge der Kante in einer Epsilonumgebung liegen. Somit wird also getestet ob der Punkt in einer Ellipse liegt, deren Brennpunkte die Vertices der Kante sind und deren Distanz von einem Scheitelpunkt zu dem nächsten Brennpunkt gleich Epsilon ist. Uns erschien diese Implementierung als einfachste Lösung, da keine Sonderfälle behandelt werden müssen und für \lststyle{e.contains(pt)} \lststyle{e.lineContains(pt)} nur minimal erweitert werden muss. In der Praxis kam es durch die geringe Größe der Epsilonumgebung auch nie zu Problemen die auf die ungleichmäßige Form der Ellipse zurückzuführen wären.
   \item{\lststyle{e1.lineIntersection(e2)}}
-    Mit dieser Funktion werden die Schnittpunkte von zwei Geraden, die durch e1 und e2 verlaufen berechnet, falls diese existieren. Da bei werden die beiden Sonderfälle von identischen und parallelen Geraden als erstes behandelt. Hierzu wird zunächst überprüft ob die Normalen der Geraden linear abhängig sind, ist dies der Fall so sind sie mindestens parallel zueinander, haben beide Geraden zusätzlich den gleichen Abstand zum Ursprung (bzw. liegen die Abstände in einer Epsilonumgebung zueinander), so sind sie identisch. In diesen Fällen wird von der Funktion ein String zurückgegeben (\emph{``identical\_lines''} bzw. \emph{``parallel\_lines''}).
+    Mit dieser Funktion werden die Schnittpunkte von zwei Geraden, die durch e1 und e2 verlaufen berechnet, falls diese existieren. Da bei werden die beiden Sonderfälle von identischen und parallelen Geraden als erstes behandelt. Hierzu wird zunächst überprüft ob die Normalen der Geraden linear abhängig sind, ist dies der Fall so sind sie mindestens parallel zueinander, haben beide Geraden zusätzlich den gleichen Abstand zum Ursprung (bzw. liegen die Abstände in einer Epsilonumgebung zueinander), so sind sie identisch. In diesen Fällen wird von der Funktion ein String zurückgegeben (\emph{``identical\_lines''} bzw. \emph{``parallel\_lines''}). Andernfalls ist die $y$-Koordinate des Schnitpunkts durch $y = \frac{d1 * n2_x - d2 * n1_x}{n1_y * n2_x - n1_x * n2_y}$ gegeben {\bf Herleiten und Vervollständigen}. 
   \item{\lststyle{e1.edgeIntersection(e2)}}
+    Wie die vorherige Funktion, zusätzlich wird überprüft ob die Kanten den Schnittpunkt auch enthalten, wenn ja wird er zurückgegeben, wenn nicht ist die Rückgabe \lststyle{null}.
 \end{description}
 
 
@@ -268,9 +272,10 @@ Somit ist es möglich die Bestenliste unabhängig vom Speicherort anzuzeigen, so
 
 \section{Algorithmen}
 
-\subsection{Algo 1}
-\subsection{Algo 2}
-
+\subsection{Test auf Kollinearität}
+Ein sehr simples und essentielles Kriterium zur Überprüfung der allgemeinen Lage von Punkten ist der Test auf Kollinearität. Im speziellen ist hiermit der Fall von 3 oder mehr Punkten auf einer Geraden gemeint. Leider konnten wir dieses Problem von algorithmischer Seite nicht über eine Brute Force Lösung hinaus verbessern, wir vermuten allerdings, dass sich die Lösung bis auf hilfreiche Heuristiken und Verbesserungen der Implementierung auch nur schwer verbessern liesse. So müssen alle 3-Untermengen der Punktmenge gesondert auf Kollinearität überprüft werden, die dafür im wesentlichen benötigte Funktion ist \lststyle{e.contains(pt)} (siehe Kantenfunktionen). Um Ungenauigkeiten zu vermeiden wurde \lststyle{e} aus den beiden am weitesten auseinander liegenden Punkten generiert, \lststyle{pt} ist somit der dritte Punkt.  
+\subsection{Berechnung der Schnittpunkte}
+Ein wichtiger Algorithmus ist der zur Bestimmung von Schnittpunkten von Kanten, da unser primärer Algorithmus zur Bewertung der Punktlage ~-- der Algorithmus zur Bestimmung der kürzesten Distanz von einem Punkt zu einer Kante ~-- auf diesen fusst.  
 \subsection{Punkte befinden sich auf Kreis}
 Ein weiteres Kriterium für die Bewertung der allgemeinen Lage von Punkten, welches im Rahmen dieses Projekts umgesetzt wurde, besteht darin zu berechnen, ob mehr als drei Punkte auf einem Kreis liegen. Da drei Punkte immer auf einem Kreis liegen ist hierdurch noch keine Besonderheit gegeben, was die Lage der Punkte im Koordinatensystem anbelangt. Da mehr als drei Punkte jedoch nicht immer zwingend auf einem Kreis liegen müssen, kann eine solche Anordnung so als Sonderfall betrachtet werden, die einer allgemeinen Lage der Punkte wiederspricht.\\
 Um dieses Kriterium zu betrachten wurde kein mathematischer Ansatz gewählt, der auf der Berechnung von Kreisgleichungen basiert, sondern eher ein grafischer. Dieser soll im Folgenden genauer erläutert werden.\\
