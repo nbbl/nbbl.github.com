@@ -120,7 +120,10 @@ var AlgLageController = function(gui) {
     
     function showHighscore() {
         var h = highscore[currLevname];
-        if(h === undefined) return false;
+        if(h === undefined) {
+            gui.clearHighscore();
+            return false;
+        }
         
         gui.showHighscore(h)
     }
