@@ -303,7 +303,7 @@ var GUI = function(settings) {
     }
 
     function overdraw(obj, algoName, color) {
-        eraseAnnotations();
+        eraseAnnotations(algoName);
         draw(obj, algoName, color);
     }
 
