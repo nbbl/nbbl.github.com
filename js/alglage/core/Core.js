@@ -248,21 +248,6 @@ Edge.prototype.contains = function(pt){ //enthält die Kante den Punkt?
 	approx(this.getLeft().distance(pt) + this.getRight().distance(pt), this.length());
 };
 
-/*
- * Veraltete Version
- */
-//Edge.prototype.lineIntersection = function(edge){ //der Schnittpunkt der beiden Geraden. (Lösung des LGS der HNFs)
-//    if (this.normal.equals(edge.normal) || this.normal.equals(Vector.skalarMult(-1,edge.normal))) {
-//        if (approx(this.dist,edge.dist)) return "identical_lines";
-//        return "parallel_lines"; 
-//    }
-//    var y = (this.normal.x * edge.dist     - edge.normal.x * this.dist) / 
-//        (this.normal.x * edge.normal.y - this.normal.y * edge.normal.x);
-//    var x = (this.dist - this.normal.y * y) / this.normal.x;
-//    if (!isFinite(x) || !isFinite(y)) return null; 
-//    return new Point(x,y);
-//}; 
-
 //zuverlaessigere Version
 Edge.prototype.lineIntersection = function(edge) {
     if (this.normal.equals(edge.normal) || this.normal.equals(Vector.skalarMult(-1, edge.normal))) {
@@ -299,11 +284,6 @@ function Graph(edges) {
 
 };
 
-// Graph.prototype.addPoint = function(point) {
-//     point.incidentEdges = [];
-//     this.points.push(point);
-// };
-
 Graph.prototype.addEdge = function(edge) {
     var ind1 = null;
     var ind2 = null;
@@ -322,26 +302,6 @@ Graph.prototype.addEdge = function(edge) {
     }    
     this.edges.push(edge)
 };
-
-// Graph.prototype.addEdge = function(edge) {
-//     // checken, ob die punkte der kante bereits im graph vorhanden sind
-//     var ind1 = this.points.indexOf(edge.pt1);
-//     var ind2 = this.points.indexOf(edge.pt2);
-
-//     // noch nicht vorhandene werden hinzugefügt
-//     if(ind1 == -1) {
-//         this.addPoint(pt1);
-//     }
-//     if(ind2 == -1) {
-//         this.addPoint(pt2);
-//     }
-    
-//     // den Punkten die Inzidenz hinzufügen
-//     edge.pt1.incidentEdges.push(edge);
-//     edge.pt2.incidentEdges.push(edge);
-
-//     this.edges.push(edge);
-// };
 
 Graph.prototype.toString = function() {
     var ret = "{\n    \"points\" : [";
@@ -391,11 +351,6 @@ function Angle(points) {
     this.degrees = Angle.getDegrees(this.a,this.b,this.c);
 };
 
-// Angle.getDegrees = function(pointA, pointB, pointC) {
-//     var AminusB = new Vector( pointB.inv().add(pointA) );
-//     var CminusB = new Vector( pointB.inv().add(pointC) );
-//     return AminusB.degreesTo(CminusB);
-// };
 
 Angle.getDegrees = function(a, b, c) {
     return a.substract(b).degreesTo(c.substract(b));
