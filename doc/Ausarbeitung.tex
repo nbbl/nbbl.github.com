@@ -227,7 +227,6 @@ Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph
 Hier werden die wichtigsten Methoden der GUI dokumentiert.
 
 \begin{description}[font=\normalfont]
-
     \item{\lststyle{initGraph(graph)}} 
     Zum Hinzufügen der Referenz auf den Graph des Controllers. Darüberhinaus wird hierüber der Bestwert initialisiert und der Graph gezeichnet.
     \item{\lststyle{getPoints()}} 
@@ -238,6 +237,7 @@ Hier werden die wichtigsten Methoden der GUI dokumentiert.
     Die Punkte und Kanten des \texttt{graph} werden dem JSXBoard hinzugefügt. Referenzen auf die Objekte liegen in \texttt{boardPoints} und \texttt{boardEdges}. Bei jedem Aufruf von \texttt{\_drawGraph()} werden die bisher in diesen Arrays enthaltenen Objekte vom \texttt{board} gelöscht und neu erstellt. Das Aufrufen dieser Methode ist nur einmal nach dem Initalisieren des Graphens notwendig, um die weitere Anzeige kümmert sich das JSXGraph Framework. Jedem graphischen Objekt wird ein Eventhandler hinzugefügt, der mit einem Timer verknüpft, bei Mausklicks das Event \texttt{'points-change'} in der Frequenz des Timers feuert. Hier geschieht auch die Bereichsabfrage, die das Verschieben der Punkte und Strecken auf einen bestimmten Rahmen (den Bereich des Rechtecks zwischen (0,0) und (\texttt{settings.maxX}, \texttt{settings.maxY}) ) einschränkt.
     Der Eventhandler der Kanten führt zusätzlich ein \texttt{Edge.reload()} auf der verschobenen Kante und allen inzidenten Kanten aus.
     \item{\lststyle{overdraw(object, algoName, color)}} 
+    Dasselbe wie \texttt{draw(...)} nur mit einem vorherigen Löschen aller Annotationen des jeweiligen Algorithmus.
     \item{\lststyle{draw(object, algoName, color)}} 
     \item{\lststyle{eraseAllAnnotations()}} 
     \item{\lststyle{eraseAnnotations(algoName)}} 
