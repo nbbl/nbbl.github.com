@@ -201,11 +201,10 @@ Die Methode \texttt{calculateAlgos()} iteriert über alle mit \texttt{addAlgo(..
 \subsubsection{Aufbau}
 Die GUI ist die Brücke zwischen Controller und Benutzer. Sie nimmt Benutzereingaben entgegen und gibt Statusinformationen des Programms graphisch aus. Die Darstellung der Graphen wird durch Einbindung von JSXGraph verwirklicht. JSXGraph stellt Werkzeuge zur Anzeige, Modifikation und Verwaltung von graphischen Objekten zur Verfügung. Neben der Grafikanzeige übernimmt die GUI auch die Anzeige von Textinformationen (wie z.B. den Score) und von Optionsmenüs (die Menüs selbst werden von Bootstrap erzeugt).
 Die GUI erhält über \texttt{initGraph(graph)} eine Referenz auf den Graphen des Controllers.
-Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph. Beim Initialisieren eines neuen Graphen wird \texttt{\_drawGraph(graph)} aufgerufen, welches die Punkte aus dem Graph Objekt liest und das \texttt{board} (also den JSXGraph Anzeigebereich) mit den entsprechenden graphischen Objekten füllt. Dabei werden an die erzeugten Objekte Eventhandler angebracht, die beim Eintreten einer Benuztereingabe (also dem Klicken und Verziehen von Objekten) an den Controller mit \texttt{\$publish('points-change')} signalisieren, dass sich der Zustand des Graphen verändert hat. Dieser wird daraufhin mit der Methode \texttt{getPoints()} der GUI die aktuellen Koordinaten abfragen und sie an die Webworker weiterleiten.
+Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph. Beim Initialisieren eines neuen Graphen wird \texttt{\_drawGraph(graph)} aufgerufen, welches die Punkte aus dem Graph Objekt liest und das \texttt{board} (also den JSXGraph Anzeigebereich) mit den entsprechenden graphischen Objekten füllt. Dabei werden an die erzeugten Objekte Eventhandler angebracht, die beim Eintreten einer Benuztereingabe (also dem Klicken und Verziehen von Objekten) an den Controller mit \texttt{\$.publish('points-change')} signalisieren, dass sich der Zustand des Graphen verändert hat. Dieser wird daraufhin mit der Methode \texttt{getPoints()} der GUI die aktuellen Koordinaten abfragen und sie an die Webworker weiterleiten.
 
 \subsubsection{Methoden}
 Hier werden die wichtigsten Methoden der GUI dokumentiert.
-
 \begin{description}[font=\normalfont]
     \item{\lststyle{initGraph(graph)}} 
     Zum Hinzufügen der Referenz auf den Graph des Controllers. Darüberhinaus wird hierüber der Bestwert initialisiert und der Graph gezeichnet.
@@ -234,9 +233,7 @@ Hier werden die wichtigsten Methoden der GUI dokumentiert.
     \item{\lststyle{getGraph()}} 
     \item{\lststyle{isActive(algoName)}} 
     \item{\lststyle{checkTmpBestval(val)}} 
-
 \end{description}
-
 \subsection{Speicherung der Bestwerte}
 In der Anwendung besteht die Möglichkeit einen erreichten Punktestand mit einem Formular in einer Bestenliste zu speichern. Dieser wird, wenn er zu den drei höchsten eines Levels gehört, danach in der Liste angezeigt. Zusätzlich wird zu einem Punktestand der Name des Benutzers angezeigt und es besteht die Möglichkeit, die Punkte auf die Positionen zu setzten, mit welchen der Punktestand erreicht wurde. Wie die hierfür benötigten Daten gespeichert und angezeigt werden soll nun genauer erläutert werden.\\
 Um die Speicherung der Daten kümmert sich eine Datenbank, welche hierfür mit einer Tabelle versehen wurde. Diese enthält die Spalten „hid“, „levname“, „name“, „score“ und „points“. Hierbei ist „hid“ ein eindeutiger Schlüssel eines jeden Eintrags, „levname“ gibt an zu welchem Level ein Eintrag gehört, „name“ beinhaltet den Namen des Benutzers, „score“ entspricht dem erreichten Punktestand und in „points“ werden die Positionen der Punkte in einem String gespeichert. Da beim Anzeigen der Punktpositionen eines Bestwertes der Graph bereits geladen ist und sich die Reihenfolge der Punkte niemals ändert, genügt es nur die Positionen der jeweiligen Punkte zu speichern. Beim Klick auf den Pfeil werden dann die Punkte im Graph auf die gespeicherten Positionen verschoben.\\
