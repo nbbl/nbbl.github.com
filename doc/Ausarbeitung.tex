@@ -13,7 +13,7 @@
     \definecolor{lightgray}{gray}{.95}
 \usepackage{listings}
     \lstset{
-    %basicstyle=\usefont{T1}{pcr}{m}{n}\small, 
+    basicstyle=\usefont{T1}{pcr}{m}{n}\small, 
     %basicstlye=\small,
     numbers=none,
     numberstyle=\tiny,
@@ -171,7 +171,17 @@ Attribute.
     Wie die vorherige Funktion, zusätzlich wird überprüft ob die Kanten den Schnittpunkt auch enthalten, wenn ja wird er zurückgegeben, wenn nicht ist die Rückgabe \lststyle{null}.
 \end{description}
 
-
+\subsection{Annotations}
+Die Ergebnisse der Algorithmen können neben numerischen Werten und Text auch graphische Elemente enthalten. Diese Ergebnisse müssen die Form eines definierten Annotations Objektes haben und werden aus den Ergebnissen der Algorithmen vom Controller an die GUI durchgereicht. Ein solches Objekt muss folgende Form haben:
+\begin{lstlisting}
+var obj = {
+    points: Points-Array,
+    lines: Edge-Array,
+    lineSegments: Edge-Array,
+    circles: Circle-Array,
+    angles: Angle-Array,
+};
+\end{lstlisting}
 
 \section{Aufbau / Architektur}
 Die grundsätzliche Architektur dieser Anwendung ist recht simpel aufgebaut. Es gibt drei Klassen von Akteuren: \emph{Webworker}, den zentralen \emph{Controller} und die \emph{GUI}, die grafische Benutzerschnittstelle.
@@ -201,42 +211,42 @@ Die Methode \texttt{calculateAlgos()} iteriert über alle mit \texttt{addAlgo(..
 \subsubsection{Aufbau}
 Die GUI ist die Brücke zwischen Controller und Benutzer. Sie nimmt Benutzereingaben entgegen und gibt Statusinformationen des Programms graphisch aus. Die Darstellung der Graphen wird durch Einbindung von JSXGraph verwirklicht. JSXGraph stellt Werkzeuge zur Anzeige, Modifikation und Verwaltung von graphischen Objekten zur Verfügung. Neben der Grafikanzeige übernimmt die GUI auch die Anzeige von Textinformationen (wie z.B. den Score) und von Optionsmenüs (die Menüs selbst werden von Bootstrap erzeugt).
 Die GUI erhält über \texttt{initGraph(graph)} eine Referenz auf den Graphen des Controllers.
-Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph. Beim Initialisieren eines neuen Graphen wird \texttt{\_drawGraph(graph)} aufgerufen, welches die Punkte aus dem Graph Objekt liest und das \texttt{board} (also den JSXGraph Anzeigebereich) mit den entsprechenden graphischen Objekten füllt. Dabei werden an die erzeugten Objekte Eventhandler angebracht, die beim Eintreten einer Benuztereingabe (also dem Klicken und Verziehen von Objekten) an den Controller mit \texttt{\$publish('points-change')} signalisieren, dass sich der Zustand des Graphen verändert hat. Dieser wird daraufhin mit der Methode \texttt{getPoints()} der GUI die aktuellen Koordinaten abfragen und sie an die Webworker weiterleiten.
+Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph. Beim Initialisieren eines neuen Graphen wird \texttt{\_drawGraph(graph)} aufgerufen, welches die Punkte aus dem Graph Objekt liest und das \texttt{board} (also den JSXGraph Anzeigebereich) mit den entsprechenden graphischen Objekten füllt. Dabei werden an die erzeugten Objekte Eventhandler angebracht, die beim Eintreten einer Benuztereingabe (also dem Klicken und Verziehen von Objekten) an den Controller mit \texttt{\$.publish('points-change')} signalisieren, dass sich der Zustand des Graphen verändert hat. Dieser wird daraufhin mit der Methode \texttt{getPoints()} der GUI die aktuellen Koordinaten abfragen und sie an die Webworker weiterleiten.
 
 \subsubsection{Methoden}
 Hier werden die wichtigsten Methoden der GUI dokumentiert.
-
-\begin{description}[font=\normalfont]
-    \item{\lststyle{initGraph(graph)}} 
+%\begin{description}[font=\normalfont]
+    \subparagraph{\texttt{initGraph(graph)}} 
     Zum Hinzufügen der Referenz auf den Graph des Controllers. Darüberhinaus wird hierüber der Bestwert initialisiert und der Graph gezeichnet.
-    \item{\lststyle{getPoints()}} 
+    \subparagraph{\texttt{getPoints()}} 
     Simpler getter für die Punkte des Graphen.
-    \item{\lststyle{setPoints(points)}} 
+    \subparagraph{\texttt{setPoints(points)}} 
     Hiermit werden die Punkte eines bereits initialisierten Graphen entsprechend der übergebenen Punktkoordinaten neu angeordnet. Die Struktur (also die Kanten) des Graphen bleibt bestehen.
-    \item{\lststyle{\_drawGraph()}} 
+    \subparagraph{\texttt{\_drawGraph()}} 
     Die Punkte und Kanten des \texttt{graph} werden dem JSXBoard hinzugefügt. Referenzen auf die Objekte liegen in \texttt{boardPoints} und \texttt{boardEdges}. Bei jedem Aufruf von \texttt{\_drawGraph()} werden die bisher in diesen Arrays enthaltenen Objekte vom \texttt{board} gelöscht und neu erstellt. Das Aufrufen dieser Methode ist nur einmal nach dem Initalisieren des Graphens notwendig, um die weitere Anzeige kümmert sich das JSXGraph Framework. Jedem graphischen Objekt wird ein Eventhandler hinzugefügt, der mit einem Timer verknüpft, bei Mausklicks das Event \texttt{'points-change'} in der Frequenz des Timers feuert. Hier geschieht auch die Bereichsabfrage, die das Verschieben der Punkte und Strecken auf einen bestimmten Rahmen (den Bereich des Rechtecks zwischen (0,0) und (\texttt{settings.maxX}, \texttt{settings.maxY}) ) einschränkt.
     Der Eventhandler der Kanten führt zusätzlich ein \texttt{Edge.reload()} auf der verschobenen Kante und allen inzidenten Kanten aus.
-    \item{\lststyle{overdraw(object, algoName, color)}} 
+    \subparagraph{\texttt{overdraw(object, algoName, color)}} 
     Dasselbe wie \texttt{draw(...)} nur mit einem vorherigen Löschen aller Annotationen des jeweiligen Algorithmus.
-    \item{\lststyle{draw(object, algoName, color)}} 
-    Zeichnet geometrische Objekte wie Punkte, Linien, Strecken, Kreise und Winkel eine eigene von \texttt{algoName} abhängige Lage. \texttt{object} muss dabei ein Annotations Objekt sein.
-    \item{\lststyle{eraseAllAnnotations()}} 
-    \item{\lststyle{eraseAnnotations(algoName)}} 
-    \item{\lststyle{initAlgoBox(algoName, color)}} 
-    \item{\lststyle{setAlgoBox(algoName)} 
-    \item{\lststyle{setAlgoBoxLoading(algoName)}} 
-    \item{\lststyle{refreshAlgoBox(algoName, score, info, annots, color}} 
-    \item{\lststyle{addLevelToNav(levelName)}} 
-    \item{\lststyle{changePageHeader(text)}} 
-    \item{\lststyle{showHighscore(data)}} 
-    \item{\lststyle{clearHighscore()}} 
-    \item{\lststyle{setHighscoreVisibility(visible)}} 
-    \item{\lststyle{showGraph()}} 
-    \item{\lststyle{getGraph()}} 
-    \item{\lststyle{isActive(algoName)}} 
-    \item{\lststyle{checkTmpBestval(val)}} 
-
-\end{description}
+    \subparagraph{\texttt{draw(object, algoName, color)}} 
+    Hiermit können unabhängig vom Graphen Annotations gezeichnet werden. Die Annotations werden in eine eigene, von \texttt{algoName} abhängige Lage gezeichnet. \texttt{obj} muss dabei ein Annotations Objekt sein.
+    \subparagraph{\texttt{eraseAllAnnotations()}} 
+    Jegliche Annotations aller Algorithmen werden entfernt.
+    \subparagraph{\texttt{eraseAnnotations(algoName)}} 
+    Nur die Annotations, die zuvor unter \texttt{algoName} gezeichnet wurden, werden gelöscht.
+    \subparagraph{\texttt{initAlgoBox(algoName, color)}} 
+    Mit dieser Methode fügt man dem Dokument eine neue Anzeigebox für den Algorithmus mit Namen \texttt{algoName} hinzu und speichert für ihn eine Farbe ab, in der die Annotations angezeigt werden.
+    \subparagraph{\texttt{setAlgoBox(algoName)}} 
+    \subparagraph{\texttt{setAlgoBoxLoading(algoName)}} 
+    \subparagraph{\texttt{refreshAlgoBox(algoName, score, info, annots, color)}} 
+    \subparagraph{\texttt{addLevelToNav(levelName)}} 
+    \subparagraph{\texttt{changePageHeader(text)}} 
+    \subparagraph{\texttt{showHighscore(data)}} 
+    \subparagraph{\texttt{clearHighscore()}} 
+    \subparagraph{\texttt{setHighscoreVisibility(visible)}} 
+    \subparagraph{\texttt{showGraph()}} 
+    \subparagraph{\texttt{getGraph()}} 
+    \subparagraph{\texttt{isActive(algoName)}} 
+    \subparagraph{\texttt{checkTmpBestval(val)}} 
 
 \subsection{Speicherung der Bestwerte}
 In der Anwendung besteht die Möglichkeit einen erreichten Punktestand mit einem Formular in einer Bestenliste zu speichern. Dieser wird, wenn er zu den drei höchsten eines Levels gehört, danach in der Liste angezeigt. Zusätzlich wird zu einem Punktestand der Name des Benutzers angezeigt und es besteht die Möglichkeit, die Punkte auf die Positionen zu setzten, mit welchen der Punktestand erreicht wurde. Wie die hierfür benötigten Daten gespeichert und angezeigt werden soll nun genauer erläutert werden.\\

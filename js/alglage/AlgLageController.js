@@ -33,7 +33,8 @@ var AlgLageController = function(gui) {
 	currLevname = name;
         if(levels[name] === undefined) return false;
         
-        if(name.indexOf('Custom') != -1) {
+        // if(name.indexOf('Custom') != -1) {
+        if(name.indexOf('Custom') != -1 || name.indexOf('Random') != -1) {
             gui.setHighscoreVisibility(false);
         }
 
@@ -120,7 +121,10 @@ var AlgLageController = function(gui) {
     
     function showHighscore() {
         var h = highscore[currLevname];
-        if(h === undefined) return false;
+        if(h === undefined) {
+            gui.clearHighscore();
+            return false;
+        }
         
         gui.showHighscore(h)
     }
