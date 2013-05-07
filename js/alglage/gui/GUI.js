@@ -112,7 +112,7 @@ var GUI = function(settings) {
         bestVal = 0;
         bestPoints = JSON.parse(gr.toString()).points;
         
-        _drawGraph();
+        drawGraph();
     }
 
     function getPoints() {
@@ -136,7 +136,7 @@ var GUI = function(settings) {
         $.publish('points-change');
     }
 
-    function _drawGraph() {
+    function drawGraph() {
         // alle Punkte neuzeichnen 
         // Kanten löschen
         for(var i = 0; i < boardEdges.length; i++) {

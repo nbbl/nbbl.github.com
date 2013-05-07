@@ -184,7 +184,12 @@ var obj = {
 \end{lstlisting}
 
 \section{Aufbau / Architektur}
-Die grundsätzliche Architektur dieser Anwendung ist recht simpel aufgebaut. Es gibt drei Klassen von Akteuren: \emph{Webworker}, den zentralen \emph{Controller} und die \emph{GUI}, die grafische Benutzerschnittstelle.
+Die grundsätzliche Architektur dieser Anwendung ist in folgendem UML-Sequenzdiagramm beschrieben:
+\\\\
+\includegraphics[width=0.5\textwidth]{Bilder/SequenceArchitecture}
+\\\\
+Hierbei stellen \texttt{'points-change'} und \texttt{results} Nachrichten dar, die Daten enthalten dar. \texttt{calculate(...)} und \texttt{showResults(...)} hingegen sind Methodenaufrufe der jeweiligen Objekte.
+Es gibt drei Klassen von Akteuren: \emph{Webworker}, den zentralen \emph{Controller} und die \emph{GUI}, die grafische Benutzerschnittstelle.
 
 \subsection{Webworker}
 Um aus Benuztersicht die Ansprechbarkeit der Anwendung zu optimieren, haben wir uns dafür entschieden, die Berechnung der Algorithmen in Webworker auszulagern. Webworker ermöglichen es, in Javascript parallele Berechnungen ausführen zu lassen. So finden diese Berechnungen im Hintergrund statt, während die GUI weiterhin ansprechbar bleibt.
