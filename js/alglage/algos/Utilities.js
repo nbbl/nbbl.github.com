@@ -54,4 +54,4 @@ function randomColor() {
 }
 
 // Liste von HTML-Farben für die Einfärbung der Annotations
-annotationsColors = ["#00FF00", "#0000FF", "#FFFF00", "#00FFFF", "#FF00FF", "#FF6600", "#9933CC"];
+annotationsColors = ["#00FF00", "#0000FF", "#FFFF00", "#00FFFF", "#5F04B4", "#FF6600", "#9933CC"];
