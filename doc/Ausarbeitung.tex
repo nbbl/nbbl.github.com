@@ -171,7 +171,17 @@ Attribute.
     Wie die vorherige Funktion, zusätzlich wird überprüft ob die Kanten den Schnittpunkt auch enthalten, wenn ja wird er zurückgegeben, wenn nicht ist die Rückgabe \lststyle{null}.
 \end{description}
 
-
+\subsection{Annotations}
+Die Ergebnisse der Algorithmen können neben numerischen Werten und Text auch graphische Elemente enthalten. Diese Ergebnisse müssen die Form eines definierten Annotations Objektes haben und werden aus den Ergebnissen der Algorithmen vom Controller an die GUI durchgereicht. Ein solches Objekt muss folgende Form haben:
+\begin{lstlisting}
+var obj = {
+    points: Points-Array,
+    lines: Edge-Array,
+    lineSegments: Edge-Array,
+    circles: Circle-Array,
+    angles: Angle-Array,
+};
+\end{lstlisting}
 
 \section{Aufbau / Architektur}
 Die grundsätzliche Architektur dieser Anwendung ist recht simpel aufgebaut. Es gibt drei Klassen von Akteuren: \emph{Webworker}, den zentralen \emph{Controller} und die \emph{GUI}, die grafische Benutzerschnittstelle.
@@ -205,35 +215,39 @@ Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph
 
 \subsubsection{Methoden}
 Hier werden die wichtigsten Methoden der GUI dokumentiert.
-\begin{description}[font=\normalfont]
-    \item{\lststyle{initGraph(graph)}} 
+%\begin{description}[font=\normalfont]
+    \subparagraph{initGraph(graph)} 
     Zum Hinzufügen der Referenz auf den Graph des Controllers. Darüberhinaus wird hierüber der Bestwert initialisiert und der Graph gezeichnet.
-    \item{\lststyle{getPoints()}} 
+    \subparagraph{getPoints()} 
     Simpler getter für die Punkte des Graphen.
-    \item{\lststyle{setPoints(points)}} 
+    \subparagraph{setPoints(points)} 
     Hiermit werden die Punkte eines bereits initialisierten Graphen entsprechend der übergebenen Punktkoordinaten neu angeordnet. Die Struktur (also die Kanten) des Graphen bleibt bestehen.
-    \item{\lststyle{\_drawGraph()}} 
+    \subparagraph{\_drawGraph()} 
     Die Punkte und Kanten des \texttt{graph} werden dem JSXBoard hinzugefügt. Referenzen auf die Objekte liegen in \texttt{boardPoints} und \texttt{boardEdges}. Bei jedem Aufruf von \texttt{\_drawGraph()} werden die bisher in diesen Arrays enthaltenen Objekte vom \texttt{board} gelöscht und neu erstellt. Das Aufrufen dieser Methode ist nur einmal nach dem Initalisieren des Graphens notwendig, um die weitere Anzeige kümmert sich das JSXGraph Framework. Jedem graphischen Objekt wird ein Eventhandler hinzugefügt, der mit einem Timer verknüpft, bei Mausklicks das Event \texttt{'points-change'} in der Frequenz des Timers feuert. Hier geschieht auch die Bereichsabfrage, die das Verschieben der Punkte und Strecken auf einen bestimmten Rahmen (den Bereich des Rechtecks zwischen (0,0) und (\texttt{settings.maxX}, \texttt{settings.maxY}) ) einschränkt.
     Der Eventhandler der Kanten führt zusätzlich ein \texttt{Edge.reload()} auf der verschobenen Kante und allen inzidenten Kanten aus.
-    \item{\lststyle{overdraw(object, algoName, color)}} 
+    \subparagraph{overdraw(object, algoName, color)} 
     Dasselbe wie \texttt{draw(...)} nur mit einem vorherigen Löschen aller Annotationen des jeweiligen Algorithmus.
-    \item{\lststyle{draw(object, algoName, color)}} 
-    \item{\lststyle{eraseAllAnnotations()}} 
-    \item{\lststyle{eraseAnnotations(algoName)}} 
-    \item{\lststyle{initAlgoBox(algoName, color)}} 
-    \item{\lststyle{setAlgoBox(algoName)} 
-    \item{\lststyle{setAlgoBoxLoading(algoName)}} 
-    \item{\lststyle{refreshAlgoBox(algoName, score, info, annots, color}} 
-    \item{\lststyle{addLevelToNav(levelName)}} 
-    \item{\lststyle{changePageHeader(text)}} 
-    \item{\lststyle{showHighscore(data)}} 
-    \item{\lststyle{clearHighscore()}} 
-    \item{\lststyle{setHighscoreVisibility(visible)}} 
-    \item{\lststyle{showGraph()}} 
-    \item{\lststyle{getGraph()}} 
-    \item{\lststyle{isActive(algoName)}} 
-    \item{\lststyle{checkTmpBestval(val)}} 
-\end{description}
+    \subparagraph{draw(object, algoName, color)} 
+    Hiermit können unabhängig vom Graphen Annotations gezeichnet werden. Die Annotations werden in eine eigene, von \texttt{algoName} abhängige Lage gezeichnet. \texttt{obj} muss dabei ein Annotations Objekt sein.
+    \subparagraph{eraseAllAnnotations()} 
+    Jegliche Annotations aller Algorithmen werden entfernt.
+    \subparagraph{eraseAnnotations(algoName)} 
+    Nur die Annotations, die zuvor unter \texttt{algoName} gezeichnet wurden, werden gelöscht.
+    \subparagraph{initAlgoBox(algoName, color)} 
+    \subparagraph{setAlgoBox(algoName)} 
+    \subparagraph{setAlgoBoxLoading(algoName)} 
+    \subparagraph{refreshAlgoBox(algoName, score, info, annots, color} 
+    \subparagraph{addLevelToNav(levelName)} 
+    \subparagraph{changePageHeader(text)} 
+    \subparagraph{showHighscore(data)} 
+    \subparagraph{clearHighscore()} 
+    \subparagraph{setHighscoreVisibility(visible)} 
+    \subparagraph{showGraph()} 
+    \subparagraph{getGraph()} 
+    \subparagraph{isActive(algoName)} 
+    \subparagraph{checkTmpBestval(val)} 
+%\end{description}
+
 \subsection{Speicherung der Bestwerte}
 In der Anwendung besteht die Möglichkeit einen erreichten Punktestand mit einem Formular in einer Bestenliste zu speichern. Dieser wird, wenn er zu den drei höchsten eines Levels gehört, danach in der Liste angezeigt. Zusätzlich wird zu einem Punktestand der Name des Benutzers angezeigt und es besteht die Möglichkeit, die Punkte auf die Positionen zu setzten, mit welchen der Punktestand erreicht wurde. Wie die hierfür benötigten Daten gespeichert und angezeigt werden soll nun genauer erläutert werden.\\
 Um die Speicherung der Daten kümmert sich eine Datenbank, welche hierfür mit einer Tabelle versehen wurde. Diese enthält die Spalten „hid“, „levname“, „name“, „score“ und „points“. Hierbei ist „hid“ ein eindeutiger Schlüssel eines jeden Eintrags, „levname“ gibt an zu welchem Level ein Eintrag gehört, „name“ beinhaltet den Namen des Benutzers, „score“ entspricht dem erreichten Punktestand und in „points“ werden die Positionen der Punkte in einem String gespeichert. Da beim Anzeigen der Punktpositionen eines Bestwertes der Graph bereits geladen ist und sich die Reihenfolge der Punkte niemals ändert, genügt es nur die Positionen der jeweiligen Punkte zu speichern. Beim Klick auf den Pfeil werden dann die Punkte im Graph auf die gespeicherten Positionen verschoben.\\
