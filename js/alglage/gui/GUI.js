@@ -137,26 +137,28 @@ var GUI = function(settings) {
     }
 
     function _drawGraph() {
-        // alle Punkte neuzeichnen
+        // alle Punkte neuzeichnen 
+        // Kanten löschen
+        for(var i = 0; i < boardEdges.length; i++) {
+            board.removeObject(boardEdges[i]);
+        }
+        boardEdges = [];
+        // Punkte löschen 
         for(var i = 0; i < boardPoints.length; i++) {
             board.removeObject(boardPoints[i]);
         }
         boardPoints = [];       
-        for(var i = 0; i < boardEdges.length; i++) {
-           p = board.removeObject(boardEdges[i]);
-        }
-        boardEdges = [];
+
 
         if(graph.points !== undefined) {
-
 
             for (var i = 0; i < graph.points.length; i++) {
                 var p = board.create('point', [ graph.points[i].x, graph.points[i].y ], {withLabel:false});
                 p.srcPoint = graph.points[i]; // Referenz auf zugrundeliegenden Punkt setzen
+
                 boardPoints.push(p);
                 
                 p.on('mousedown', function() {
-                    
                     var self = this;
                     
                     if(isChecked) {
@@ -171,28 +173,26 @@ var GUI = function(settings) {
                             $.publish('points-change');
                         }, settings.refreshTime);
                     }
-                    
                 });
                 
                 p.on('mouseup', function() {
-                    
+                    var self = this;
                     if(isChecked) {
                         clearInterval(timer);
                     }
                     else {
-                        this.srcPoint.x = this.X();
-                        this.srcPoint.y = this.Y();
-                        for(var i = 0; i < this.srcPoint.incidentEdges.length; i++) {
-                            this.srcPoint.incidentEdges[i].reload();
+                        self.srcPoint.x = self.X();
+                        self.srcPoint.y = self.Y();
+                        for(var i = 0; i < self.srcPoint.incidentEdges.length; i++) {
+                            self.srcPoint.incidentEdges[i].reload();
                         }
-                        
                         $.publish('points-change');
                     }
-                    
                 });
 
                 // Bereich zum Verschieben der Punkte einschr�nken
                 p.on('drag', function(){
+                    var self = this;
                     if(this.X() < 0) this.moveTo([0, this.Y()]);
                     if(this.X() > settings.maxX) this.moveTo([settings.maxX, this.Y()]);
                     if(this.Y() < 0) this.moveTo([this.X(), 0]);
@@ -203,7 +203,6 @@ var GUI = function(settings) {
 
         if(graph.edges !== undefined) {
             // alle Kanten neuzeichnen
-
 
             for (var i = 0; i < graph.edges.length; i++) {
                 var pt1 = boardPoints[graph.points.indexOf(graph.edges[i].pt1)];
@@ -240,16 +239,17 @@ var GUI = function(settings) {
                 
                 line.on('mouseup', function() {
                     
+                    var self = this;
                     if(isChecked) {
                         clearInterval(timer);
                     }
                     else {
-                        this.point1.srcPoint.moveTo(this.point1.X(), this.point1.Y());
-                        this.point2.srcPoint.moveTo(this.point2.X(), this.point2.Y());
+                        self.point1.srcPoint.moveTo(self.point1.X(), self.point1.Y());
+                        self.point2.srcPoint.moveTo(self.point2.X(), self.point2.Y());
     
                         // alle inzidenten Kanten updaten (die gemeinsame Kante beider Punkte wird doppelt geupdatet)
-                        var inc1 = this.srcEdge.pt1.incidentEdges;
-                        var inc2 = this.srcEdge.pt2.incidentEdges;
+                        var inc1 = self.srcEdge.pt1.incidentEdges;
+                        var inc2 = self.srcEdge.pt2.incidentEdges;
     
                         for(var i = 0; i < inc1.length; i++) {
                             inc1[i].reload();
@@ -264,38 +264,39 @@ var GUI = function(settings) {
                 
                 // Kanten bleiben steif, wenn sie den Rand beruehren
                 line.on('drag', function() {
+                    var self = this;
                     var tmp = 0;
-                    if((tmp = this.point1.X())< 0) { 
-                        this.point1.moveTo([0,this.point1.Y()]);
-                        this.point2.moveTo([this.point2.X()-tmp, this.point2.Y()])
+                    if((tmp = self.point1.X())< 0) { 
+                        self.point1.moveTo([0,self.point1.Y()]);
+                        self.point2.moveTo([self.point2.X()-tmp, self.point2.Y()])
                     }
-                    if((tmp = this.point2.X())< 0) { 
-                        this.point2.moveTo([0,this.point2.Y()]);
-                        this.point1.moveTo([this.point1.X()-tmp, this.point1.Y()])
+                    if((tmp = self.point2.X())< 0) { 
+                        self.point2.moveTo([0,self.point2.Y()]);
+                        self.point1.moveTo([self.point1.X()-tmp, self.point1.Y()])
                     }
-                    if((tmp = this.point1.Y())< 0) { 
-                        this.point1.moveTo([this.point1.X(),0]);
-                        this.point2.moveTo([this.point2.X(), this.point2.Y()-tmp])
+                    if((tmp = self.point1.Y())< 0) { 
+                        self.point1.moveTo([self.point1.X(),0]);
+                        self.point2.moveTo([self.point2.X(), self.point2.Y()-tmp])
                     }
-                    if((tmp = this.point2.Y())< 0) { 
-                        this.point2.moveTo([this.point2.X(),0]);
-                        this.point1.moveTo([this.point1.X(), this.point1.Y()-tmp])
+                    if((tmp = self.point2.Y())< 0) { 
+                        self.point2.moveTo([self.point2.X(),0]);
+                        self.point1.moveTo([self.point1.X(), self.point1.Y()-tmp])
                     }
-                    if((tmp = this.point1.X()-settings.maxX) > 0) {
-                        this.point1.moveTo([settings.maxX,this.point1.Y()]);
-                        this.point2.moveTo([this.point2.X()-tmp,this.point2.Y()]);
+                    if((tmp = self.point1.X()-settings.maxX) > 0) {
+                        self.point1.moveTo([settings.maxX,self.point1.Y()]);
+                        self.point2.moveTo([self.point2.X()-tmp,self.point2.Y()]);
                     }
-                    if((tmp = this.point2.X()-settings.maxX) > 0) {
-                        this.point2.moveTo([settings.maxX,this.point2.Y()]);
-                        this.point1.moveTo([this.point1.X()-tmp,this.point1.Y()]);
+                    if((tmp = self.point2.X()-settings.maxX) > 0) {
+                        self.point2.moveTo([settings.maxX,self.point2.Y()]);
+                        self.point1.moveTo([self.point1.X()-tmp,self.point1.Y()]);
                     }
-                    if((tmp = this.point1.Y()-settings.maxY) > 0) {
-                        this.point1.moveTo([this.point1.X(),settings.maxY]);
-                        this.point2.moveTo([this.point2.X(),this.point2.Y()-tmp]);
+                    if((tmp = self.point1.Y()-settings.maxY) > 0) {
+                        self.point1.moveTo([self.point1.X(),settings.maxY]);
+                        self.point2.moveTo([self.point2.X(),self.point2.Y()-tmp]);
                     }
-                    if((tmp = this.point2.Y()-settings.maxY) > 0) {
-                        this.point2.moveTo([this.point2.X(),settings.maxY]);
-                        this.point1.moveTo([this.point1.X(),this.point1.Y()-tmp]);
+                    if((tmp = self.point2.Y()-settings.maxY) > 0) {
+                        self.point2.moveTo([self.point2.X(),settings.maxY]);
+                        self.point1.moveTo([self.point1.X(),self.point1.Y()-tmp]);
                     }
                 });
             }
