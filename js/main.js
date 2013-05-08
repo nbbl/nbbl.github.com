@@ -31,6 +31,7 @@ alc.addLevel('Random', randomGraph(10,20,15,10));
 alc.addLevel('Sieben', graph_complete_7);
 alc.addLevel('Elf', graph_complete_11);
 alc.addLevel('Zweiundzwanzig', graph_complete_22);
+alc.addLevel('Petersen', petersen1);
 
 alc.addAlgo('ShortestDistPoint-Edge', 'js/alglage/algos/EdgeIntersections_Brutal.js');
 alc.addAlgo('XCoord', 'js/alglage/algos/XCoordinates.js');

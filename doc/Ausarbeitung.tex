@@ -198,7 +198,7 @@ Da ein Webworker vom Hauptthread abgeschottet läuft und seinen eigenen Namensra
 Auf Anfrage wendet ein Webworker den im Skript enthaltenen Algorithmus an und sendet seine Ergebnisse zurück an den Controller. Die Anfrage besteht aus einer Nachricht, welche ein Graphobjekt und einen Namen enthält.
 
 \subsection{Controller}
-Der Controller(\emph{AlgLageController.js} ist einerseits dafür zuständig, die Algorithmen aufzurufen, andererseits um eine Brücke zwischen GUI und den Webworkern zu bauen, also Ergebnisse weiterzuleiten und Benutzereingaben zu verarbeiten. 
+Der Controller(\emph{AlgLageController.js}) ist einerseits dafür zuständig, die Algorithmen aufzurufen, andererseits um eine Brücke zwischen GUI und den Webworkern zu bauen, also Ergebnisse weiterzuleiten und Benutzereingaben zu verarbeiten. 
 Ursprünglich sollte der Status der Anwendung lediglich im Controller gespeichert sein, allerdings wurde auch hier aus Gründen der Benutzbarkeit ein Teil des Status in die GUI ausgelagert.
 Beim Erstellen eines Controllerobjektes wird ein GUIobjekt übergeben, um dem Controller direkten Zugriff auf Elemente und Methoden der GUI zu ermöglichen.
 Im Gegensatz dazu funktioniert die Kommunikation mit den Workern asynchron über Nachrichten. Der Controller meldet sich mit \texttt{\$.subscribe('points-change', ...)} über jQuery beim Event \texttt{points-change} an. Dieses Event wird von der GUI gefeuert und zwar immer dann, wenn Punkte verschoben wurden. Da der eigentliche Koordinatenstatus der Punkte des Graphen in der GUI gespeichert ist, muss der Controller seinen internen Graphen mit den neuen Punkten der GUI updaten (\texttt{graph.points = gui.getPoints()}). Dann wird mit \texttt{calculateAlgos()} die Neuberechnung der Algorithmen gestartet.

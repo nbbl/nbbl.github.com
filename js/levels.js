@@ -45,10 +45,10 @@ var edges_hvn = [
 var graph_hvn = new Graph(edges_hvn);
 
 //vollstaendiger n-Graph
-var get_points_complete_graph = function(n) {
-    var yMax = 10;
+var get_points_complete_graph = function(n,radius) {
     var xMax = 15;
-    var r = 4;
+    var yMax = 10;
+    var r = radius || 4;
     var resPoints = [];
 
     for (var i = 0; i < n; ++i) {
@@ -84,3 +84,30 @@ var graph_complete_11 = new Graph(edges_complete_11);
 var points_complete_22 = get_points_complete_graph(22);
 var edges_complete_22 = get_edges_complete_graph(points_complete_22);
 var graph_complete_22 = new Graph(edges_complete_22);
+
+//Peterson Graph 1
+
+var get_edges_petersen1 = function(points) {
+    var resEdges = [];
+
+    //aeusserer Ring
+    for(var i=0; i<5; ++i) {
+        resEdges.push(new Edge(points[i], points[(i+1)%5]));
+    }
+
+    //innerer Stern
+    for(var i=0; i<5; ++i) {
+        resEdges.push(new Edge(points[((2*i)%5)+5], points[((2*(i+1))%5)+5]));
+    }
+    
+    //verbindung Stern - Ring
+    for(var i=0; i<5; ++i) {
+        resEdges.push(new Edge(points[i], points[i+5]));
+    }
+
+    return resEdges;
+}
+
+var points_petersen1 = get_points_complete_graph(5,4.5).concat(get_points_complete_graph(5,3));
+var edges_petersen1 = get_edges_petersen1(points_petersen1);
+var petersen1 = new Graph(edges_petersen1);
