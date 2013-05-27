@@ -59,6 +59,57 @@
 \tableofcontents
 
 \section{Einleitung}
+Der Titel des Softwareprojekts lautet "`Punkte in allgemeiner Lage"', welches eine oft zitierte Eingangsvorraussetzung,
+gerade im Bereich von geometrischen Problemstellungen, darstellt. Ziel dieses Projekts war es, ein Spiel zu entwickeln,
+welches es einem Benutzer erm\"oglicht, Punkte in \emph{allgemeine Lage} zu verschieben und \emph{sch\"one} Graphen zu
+zeichnen. \\
+Was genau nun eine allgemeine Lage eigentlich ist und was unter sch\"onen Graphen zu verstehen ist, soll im Folgenden
+kurz ausgef\"uhrt werden.
+\subsection{Allgemeine Lage}
+\label{sec:Allgemeine_Lage}
+Sei $P$ eine Menge von Punkten. Wir sagen $P$ ist in allgemeiner Lage, wenn die folgenden drei Kriterien erf\"ullt
+sind:
+\begin{enumerate}
+  \item
+    Keine zwei Punkte aus $P$ haben die selbe $x$-Koordinate.
+  \item
+    Keine drei Punkte aus $P$ liegen auf einer gemeinsamen Gerade.
+  \item
+    Keine vier Punkte aus $P$ liegen auf einem gemeinsamen Kreis.
+\end{enumerate}
+W\"ahrend die ersten zwei Kriterien in der Regel leicht von einem Spieler erkannt werden, stellt das dritte Kriterium
+eine etwas schwerer zu erkennende Einschr\"ankung dar.\\
+Jedoch ist leicht zu einzusehen, dass auch mit der dritten
+Bedingung noch keine ausreichende Umgebung f\"ur ein interessantes Spiel geschaffen ist. Zum Einen stellt das alleinige
+Anordnen von Punkten auf einer Leinwand keine sehr gro\ss e visuelle Befriedigung dar, zum Anderen stellt sich die Frage
+welche G\"ute einem gefundenen Arrangement gegeben werden soll. Ein Spiel wird interessanter, wenn es einem die
+M\"oglichkeit gibt sich zu verbessern. Es sollte also davon abgesehen werden, einfach nur ein 'Bestanden' anzuzeigen,
+sollte eine g\"ultige Konfiguration von Punkten gefunden worden sein. Aber wann ist eine Punktlage besser als eine
+andere, oder anders: welches praktikable Optimierungskriterium f\"uhrt nicht gleich zu einer leicht 'gesch\"uttelten' 
+Gitteranordnung?\\*[1ex]
+Es ergibt sich, dass  die oben aufgelisteten Kriterien sehr nat\"urlich auf Graphen projiziert werden k\"onnen, welche
+zugleich eine visuell interessantere Struktur besitzen, als auch ein zug\"anglicheres Benotungssystem zulassen. Hieraus
+resultiert das Spielprinzip sch\"one Graphen zu zeichnen.
+
+\subsection{Sch\"one Graphen}
+Ist $V$ eine beliebige Menge von Elementen (Knoten) und $E\subseteq\binom{V}{2}$\footnote{$\binom{V}{2}$ soll hierbei das
+Mengensystem aller Teilmengen von $V$ mit kardinalit\"at $2$ darstellen.} (Kanten) eine bin\"are Relation, so wird
+$G=(V,E)$ als Graph bezeichnet.\\
+Ist $V$ nun eine Menge von Punkten im $\mathbb{R}^2$ und bezeichnet $E$ die Relation "`durch eine Strecke verbunden"' so
+ergibt sich eine graphische Interpretation von $G$. Wenn wir im Folgenden von "`Graphen"' sprechen, ist damit immer die
+visuelle Interpretation von Punkten im $\mathbb{R}^2$, mit Strecken zwischen diesen, gemeint. Wenn wir von "`Punkten"'
+des Graphen sprechen, ist dies als Synonym f\"ur deren Funktion als Knoten in $G$ gemeint. Analog bezeichnen wir Kanten
+von $G$ als Strecken.\\
+Alle Kriterien aus \ref{sec:Allgemeine_Lage} k\"onnen direkt auf $V$ angewandt werden. Als Optimierungskriterium
+dient jedoch eine andere Eigenschaft des Graphen: Ein Spieler bekommt einen Graphen mit fester Anzahl an Punkten
+sowie Strecken. Die Punkte sollen frei verschiebbar sein, jedoch sollen die Strecken zwischen ihnen erhalten bleiben
+(sich also dynamisch mitbewegen). Aufgabe des Spielers ist es nun, eine Konfiguration von $V$ zu finden, sodass der
+Abstand eines Punktes zu einer nichtinzidenten Kante maximiert wird. Hierbei ist zu beachten, dass am Kreuzungspunkt
+zweier Kanten ein neuer Punkt entsteht, welcher zwar nicht direkt Bewegt werden kann (lediglich durch das verschieben
+der Endpunkte der kreuzenden Kanten), jedoch durch einen eventuell geringen Abstand den Punktestand des Spielers
+herabsenkt.\\
+Das Spielprinzip ist somit klar: je geringer der kleinste Abstand eines Punktes zu einer Kante ausf\"allt, desto weniger
+Punke erh\"alt der Spieler.
 
 \section{Datenstrukturen}
 
@@ -80,9 +131,9 @@ js> 0.2-(0.3-0.1)
 Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ (im folgenden auch Epsilon oder Epsilonumgebung ~-- wenn die Differenz von zwei Werten betrachtet wird ~-- genannt) zu setzen. (\textbf{(remove me) Warum?}).
 \subsection{Punkte und Vektoren}
 Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
-Attribute und verf\"ugen \"uber die grundlegenden Eigenschaften und Funktionalit\"aten, welche von ihnen zu erwarten sind
+Attribute und verf\"ugen \"uber die grundlegenden, aus der Mathematik bekannten, Eigenschaften und Funktionalit\"aten
 (Vektoraddition/-subtraktion,
-Multiplikation mit einem Skalar, Skalarmultiplikation, etc.).
+Multiplikation mit einem Skalar, Skalarprodukt, etc.).
 \subsubsection{Funktionen}
 Die folgenden Methoden sind Instanzfunktionen eines Vektors, vergleichbar mit Objektmethoden in Java.
 \begin{description}[font=\normalfont]
@@ -94,7 +145,7 @@ Die folgenden Methoden sind Instanzfunktionen eines Vektors, vergleichbar mit Ob
     Berechnet die euklidische Distanz zwischen \lststyle{v1} und \lststyle{v2} (als Ortsvektoren). 
   \item{\lststyle{v1.equals(v2)}} 
     Betragsweiser Vergleich der Vektoren, wobei diese nicht exakt übereinstimmen
-    müssen sondern in Epsilonumgebung zueinander liegen müssen. 
+    müssen sondern in  Epsilonumgebung zueinander liegen können. 
   \item{\lststyle{v.length()}}
     euklidische Norm des Vektors \lststyle{v}.
   \item{\lststyle{v.moveTo(coordX,coordY)}}
@@ -126,11 +177,11 @@ Aus diesem Grund wurden Punkte um die folgende Instanzmethode erweitert.
 Die \lststyle{Edge} Datenstruktur repr\"asentiert eine  Strecke in einem kartesischen Koordinatensystem, als auch eine
 Kante in einem Graph. Wir w\"ahlten aufgrund ihrer arithmetischen Vorz\"uge die Geradendarstellung in \emph{Hessescher
 Normalform}. In ihr wird eine Gerade $g$ dargestellt durch ihren \emph{Normaleneinheitsvektor} $\widehat{n}$, sowie
-durch ihren Abstand zum Koordinatenursprung. Jeder Punkt $p=(x,y)$ auf der Geraden erf\"ullt somit die Gleichung: 
+durch ihren Abstand $d$ zum Koordinatenursprung. Jeder Punkt $p=(x,y)$ auf der Geraden erf\"ullt somit die Gleichung: 
 \begin{align}
   \widehat{n}\vec{p}-d=0  
 \end{align}
-, wobei $\vec{p}$ der Ortsvektor von $p$ bezeichne.\\
+, wobei $\vec{p}$ den Ortsvektor von $p$ bezeichne.\\
 Zus\"atzlich zu $\widehat{n}$ und $d$ speichert die \lststyle{Edge} Datenstruktur noch ihre zwei Endpunkte als
 Attribute.
 \subsubsection{Funktionen}
@@ -147,7 +198,7 @@ Attribute.
     Liefert die  $y$-Koordinate einer Geraden an $x$-Koordinate \lststyle{x}. \textbf{in fancy?}
   \item{\lststyle{e.getLeft()}}
     Liefert den Endpunkt einer Kante mit geringerer $x$-Koordinate. (Haben beide Endpunkte die selbe $x$-Koordinate so
-    liefert \lststyle{e.getLeft()} einen anderen Punkt zur\"uck als \lststyle{e.getRight()}).  
+    liefert \lststyle{e.getLeft()} einen anderen Endpunkt zur\"uck als \lststyle{e.getRight()}).  
   \item{\lststyle{e.getRight()}}
     Analog zu oben.
   \item{\lststyle{e.getAdjacent(pt)}}
