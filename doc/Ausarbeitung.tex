@@ -19,11 +19,14 @@
     numberstyle=\tiny,
     numbersep=5pt,
     backgroundcolor=\color{lightgray},
+    aboveskip=2ex,
+    belowskip=-4ex,
     showspaces=false,
     showstringspaces=false,
     showtabs=false, 
     frame=tb, 
     framerule=.8pt, 
+    framesep=0pt,
     rulecolor=\color{black}, 
     tabsize=2,
     captionpos=b,
@@ -36,6 +39,7 @@
     morekeywords={process,in,out,is,begin,for,do,if,then, else, end, while}
     }
 \newcommand{\lststyle}[1]{{\usefont{T1}{pcr}{m}{n}\small\selectfont#1}}
+\renewcommand{\texttt}[1]{{\usefont{T1}{pcr}{m}{n}\small\selectfont#1}}
 
 \author{Julian Dobmann, Frederik Feiten, Felix Herter, Johannes Sauer}
 \title{Softwareprojekt Anwendung von Algorithmen}
@@ -93,7 +97,7 @@ resultiert das Spielprinzip sch\"one Graphen zu zeichnen.
 
 \subsection{Sch\"one Graphen}
 Ist $V$ eine beliebige Menge von Elementen (Knoten) und $E\subseteq\binom{V}{2}$\footnote{$\binom{V}{2}$ soll hierbei das
-Mengensystem aller Teilmengen von $V$ mit kardinalit\"at $2$ darstellen.} (Kanten) eine bin\"are Relation, so wird
+Mengensystem aller Teilmengen von $V$ mit Kardinalit\"at $2$ darstellen.} (Kanten) eine bin\"are Relation, so wird
 $G=(V,E)$ als Graph bezeichnet.\\
 Ist $V$ nun eine Menge von Punkten im $\mathbb{R}^2$ und bezeichnet $E$ die Relation "`durch eine Strecke verbunden"' so
 ergibt sich eine graphische Interpretation von $G$. Wenn wir im Folgenden von "`Graphen"' sprechen, ist damit immer die
@@ -111,7 +115,14 @@ herabsenkt.\\
 Das Spielprinzip ist somit klar: je geringer der kleinste Abstand eines Punktes zu einer Kante ausf\"allt, desto weniger
 Punke erh\"alt der Spieler.
 
-\section{Datenstrukturen}
+\section{Datenstrukturen \& Grundlegendes}
+\subsection{Javascript}
+Da es sich um ein webbasiertes Browserspiel handeln sollte entschieden wir uns für Javascript als Programmiersprache.
+Das Objektmodell von Javascript weicht deutlich von dem von Java ab insofern, dass es in Javascript keine Klassen gibt.
+Vielmehr werden Prototypeobjekte verwendet, die Gemeinsamkeiten abstrahieren. Andere Obekte verweisen auf diese Prototypen 
+und können dadurch deren Methoden verwenden. Um die Syntax von Java aufzugreifen beschreiben
+wir die Prototypeobjekte als Klassen und Objekte die auf einen gemeinsamen Prototypen verweisen als Instanzen eines Prototyps. 
+Bezeichnungen wie Klassen- bzw. statische Methoden ergeben sich aus dieser Konvention.
 
 \subsection{Einführung der arithmetischen Unschärfe}
 Bedingt durch die endliche Darstellung von Flie\ss kommazahlen im Prozessor waren wir gezwungen eine arithmetische
@@ -128,7 +139,7 @@ js> 0.2-(0.3-0.1)
 2.7755575615628914e-17
 \end{lstlisting}
 , weicht also um die Gr\"o\ss enordung $10^{-16}$ von der, der Operanden ab.
-Wir haben uns entschienden die arithmetische Unsch\"arfe auf $10^{-10}$ (im folgenden auch Epsilon oder Epsilonumgebung ~-- wenn die Differenz von zwei Werten betrachtet wird ~-- genannt) zu setzen. (\textbf{(remove me) Warum?}).
+Wir haben uns entschieden die arithmetische Unsch\"arfe auf $10^{-10}$ (im folgenden auch Epsilon oder Epsilonumgebung ~-- wenn die Differenz von zwei Werten betrachtet wird ~-- genannt) zu setzen. Um auf der sicheren Seite zu sein aber gleichzeitig eine unnötig große Toleranz zu vermeiden haben wir die Fehlermarge ca. 6 Größenordnungen oberhalb der arithmetischen Abweichung festgelegt.
 \subsection{Punkte und Vektoren}
 Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
 Attribute und verf\"ugen \"uber die grundlegenden, aus der Mathematik bekannten, Eigenschaften und Funktionalit\"aten
@@ -162,17 +173,17 @@ Die folgenden Funktionen sind Klassenfunktionen der Vektoren, vergleichbar mit s
   \item{\lststyle{cast(p)}}  
     Konvertiert einen Vektor zu einem Punkt.
 \end{description}
-Ohne in ihrer programmatischen Funktionalit\"at von den Vektoren abzuweichen, wurden Punkte eingef\"uhrt. Es stellte
+Ohne groß in ihrer programmatischen Funktionalit\"at von den Vektoren abzuweichen, wurden Punkte eingef\"uhrt. Es stellte
 sich heraus, dass beide Strukturen ihre Notwendigkeit hatten (der Abstand zweier Punkte sollte
 als Vektor und 
-nicht als Punkt ausgedr\"uckt werden, wohingegen ein Graph als Tupel von Verbindungskanten und Punkten, nicht Vektoren
+nicht als Punkt ausgedr\"uckt werden, wohingegen ein Graph als Tupel von Mengen von Verbindungskanten und Punkten, nicht Vektoren
 dargestellt wird).
-Aus diesem Grund wurden Punkte um die folgende Instanzmethode erweitert.
+Im Hinblick auf ihre spätere Verwendung können Punkte inzidente Kanten abspeicheren und wurden aus diesem Grund um die folgende Instanzmethode erweitert.
 \begin{description}[font=\normalfont]
   \item{\lststyle{pt1.isAdjacentTo(pt2)}}
     Iteriert durch die inzidenten Kanten von pt1 und überprüft durch \lststyle{getAdjacent}    (siehe Kantenfunktionen) ob pt2 in einer von diesen adjazent zu pt1 ist.   
 \end{description}
-\textbf{(remove me) Was gibts noch zu sagen?}
+
 \subsection{Kanten}
 Die \lststyle{Edge} Datenstruktur repr\"asentiert eine  Strecke in einem kartesischen Koordinatensystem, als auch eine
 Kante in einem Graph. Wir w\"ahlten aufgrund ihrer arithmetischen Vorz\"uge die Geradendarstellung in \emph{Hessescher
@@ -195,29 +206,29 @@ Attribute.
     Liefert die L\"ange einer Kante zur\"uck.
 
   \item{\lststyle{e.getY(x)}}
-    Liefert die  $y$-Koordinate einer Geraden an $x$-Koordinate \lststyle{x}. \textbf{in fancy?}
+    Liefert die  $y$-Wert einer Geraden an Position \lststyle{x}
   \item{\lststyle{e.getLeft()}}
     Liefert den Endpunkt einer Kante mit geringerer $x$-Koordinate. (Haben beide Endpunkte die selbe $x$-Koordinate so
     liefert \lststyle{e.getLeft()} einen anderen Endpunkt zur\"uck als \lststyle{e.getRight()}).  
   \item{\lststyle{e.getRight()}}
     Analog zu oben.
   \item{\lststyle{e.getAdjacent(pt)}}
-    Falls \lststyle{pt} in \lststyle{e} enthalten ist wird der zu zweite Knoten von \lststyle{e} ausgegeben, ansonsten \lststyle{false}.
+    Falls \lststyle{pt} ein Endpunkt von \lststyle{e} ist wird der andere Endpunkt von \lststyle{e} ausgegeben, ansonsten \lststyle{false}.
 
   \item{\lststyle{e.projectionToLine(pt)}}
-    Liefert die Projektion eines Punktes \lststyle{pt} auf die Geraden durch die Knoten von \lststyle{e}.
+    Liefert die Projektion eines Punktes \lststyle{pt} auf die Gerade durch \lststyle{e}.
   \item{\lststyle{e.projectionToEdge(pt)}}
     Analog zu \lststyle{ProjectionToLine}, liefert jedoch \lststyle{null} sollte die Projektion nicht in \lststyle{e} liegen.
   \item{\lststyle{e.distanceToLine(pt)}}
-    Liefert den Abstand eines Punktes \lststyle{pt} zu der Geraden die durch die Endpunkte von \lststyle{e} verläuft.
+    Liefert den Abstand eines Punktes \lststyle{pt} zu der Geraden die \lststyle{e} verläuft.
   \item{\lststyle{e.signedDistanceToLine(pt)}}
-    Wie die vorherige Funktion, allerdings wird die je nachdem ob sie auf der linken oder rechten Halbebene der Geraden liegt positiv bzw. negativ.
+    Wie die vorherige Funktion, jedoch mit Vorzeichen abhängig von der Halbebene auf der \lststyle{pt} liegt.
   \item{\lststyle{e.lineContains(pt)}}
     Gibt einen Boolean zurück, der angibt ob der Punkt auf der Geraden durch e liegt. Das ist der Fall, wenn der Punkt eine Entfernung zur Geraden hat, die kleiner Epsilon ist.
   \item{\lststyle{e.contains(pt)}}
-    Wie die vorherige Funktion, allerdings wird hier auch überprüft ob der Punkt auf der Kante selbst liegt. Dies wird überprüft, indem die Distanzen des Punktes zu den Vertices der Kante ermittelt werden. Die Summe der Distanzen zu der Länge der Kante in einer Epsilonumgebung liegen. Somit wird also getestet ob der Punkt in einer Ellipse liegt, deren Brennpunkte die Vertices der Kante sind und deren Distanz von einem Scheitelpunkt zu dem nächsten Brennpunkt gleich Epsilon ist. Uns erschien diese Implementierung als einfachste Lösung, da keine Sonderfälle behandelt werden müssen und für \lststyle{e.contains(pt)} \lststyle{e.lineContains(pt)} nur minimal erweitert werden muss. In der Praxis kam es durch die geringe Größe der Epsilonumgebung auch nie zu Problemen die auf die ungleichmäßige Form der Ellipse zurückzuführen wären.
+    Wie die vorherige Funktion, zusätzlich wird hier auch überprüft ob der Punkt auf der Kante selbst liegt. Dies wird überprüft, indem die Distanzen von \lststyle{pt} zu den Endpunkten der Kante ermittelt werden. Ist die Differenz aus der Summe der Distanzen und der Länge der Kante kleiner Epsilon so wird \lststyle{true} ausgegeben sonst \lststyle{false}. Somit wird also getestet ob der Punkt in dem Schnitt der Fläche aus \lststyle{e.lineContains(pt)} und einer Ellipse, deren Brennpunkte die Endpunkte der Kante sind und deren Distanz von einem Scheitelpunkt zu dem nächsten Brennpunkt gleich Epsilon ist, liegt. Uns erschien diese Implementierung als einfachste Lösung, da keine Sonderfälle behandelt werden müssen und für \lststyle{e.contains(pt)} \lststyle{e.lineContains(pt)} nur minimal erweitert werden muss. In der Praxis kam es durch die geringe Größe der Epsilonumgebung auch nie zu Problemen die auf die ungleichmäßige Form der Ellipse zurückzuführen wären.
   \item{\lststyle{e1.lineIntersection(e2)}}
-    Mit dieser Funktion werden die Schnittpunkte von zwei Geraden, die durch e1 und e2 verlaufen berechnet, falls diese existieren. Da bei werden die beiden Sonderfälle von identischen und parallelen Geraden als erstes behandelt. Hierzu wird zunächst überprüft ob die Normalen der Geraden linear abhängig sind, ist dies der Fall so sind sie mindestens parallel zueinander, haben beide Geraden zusätzlich den gleichen Abstand zum Ursprung (bzw. liegen die Abstände in einer Epsilonumgebung zueinander), so sind sie identisch. In diesen Fällen wird von der Funktion ein String zurückgegeben (\emph{``identical\_lines''} bzw. \emph{``parallel\_lines''}). Andernfalls ist die $y$-Koordinate des Schnitpunkts durch $y = \frac{d1 * n2_x - d2 * n1_x}{n1_y * n2_x - n1_x * n2_y}$ gegeben {\bf Herleiten und Vervollständigen}. 
+    Mit dieser Funktion werden die Schnittpunkte von zwei Geraden, die durch \lststyle{e1} und \lststyle{e2} verlaufen berechnet, falls diese existieren. Dabei werden die beiden Sonderfälle von identischen und parallelen Geraden als erstes behandelt. Hierzu wird zunächst überprüft ob die Normalen der Geraden linear abhängig sind, ist dies der Fall so sind sie mindestens parallel zueinander, haben beide Geraden zusätzlich den gleichen Abstand zum Ursprung (bzw. liegen die Abstände in einer Epsilonumgebung zueinander), so sind sie identisch. In diesen Fällen wird von der Funktion ein String zurückgegeben (\emph{``identical\_lines''} bzw. \emph{``parallel\_lines''}). Andernfalls ist die $y$-Koordinate des Schnitpunkts durch $y = \frac{d1 * n2_x - d2 * n1_x}{n1_y * n2_x - n1_x * n2_y}$ gegeben. Dabei ist $ni_j$ die $j$-Koordinate des Normalenvektors von \lststyle{e}$i$, $i\in\{$\lststyle{1,2}$\},\ j\in\{x,y\}$. 
   \item{\lststyle{e1.edgeIntersection(e2)}}
     Wie die vorherige Funktion, zusätzlich wird überprüft ob die Kanten den Schnittpunkt auch enthalten, wenn ja wird er zurückgegeben, wenn nicht ist die Rückgabe \lststyle{null}.
 \end{description}
@@ -239,7 +250,7 @@ Die grundsätzliche Architektur dieser Anwendung ist in folgendem UML-Sequenzdia
 \\\\
 \includegraphics[width=0.5\textwidth]{Bilder/SequenceArchitecture}
 \\\\
-Hierbei stellen \texttt{'points-change'} und \texttt{results} Nachrichten dar, die Daten enthalten dar. \texttt{calculate(...)} und \texttt{showResults(...)} hingegen sind Methodenaufrufe der jeweiligen Objekte.
+Hierbei stellen \texttt{'points-change'} und \texttt{results} Nachrichten dar, die Daten enthalten. \texttt{calculate(...)} und \texttt{showResults(...)} hingegen sind Methodenaufrufe der jeweiligen Objekte.
 Es gibt drei Klassen von Akteuren: \emph{Webworker}, den zentralen \emph{Controller} und die \emph{GUI}, die grafische Benutzerschnittstelle.
 
 \subsection{Webworker}
@@ -367,9 +378,13 @@ Somit ist es möglich die Bestenliste unabhängig vom Speicherort anzuzeigen, so
 \section{Algorithmen}
 
 \subsection{Test auf Kollinearität}
-Ein sehr simples und essentielles Kriterium zur Überprüfung der allgemeinen Lage von Punkten ist der Test auf Kollinearität. Im speziellen ist hiermit der Fall von 3 oder mehr Punkten auf einer Geraden gemeint. Leider konnten wir dieses Problem von algorithmischer Seite nicht über eine Brute Force Lösung hinaus verbessern, wir vermuten allerdings, dass sich die Lösung bis auf hilfreiche Heuristiken und Verbesserungen der Implementierung auch nur schwer verbessern liesse. So müssen alle 3-Untermengen der Punktmenge gesondert auf Kollinearität überprüft werden, die dafür im wesentlichen benötigte Funktion ist \lststyle{e.contains(pt)} (siehe Kantenfunktionen). Um Ungenauigkeiten zu vermeiden wurde \lststyle{e} aus den beiden am weitesten auseinander liegenden Punkten generiert, \lststyle{pt} ist somit der dritte Punkt.  
-\subsection{Berechnung der Schnittpunkte}
-Ein wichtiger Algorithmus ist der zur Bestimmung von Schnittpunkten von Kanten, da unser primärer Algorithmus zur Bewertung der Punktlage ~-- der Algorithmus zur Bestimmung der kürzesten Distanz von einem Punkt zu einer Kante ~-- auf diesen fusst.  
+Ein sehr simples und essentielles Kriterium zur Überprüfung der allgemeinen Lage von Punkten ist der Test auf Kollinearität. Im speziellen ist hiermit der Fall von 3 oder mehr Punkten auf einer Geraden gemeint. Leider konnten wir dieses Problem von algorithmischer Seite nicht über eine Brute Force Lösung hinaus verbessern, wir vermuten allerdings, dass sich die Lösung bis auf hilfreiche Heuristiken und Verbesserungen der Implementierung auch nur schwer verbessern liesse. So müssen alle 3-Untermengen der Punktmenge gesondert auf Kollinearität überprüft werden, die dafür im wesentlichen benötigte Funktion ist \lststyle{e.contains(pt)} (siehe Kantenfunktionen). Um Ungenauigkeiten zu vermeiden wurde eine Kante \lststyle{e} aus den beiden am weitesten auseinander liegenden Punkten generiert und überprüft ob sich der dritte Punkt auf dieser befindet, \lststyle{pt} ist somit der dritte Punkt.  
+\subsection{Berechnung der Schnittpunkte/ kleinster Abstand}
+Ein wichtiger Algorithmus ist der zur Bestimmung von Schnittpunkten von Kanten, da unser primärer Algorithmus zur Bewertung der Punktlage ~-- der Algorithmus zur Bestimmung der kürzesten Distanz von einem Punkt zu einer Kante ~-- auf diesen fusst. \\
+Wieder \"uberzeugte die "brute force" L\"osung, durch ihre einfache Implementierung und Robustheit. Die Performanz ist ebenfalls akzeptabel, was darin begr\"undet ist, dass die betrachtete Anzahl an Elementen \"uberschaubar blieb.
+Die Vorgehensweise  ist hierbei wie folgt:\\
+Es werden alle Paare von Kanten auf Schnittpunkte \"uberpr\"uft. Von allen Punkten (Graphenknoten sowie  gefundene Schnittpunkte) wird der Abstand zu allen nichtinzidenten Kanten errechnet. Der k\"urzeste Abstand wird als Ergebnis zur\"uckgeliefert.\\
+Ist $n$ die Anzahl der Knoten, $m$ die Anzahl der Kanten, so ist die Anzahl der Schnittpunkte beschr\"ankt durch $\mathcal{O}(m^2)$. Die Gesamtlaufzeit ist somit beschr\"ankt durch $\mathcal{O}((n+m^2)m)$ also Kubisch in der Kantenanzahl.
 \subsection{Punkte befinden sich auf Kreis}
 Ein weiteres Kriterium für die Bewertung der allgemeinen Lage von Punkten, welches im Rahmen dieses Projekts umgesetzt wurde, besteht darin zu berechnen, ob mehr als drei Punkte auf einem Kreis liegen. Da drei Punkte immer auf einem Kreis liegen ist hierdurch noch keine Besonderheit gegeben, was die Lage der Punkte im Koordinatensystem anbelangt. Da mehr als drei Punkte jedoch nicht immer zwingend auf einem Kreis liegen müssen, kann eine solche Anordnung so als Sonderfall betrachtet werden, die einer allgemeinen Lage der Punkte wiederspricht.\\
 Um dieses Kriterium zu betrachten wurde kein mathematischer Ansatz gewählt, der auf der Berechnung von Kreisgleichungen basiert, sondern eher ein grafischer. Dieser soll im Folgenden genauer erläutert werden.\\
@@ -402,7 +417,7 @@ Als Score ließe sich hier der Abstand der Punkte zu einer möglichen Lage auf e
 
 \begin{itemize}
 
-\item Rote, G.; Kyncl, J.; Pilz, A.; Schulz, A. (2012): Most General Position, Freie Universit Berlin\\
+\item Rote, G.; Kyncl, J.; Pilz, A.; Schulz, A. (2012): Most General Position, Freie Universität Berlin\\
 (http://page.mi.fu-berlin.de/rote/Papers/slides/Most+general+position-MDS-Berlin-2012.pdf)
 
 \item JSXGraph\\
