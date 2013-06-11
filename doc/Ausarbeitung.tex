@@ -3,7 +3,7 @@
 \addtokomafont{sectioning}{\rmfamily}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
-\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=4cm]{geometry}
 \setlength{\columnsep}{5ex}
 \usepackage{enumitem}
 \usepackage{amsmath}
@@ -84,15 +84,15 @@ sind:
 W\"ahrend die ersten zwei Kriterien in der Regel leicht von einem Spieler erkannt werden, stellt das dritte Kriterium
 eine etwas schwerer zu erkennende Einschr\"ankung dar.\\
 Jedoch ist leicht zu einzusehen, dass auch mit der dritten
-Bedingung noch keine ausreichende Umgebung f\"ur ein interessantes Spiel geschaffen ist. Zum Einen stellt das alleinige
-Anordnen von Punkten auf einer Leinwand keine sehr gro\ss e visuelle Befriedigung dar, zum Anderen stellt sich die Frage
+Bedingung noch keine ausreichende Umgebung f\"ur ein interessantes Spiel geschaffen ist. Zum einen stellt das alleinige
+Anordnen von Punkten auf einer Leinwand keine sehr gro\ss e visuelle Befriedigung dar, zum anderen stellt sich die Frage
 welche G\"ute einem gefundenen Arrangement gegeben werden soll. Ein Spiel wird interessanter, wenn es einem die
 M\"oglichkeit gibt sich zu verbessern. Es sollte also davon abgesehen werden, einfach nur ein 'Bestanden' anzuzeigen,
 sollte eine g\"ultige Konfiguration von Punkten gefunden worden sein. Aber wann ist eine Punktlage besser als eine
 andere, oder anders: welches praktikable Optimierungskriterium f\"uhrt nicht gleich zu einer leicht 'gesch\"uttelten' 
 Gitteranordnung?\\*[1ex]
 Es ergibt sich, dass  die oben aufgelisteten Kriterien sehr nat\"urlich auf Graphen projiziert werden k\"onnen, welche
-zugleich eine visuell interessantere Struktur besitzen, als auch ein zug\"anglicheres Benotungssystem zulassen. Hieraus
+zugleich eine visuell interessantere Struktur besitzen, wie auch ein zug\"anglicheres Benotungssystem zulassen. Hieraus
 resultiert das Spielprinzip sch\"one Graphen zu zeichnen.
 
 \subsection{Sch\"one Graphen}
@@ -109,7 +109,7 @@ dient jedoch eine andere Eigenschaft des Graphen: Ein Spieler bekommt einen Grap
 sowie Strecken. Die Punkte sollen frei verschiebbar sein, jedoch sollen die Strecken zwischen ihnen erhalten bleiben
 (sich also dynamisch mitbewegen). Aufgabe des Spielers ist es nun, eine Konfiguration von $V$ zu finden, sodass der
 Abstand eines Punktes zu einer nichtinzidenten Kante maximiert wird. Hierbei ist zu beachten, dass am Kreuzungspunkt
-zweier Kanten ein neuer Punkt entsteht, welcher zwar nicht direkt Bewegt werden kann (lediglich durch das verschieben
+zweier Kanten ein neuer Punkt entsteht, welcher zwar nicht direkt bewegt werden kann (lediglich durch das Verschieben
 der Endpunkte der kreuzenden Kanten), jedoch durch einen eventuell geringen Abstand den Punktestand des Spielers
 herabsenkt.\\
 Das Spielprinzip ist somit klar: je geringer der kleinste Abstand eines Punktes zu einer Kante ausf\"allt, desto weniger
@@ -117,8 +117,8 @@ Punke erh\"alt der Spieler.
 
 \section{Datenstrukturen \& Grundlegendes}
 \subsection{Javascript}
-Da es sich um ein webbasiertes Browserspiel handeln sollte entschieden wir uns für Javascript als Programmiersprache.
-Das Objektmodell von Javascript weicht deutlich von dem von Java ab insofern, dass es in Javascript keine Klassen gibt.
+Da es sich um ein webbasiertes Browserspiel handeln sollte, entschieden wir uns für Javascript als Programmiersprache.
+Das Objektmodell von Javascript weicht deutlich von dem von Java ab. Im Gegensatz zum klassisch objektorientierten Java gibt es in Javascript keine Klassen.
 Vielmehr werden Prototypeobjekte verwendet, die Gemeinsamkeiten abstrahieren. Andere Obekte verweisen auf diese Prototypen 
 und können dadurch deren Methoden verwenden. Um die Syntax von Java aufzugreifen beschreiben
 wir die Prototypeobjekte als Klassen und Objekte die auf einen gemeinsamen Prototypen verweisen als Instanzen eines Prototyps. 
@@ -138,14 +138,15 @@ zur\"uckgeliefert. Die Differenz des exakten Wertes von der N\"aherung bel\"auft
 js> 0.2-(0.3-0.1)
 2.7755575615628914e-17
 \end{lstlisting}
-, weicht also um die Gr\"o\ss enordung $10^{-16}$ von der, der Operanden ab.
+Sie weicht also um die Gr\"o\ss enordung $10^{-16}$ von der der Operanden ab.
 Wir haben uns entschieden die arithmetische Unsch\"arfe auf $10^{-10}$ (im folgenden auch Epsilon oder Epsilonumgebung ~-- wenn die Differenz von zwei Werten betrachtet wird ~-- genannt) zu setzen. Um auf der sicheren Seite zu sein aber gleichzeitig eine unnötig große Toleranz zu vermeiden haben wir die Fehlermarge ca. 6 Größenordnungen oberhalb der arithmetischen Abweichung festgelegt.
 \subsection{Punkte und Vektoren}
 Als grundlegende Datenstruktur wurden Vektoren eingef\"uhrt. Diese haben ihre zwei kartesischen Koordinaten als
 Attribute und verf\"ugen \"uber die grundlegenden, aus der Mathematik bekannten, Eigenschaften und Funktionalit\"aten
 (Vektoraddition/-subtraktion,
 Multiplikation mit einem Skalar, Skalarprodukt, etc.).
-\subsubsection{Funktionen}
+
+\subsubsection*{Funktionen}
 Die folgenden Methoden sind Instanzfunktionen eines Vektors, vergleichbar mit Objektmethoden in Java.
 \begin{description}[font=\normalfont]
   \item{\lststyle{v1.add(v2)}} 
@@ -192,10 +193,10 @@ durch ihren Abstand $d$ zum Koordinatenursprung. Jeder Punkt $p=(x,y)$ auf der G
 \begin{align}
   \widehat{n}\vec{p}-d=0  
 \end{align}
-, wobei $\vec{p}$ den Ortsvektor von $p$ bezeichne.\\
+wobei $\vec{p}$ den Ortsvektor von $p$ bezeichne.\\
 Zus\"atzlich zu $\widehat{n}$ und $d$ speichert die \lststyle{Edge} Datenstruktur noch ihre zwei Endpunkte als
 Attribute.
-\subsubsection{Funktionen}
+\subsubsection*{Funktionen}
 \lststyle{Edge} besitzt die folgenden Instanzfunktionen.
 \begin{description}[font=\normalfont]
   \item{\lststyle{e.reload()}} 
@@ -278,7 +279,7 @@ Die Methode \texttt{calculateAlgos()} iteriert über alle mit \texttt{addAlgo(..
 \subsubsection{Aufbau}
 Die GUI ist die Brücke zwischen Controller und Benutzer. Sie nimmt Benutzereingaben entgegen und gibt Statusinformationen des Programms graphisch aus. Die Darstellung der Graphen wird durch Einbindung von JSXGraph verwirklicht. JSXGraph stellt Werkzeuge zur Anzeige, Modifikation und Verwaltung von graphischen Objekten zur Verfügung. Neben der Grafikanzeige übernimmt die GUI auch die Anzeige von Textinformationen (wie z.B. den Score) und von Optionsmenüs (die Menüs selbst werden von Bootstrap erzeugt).
 Die GUI erhält über \texttt{initGraph(graph)} eine Referenz auf den Graphen des Controllers.
-Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph. Beim Initialisieren eines neuen Graphen wird \texttt{drawGraph(graph)} aufgerufen, welches die Punkte aus dem Graph Objekt liest und das \texttt{board} (also den JSXGraph Anzeigebereich) mit den entsprechenden graphischen Objekten füllt. Dabei werden an die erzeugten Objekte Eventhandler angebracht, die beim Eintreten einer Benuztereingabe (also dem Klicken und Verziehen von Objekten) an den Controller mit \texttt{\$.publish('points-change')} signalisieren, dass sich der Zustand des Graphen verändert hat. Dieser wird daraufhin mit der Methode \texttt{getPoints()} der GUI die aktuellen Koordinaten abfragen und sie an die Webworker weiterleiten.
+Um die eigentliche Anzeige und Interaktivität der Punkte kümmert sich JSXGraph. Beim Initialisieren eines neuen Graphen wird \texttt{drawGraph(graph)} aufgerufen, welches die Punkte aus dem Graphobjekt liest und das \texttt{board} (also den JSXGraph Anzeigebereich) mit den entsprechenden graphischen Objekten füllt. Dabei werden an die erzeugten Objekte Eventhandler angebracht, die beim Eintreten einer Benuztereingabe (also dem Klicken und Verziehen von Objekten) an den Controller mit \texttt{\$.publish('points-change')} signalisieren, dass sich der Zustand des Graphen verändert hat. Dieser wird daraufhin mit der Methode \texttt{getPoints()} der GUI die aktuellen Koordinaten abfragen und sie an die Webworker weiterleiten.
 
 \subsubsection{Methoden}
 Hier werden die wichtigsten Methoden der GUI dokumentiert.
@@ -294,7 +295,7 @@ Hier werden die wichtigsten Methoden der GUI dokumentiert.
     \subparagraph{\texttt{overdraw(object, algoName, color)}} 
     Dasselbe wie \texttt{draw(...)} nur mit einem vorherigen Löschen aller Annotationen des jeweiligen Algorithmus.
     \subparagraph{\texttt{draw(object, algoName, color)}} 
-    Hiermit können unabhängig vom Graphen Annotations gezeichnet werden. Die Annotations werden in eine eigene, von \texttt{algoName} abhängige Lage gezeichnet. \texttt{obj} muss dabei ein Annotations Objekt sein.
+    Hiermit können unabhängig vom Graphen Annotations gezeichnet werden. Die Annotations werden in eine eigene, von \texttt{algoName} abhängige Lage gezeichnet. \texttt{obj} muss dabei ein Annotationsobjekt sein.
     \subparagraph{\texttt{eraseAllAnnotations()}} 
     Jegliche Annotations aller Algorithmen werden entfernt.
     \subparagraph{\texttt{eraseAnnotations(algoName)}} 
@@ -327,7 +328,7 @@ Hier werden die wichtigsten Methoden der GUI dokumentiert.
 
 \subsection{Speicherung der Bestwerte}
 In der Anwendung besteht die Möglichkeit einen erreichten Punktestand mit einem Formular in einer Bestenliste zu speichern. Dieser wird, wenn er zu den drei höchsten eines Levels gehört, danach in der Liste angezeigt. Zusätzlich wird zu einem Punktestand der Name des Benutzers angezeigt und es besteht die Möglichkeit, die Punkte auf die Positionen zu setzten, mit welchen der Punktestand erreicht wurde. Wie die hierfür benötigten Daten gespeichert und angezeigt werden soll nun genauer erläutert werden.\\
-Um die Speicherung der Daten kümmert sich eine Datenbank, welche hierfür mit einer Tabelle versehen wurde. Diese enthält die Spalten „hid“, „levname“, „name“, „score“ und „points“. Hierbei ist „hid“ ein eindeutiger Schlüssel eines jeden Eintrags, „levname“ gibt an zu welchem Level ein Eintrag gehört, „name“ beinhaltet den Namen des Benutzers, „score“ entspricht dem erreichten Punktestand und in „points“ werden die Positionen der Punkte in einem String gespeichert. Da beim Anzeigen der Punktpositionen eines Bestwertes der Graph bereits geladen ist und sich die Reihenfolge der Punkte niemals ändert, genügt es nur die Positionen der jeweiligen Punkte zu speichern. Beim Klick auf den Pfeil werden dann die Punkte im Graph auf die gespeicherten Positionen verschoben.\\
+Um die Speicherung der Daten kümmert sich eine Datenbank, welche hierfür mit einer Tabelle versehen wurde. Diese enthält die Spalten \emph{hid}, \emph{levname}, \emph{name}, \emph{score} und \emph{points}. Hierbei ist \emph{hid} ein eindeutiger Schlüssel eines jeden Eintrags, \emph{levname} gibt an zu welchem Level ein Eintrag gehört, \emph{name} beinhaltet den Namen des Benutzers, \emph{score} entspricht dem erreichten Punktestand und in \emph{points} werden die Positionen der Punkte in einem String gespeichert. Da beim Anzeigen der Punktpositionen eines Bestwertes der Graph bereits geladen ist und sich die Reihenfolge der Punkte niemals ändert, genügt es nur die Positionen der jeweiligen Punkte zu speichern. Beim Klick auf den Pfeil werden dann die Punkte im Graph auf die gespeicherten Positionen verschoben.\\
 Damit die Bestenliste auch funktionsfähig ist, wenn die Anwendung von einer lokalen Datei oder einem anderen Server ausgeführt wird und unabhängig von der Datenbank bleibt wurde zum Speichern der Daten eine Technik namens „JSON-P“ ausgewählt. Hiermit ist es möglich Daten von einem Server zu laden, der sich nicht auf der gleichen Domain befindet. Das ist mit aktuellem Javascript normalerweise nicht möglich.\\
 Zum Laden der Punktestände wird eine PHP-Datei dynamisch wie folgt als Script in die HTML-Seite eingebunden:\\
 
@@ -359,7 +360,7 @@ getResults('{
 }
 \end{lstlisting}
 \newblock
-Durch das Einbinden der Datei als Script-Block wird der Inhalt danach vom Browser ausgeführt. Hier wird dann die Funktion „getResults“ mit den Daten aufgerufen. Diese befindet sich bereits von Beginn an in der Seite und kann somit die Daten entgegennehmen und verarbeiten.\\
+Durch das Einbinden der Datei als Script-Block wird der Inhalt danach vom Browser ausgeführt. Hier wird dann die Funktion \texttt{getResults(..)} mit den Daten aufgerufen. Diese befindet sich bereits von Beginn an in der Seite und kann somit die Daten entgegennehmen und verarbeiten.\\
 Zum Speichern der Daten wird auf die gleiche Weise die folgende URL eingebunden:\\
 
 \begin{lstlisting}
@@ -378,7 +379,7 @@ Somit ist es möglich die Bestenliste unabhängig vom Speicherort anzuzeigen, so
 \section{Algorithmen}
 
 \subsection{Test auf Kollinearität}
-Ein sehr simples und essentielles Kriterium zur Überprüfung der allgemeinen Lage von Punkten ist der Test auf Kollinearität. Im speziellen ist hiermit der Fall von 3 oder mehr Punkten auf einer Geraden gemeint. Leider konnten wir dieses Problem von algorithmischer Seite nicht über eine Brute Force Lösung hinaus verbessern, wir vermuten allerdings, dass sich die Lösung bis auf hilfreiche Heuristiken und Verbesserungen der Implementierung auch nur schwer verbessern liesse. So müssen alle 3-Untermengen der Punktmenge gesondert auf Kollinearität überprüft werden, die dafür im wesentlichen benötigte Funktion ist \lststyle{e.contains(pt)} (siehe Kantenfunktionen). Um Ungenauigkeiten zu vermeiden wurde eine Kante \lststyle{e} aus den beiden am weitesten auseinander liegenden Punkten generiert und überprüft ob sich der dritte Punkt auf dieser befindet, \lststyle{pt} ist somit der dritte Punkt.  
+Ein sehr simples und essentielles Kriterium zur Überprüfung der allgemeinen Lage von Punkten ist der Test auf Kollinearität. Im speziellen ist hiermit der Fall von 3 oder mehr Punkten auf einer Geraden gemeint. Leider konnten wir dieses Problem von algorithmischer Seite nicht über eine Brute Force Lösung hinaus verbessern, wir vermuten allerdings, dass sich die Lösung bis auf hilfreiche Heuristiken und Verbesserungen der Implementierung auch nur schwer verbessern ließe. So müssen alle 3-Untermengen der Punktmenge gesondert auf Kollinearität überprüft werden, die dafür im wesentlichen benötigte Funktion ist \lststyle{e.contains(pt)} (siehe Kantenfunktionen). Um Ungenauigkeiten zu vermeiden wurde eine Kante \lststyle{e} aus den beiden am weitesten auseinander liegenden Punkten generiert und überprüft ob sich der dritte Punkt auf dieser befindet, \lststyle{pt} ist somit der dritte Punkt.  
 \subsection{Berechnung der Schnittpunkte/ kleinster Abstand}
 Ein wichtiger Algorithmus ist der zur Bestimmung von Schnittpunkten von Kanten, da unser primärer Algorithmus zur Bewertung der Punktlage ~-- der Algorithmus zur Bestimmung der kürzesten Distanz von einem Punkt zu einer Kante ~-- auf diesen fusst. \\
 Wieder \"uberzeugte die "brute force" L\"osung, durch ihre einfache Implementierung und Robustheit. Die Performanz ist ebenfalls akzeptabel, was darin begr\"undet ist, dass die betrachtete Anzahl an Elementen \"uberschaubar blieb.
@@ -412,31 +413,25 @@ Die Kreise werden nicht einfach nur „gezeichnet“, sondern es wird im Array, 
 Die Genauigkeit mit der die Punkte auf einem Kreis liegen lassen sich im Algorithmus über die Größe des Arrays bestimmen. Je größer das Array, desto genauer liegen die Punkte am Ende auf dem Kreis. Hier wurde eine relativ kleine Größe des Array gewählt, sodass Punkte auch dann als auf dem Kreis liegend bewertet werden, wenn sie sich etwas daneben befinden.\\
 Als Score ließe sich hier der Abstand der Punkte zu einer möglichen Lage auf einem Kreis angeben. In diesem Projekt wurde jedoch nur überprüft, ob sich mehr als drei Punkte mit einer gewissen Unschärfe auf einem Kreis befinden.
 
+\addcontentsline{toc}{section}{Quellenverzeichnis}
 
-\section{Quellen}
-
-\begin{itemize}
-
-\item Rote, G.; Kyncl, J.; Pilz, A.; Schulz, A. (2012): Most General Position, Freie Universität Berlin\\
+\begin{thebibliography}{9}
+\bibitem{Most General Position}
+\textbf{Most General Position} \\
+Rote, G.; Kyncl, J.; Pilz, A.; Schulz, A. (2012): Most General Position, Freie Universität Berlin
 (http://page.mi.fu-berlin.de/rote/Papers/slides/Most+general+position-MDS-Berlin-2012.pdf)
 
-\item JSXGraph\\
- http://jsxgraph.uni-bayreuth.de
+\bibitem{JSXGraph}
+\textbf{JSXGraph} \\
+http://jsxgraph.uni-bayreuth.de
 
-\item Bootstrap\\
+\bibitem{Bootstrap}
+\textbf{Bootstrap} \\
 https://github.com/twitter/bootstrap
 
-\item Projekt Repository\\
+\bibitem{Projekt Repository}
+\textbf{Projekt~Repository} \\
 https://github.com/nbbl/nbbl.github.com
-
-\end{itemize}
-
-
-
-
-
-
-
-
+\end{thebibliography}
 
 \end{document}
