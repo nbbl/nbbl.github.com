@@ -1,4 +1,4 @@
-[
+(Diese Readme wurde mit *pandoc* aus dem Dokumentations-Latex Code erstellt. Die eigentliche Doku liegt in '/doc/Ausarbeitung.pdf')
 
 * * * * *
 
@@ -16,7 +16,7 @@ beschreibt. So geht es in der Anwendung hauptsächlich darum, all diese
 Höhen möglichst groß zu gestalten. Zur Orientierung dient hierbei die
 kleinste vorkommende Höhe, die zusätzlich grafisch dargestellt wird.**
 
-]
+* * * * *
 
 Einleitung
 ==========
